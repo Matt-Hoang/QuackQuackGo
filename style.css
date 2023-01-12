@@ -1,0 +1,396 @@
+/* ===== Gerneral === */
+
+@font-face {
+    font-family: 'QuackQuackGoTitle';
+    src: url('fonts/Cagliostro-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cantarell'; 
+    src: url('fonts/Cantarell-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+*, body {
+    margin: 0;
+}
+
+/* === Login and Registration Page === */
+
+.login-signup-container {
+    display: flex;
+    justify-content: flex-end;
+    height: 100vh;
+    background-image: url('images/background-image.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: contain; /* set to cover, move to top, or remove if too small  */
+}
+
+
+.login-signup-info > img {
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: 21vw;
+    height: 40vh;
+    filter: drop-shadow(0px 20px 5px rgba(0, 0, 0, 0.33));
+}
+
+
+.login-signup-info {
+    width: 70%;
+    background: #FFF8E0;
+    text-align: center;
+    border-radius: 75px 0px 0px 75px;
+    -webkit-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    -moz-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+}
+
+.background {
+    width: 30%;
+}
+
+.login-signup-info > form {
+    width: 40%;
+    margin: 10vh auto;
+}
+
+.login-signup-info > form > h1 {
+    font-family: 'QuackQuackGoTitle';
+    font-size: 50px;
+    color: #FFB039;
+    text-underline-offset: 15px;
+
+}
+
+.login-signup-info > form > h3 {
+    font-family: 'Cantarell';
+    font-size: 40px;
+    margin-top: 35px;
+}
+
+.login-signup-info > form > input {
+    box-sizing: border-box;
+    background-color: #FFF8E0;
+    font-size: 25px;
+    border: 2px solid black;
+    border-radius: 12px;
+    width: 100%;
+    padding: 10px 15px;
+    margin-top: 25px;
+}
+
+.login-signup-info > form > a {
+    font-family: 'Cantarell';
+    float: right;
+    font-size: 18px;
+    margin-top: 5px;
+    color: black;
+}
+
+.login-signup-info > form > button{
+    box-sizing: border-box;
+    background-color: #FFB039;
+    font-size: 25px;
+    font-weight: bold;
+    border: 0px;
+    border-radius: 12px;
+    width: 100%;
+    padding: 8px;
+    margin-top: 25px;
+}
+
+.login-signup-info > form > h5 {
+    font-family: 'Cantarell';
+    font-weight: 400;
+    float: left;
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+a:visited {
+    color: #0000EE;
+}
+
+/* === Confirmation Page === */
+
+.confirmation-container {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    background: url('images/background-image.jpg') no-repeat center fixed;
+    background-size: cover;
+}
+
+.confirmation-info {
+    width: 50%;
+    background: #FFF8E0;
+    text-align: center;
+    border-radius: 75px;
+    box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    -webkit-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    -moz-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+}
+
+.confirmation-info > div { 
+    display: inline-block; 
+    position: relative; 
+    width: 400px; 
+    height: 400px; 
+    overflow: hidden; 
+    border-radius: 50%; 
+    border: 5px #FFB039 dashed;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 10vh 0 5vh 0;
+} 
+
+.confirmation-info > div > img { 
+    width: auto; 
+    height: 105%; 
+    margin: 50px 0px 0px 25px; 
+}
+
+.confirmation-info > h3 {
+    font-family: 'Cantarell';
+    font-size: 25px;
+}
+
+.confirmation-info > button {
+    box-sizing: border-box;
+    background-color: #FFB039;
+    font-size: 25px;
+    font-weight: bold;
+    border: 0px;
+    border-radius: 12px;
+    width: 25%;
+    padding: 10px;
+    margin: 25px 0px;
+}
+
+.confirmation-info > button:hover, .login-signup-info > form > button:hover {
+    background-color: rgba(255, 176, 57, .9);
+}
+
+/* === Home Page === */
+
+/* general */
+.flex-container {
+    display: flex;
+    align-items: center;
+    font-family: Cantarell;
+}
+
+.flex-container > div {
+    width: 100vw;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    max-width: 200px;
+    min-width: 200px;
+}
+
+/* left column */
+.left-column > img {
+    margin: 40px 0 100px 0;
+    width: 85%;
+}
+
+.left-column > a, .right-column > a {
+    display: flex;
+    align-items: center;
+    background-color: #FFF8E0;
+    color: black;
+    text-decoration: none;
+    border: 0px black solid;
+    width: 70%;
+    border-radius: 15px;
+    padding: 10px;
+    font-size: 22px;
+    margin: 15px 0px;
+    box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.3);
+}
+
+.left-column > .active, .left-column > a:hover {
+    background-color: #FFB039;
+}
+
+.left-column > a > img {
+    height: 30px;
+    margin-right: 8px;
+}
+
+.left-column > .logout-button {
+    margin: auto 0 40px 0;
+}
+
+/* right column */
+.right-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    max-width: 300px;
+    min-width: 300px;
+}
+
+.right-column > a > img {
+    border-radius: 50%;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.right-column > h3 {
+    font-size: 30px;
+    margin-top: 20px;
+}
+
+.right-column > div {
+    width: 80%;
+}
+
+.right-column > div > a {
+    display: flex;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    border: 3px solid #F0E7C9;
+    border-radius: 15px;
+    font-size: 22px;
+    margin: 25px 0px;
+    overflow: hidden;
+    box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.2);
+}
+
+.right-column > div > a:hover, .right-column > div > a > img:hover {
+    border-color: #FFB039;
+}
+
+.right-column > div > a > img {
+    height: 75px;
+    border-right: 3px solid #F0E7C9;
+    margin-right: 10px;
+}
+
+.right-column > div > a > div > h4, .right-column > div > a > div > h5 {
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    width: 140px; 
+    white-space: nowrap;
+}
+
+.right-column > div > a > div > h5 {
+    color: gray;
+    font-weight: normal;
+    font-size: 15px;
+} 
+
+/* center column */
+.center-column {
+    background-color: #FFF8E0;
+    border-radius: 35px;
+    height: 97vh;
+    padding: 0px 30px;
+}
+
+.center-column > .trending-explore-container > h4 {
+    font-size: 30px;
+}
+
+.center-column > .trending-explore-container > h5 {
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.center-column > .trending-explore-container > h4 > img {
+    height: 30px;
+    margin: 0 10px;
+}
+
+.center-column > .trending-explore-container > .trending-locations {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.center-column > .trending-explore-container > .trending-locations > div {
+    border: 1px solid black;
+    width: 250px;
+    height: 325px;
+}
+
+
+
+
+.center-column > .trending-explore-container > .explore-locations {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid green;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border: 1px solid blue;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > div{
+    height: 150px;
+    width: 175px;
+    border: 1px solid red;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .create-itinerary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    background-color: #373F51;
+    padding: 25px 25px 20px 25px;
+    margin-left: 20px;
+}
+
+.center-column > .trending-explore-container > .explore-locations > div > img {
+    height: 200px;
+    margin-bottom: 15px;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .create-itinerary > h5 {
+    font-weight: normal;
+    color: white;
+    font-size: 18px;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .create-itinerary > a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    background-color: #58A4B0;
+    border-radius: 15px;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .create-itinerary > a:hover {
+    outline: 2px solid white;
+}
+
+
+
+
+
+
+
+/* === Search === */
+/* left column */
+/* right column */
+/* center column */
