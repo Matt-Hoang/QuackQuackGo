@@ -18,6 +18,10 @@
     margin: 0;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
 /* === Login and Registration Page === */
 
 .login-signup-container {
@@ -262,7 +266,7 @@ a:visited {
     align-items: center;
     color: black;
     text-decoration: none;
-    border: 3px solid #F0E7C9;
+    border: 4px solid #F0E7C9;
     border-radius: 15px;
     font-size: 22px;
     margin: 25px 0px;
@@ -270,13 +274,12 @@ a:visited {
     box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.2);
 }
 
-.right-column > div > a:hover, .right-column > div > a > img:hover {
+.right-column > div > a:hover {
     border-color: #FFB039;
 }
 
 .right-column > div > a > img {
     height: 75px;
-    border-right: 3px solid #F0E7C9;
     margin-right: 10px;
 }
 
@@ -289,25 +292,32 @@ a:visited {
 
 .right-column > div > a > div > h5 {
     color: gray;
-    font-weight: normal;
     font-size: 15px;
 } 
 
 /* center column */
 .center-column {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: #FFF8E0;
     border-radius: 35px;
     height: 97vh;
-    padding: 0px 30px;
+    padding: 25px 30px;
 }
 
 .center-column > .trending-explore-container > h4 {
     font-size: 30px;
 }
 
+.center-column > .trending-explore-container:nth-child(2) > h4 {
+    margin-top: 20px;
+}
+
 .center-column > .trending-explore-container > h5 {
     font-size: 15px;
-    font-weight: normal;
+    margin-bottom: 12px;
 }
 
 .center-column > .trending-explore-container > h4 > img {
@@ -321,32 +331,120 @@ a:visited {
     justify-content: space-between;
 }
 
-.center-column > .trending-explore-container > .trending-locations > div {
-    border: 1px solid black;
-    width: 250px;
-    height: 325px;
+.center-column > .trending-explore-container > .trending-locations > a {
+    box-sizing: border-box;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    border-radius: 25px;
+    width: 100%;
+    min-width: 200px;
+    height: 275px;
+    padding-bottom: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
+.center-column > .trending-explore-container > .trending-locations > a:hover {
+    outline: 5px solid #FFB039;
+}
 
+.center-column > .trending-explore-container > .trending-locations > a:nth-child(1) {
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
+    url("images/temp-kyoto-japan.png");
+}
 
+.center-column > .trending-explore-container > .trending-locations > a:nth-child(2) {
+    margin: 0px 25px;
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 35%),
+    url("images/temp-seoul-korea.png");
+}
+
+.center-column > .trending-explore-container > .trending-locations > a:nth-child(3) {
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
+    url("images/temp-cebu-philippines.png");
+}
 
 .center-column > .trending-explore-container > .explore-locations {
     display: flex;
     justify-content: space-between;
-    border: 1px solid green;
 }
 
 .center-column > .trending-explore-container > .explore-locations > .new-itineraries {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    border: 1px solid blue;
+    margin: 0px auto;
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
 }
 
-.center-column > .trending-explore-container > .explore-locations > .new-itineraries > div{
-    height: 150px;
-    width: 175px;
-    border: 1px solid red;
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    border-radius:20px;
+    min-width: 175px;
+    background-size: cover;
+    background-position: center;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:hover {
+    border: 5px solid #FFB039;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(1) {
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
+    url('images/temp-anaheim.png');
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(2) {
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
+    url('images/temp-vegas.png');
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(3) {
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
+    url('images/temp-big-bear.png');
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(4) {
+    background-image: 
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
+    url('images/temp-csulb.png');
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a > div > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.center-column > .trending-explore-container > .explore-locations > .new-itineraries > a > div > div > img {
+    height: 23px;
+    margin-right: 5px;
 }
 
 .center-column > .trending-explore-container > .explore-locations > .create-itinerary {
@@ -355,7 +453,7 @@ a:visited {
     align-items: center;
     border-radius: 30px;
     background-color: #373F51;
-    padding: 25px 25px 20px 25px;
+    padding: 30px 25px 25px 25px;
     margin-left: 20px;
 }
 
@@ -389,8 +487,33 @@ a:visited {
 
 
 
+  
+
+
 
 /* === Search === */
+/* left column */
+/* right column */
+/* center column */
+
+
+/* === Itineraries General View === */
+/* left column */
+/* right column */
+/* center column */
+
+/* === Itineraries Detailed View === */
+/* left column */
+/* right column */
+/* center column */
+
+/* === About === */
+/* left column */
+/* right column */
+/* center column */
+
+
+/* === Support === */
 /* left column */
 /* right column */
 /* center column */

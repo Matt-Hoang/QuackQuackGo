@@ -6,5 +6,3 @@ login/registration:
 confirmation:
 - ducky border, square boxes and gaps
 
-home:
-- hovering upcoming trips text doesnt highlight entire border   
