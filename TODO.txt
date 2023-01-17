@@ -6,3 +6,8 @@ login/registration:
 confirmation:
 - ducky border, square boxes and gaps
 
+contact:
+- message and input placeholder differnt fonts 
+- give small pop up after contact form is sent 
+- what to do with left over space? fill with background image?
+- add linkedin links and pictures to team div 
