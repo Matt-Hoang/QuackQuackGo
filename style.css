@@ -503,8 +503,93 @@ a:visited {
 /* center column */
 
 /* === About === */
-/* right column */
-/* center column */
+.about-body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFF8E0;
+    border-radius: 35px;
+    height: 97vh;
+    padding: 25px 30px;
+    margin-right: 12px;
+}
+
+.about-body > .about-title {
+    margin-bottom: 15px;
+}
+
+.about-body > .about-title > h4 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.about-body > .about-title > h4 > img {
+    height: 30px;
+    margin: 0px 10px
+}
+
+.about-body > .about-title > h5 {
+    font-size: 15px;
+}
+
+.about-body > .about-description {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px
+}
+
+.about-body > .about-description > img {
+    height: 200px;
+    background-color: #373F51;
+    padding: 50px 15px 25px 15px;
+    border-radius: 20px;
+}
+
+
+.about-body > .about-description > div > h4 {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.about-body > .about-description > div > p {
+    font-size: 18px;
+    max-width: 500px;
+}
+
+.about-body > .about-features > h4 {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 50px 0 15px 0;
+}
+
+.about-body > .about-features > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.about-body > .about-features > div > a {
+    text-decoration: none;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.75);
+    max-width: 275px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+}
+
+.about-body > .about-features > div > a > img {
+    height: 100px;
+}
+
+.about-body > .about-features > div > a > h4 {
+    font-size: 25px;
+}
+
+.about-body > .about-features > div > a > h5 {
+    font-size: 18px;
+}
 
 
 /* === Support === */
