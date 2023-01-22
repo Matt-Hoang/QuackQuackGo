@@ -11,3 +11,14 @@ contact:
 - give small pop up after contact form is sent 
 - what to do with left over space? fill with background image?
 - add linkedin links and pictures to team div 
+
+about us:
+- add links to each feature 
+- what to do with dead space?
+
+search:
+- search result needs to be numbered correctly 
+- map needs to be implemented 
+- filter button needs to show an option for filter
+- make scroll bar nicer
+
