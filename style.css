@@ -637,29 +637,90 @@ a:visited {
     font-size: 18px;
 }
 
-
-
-
-
-
-
 .search-map {
     height: 100vh;
     background-color: lightgray;
+}
+
+/* === Itineraries General View === */
+
+/* center column */
+.itineraries-center-column {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #FFF8E0;
+    border-radius: 35px;
+    height: 97vh;
+    padding: 25px 30px;
+}
+
+.itineraries-center-column > .itineraries-container > h4, .itineraries-center-column > .bookmarked-container > h4 {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+}
+
+.itineraries-center-column > .itineraries-container > h5, .itineraries-center-column > .bookmarked-container > h5 {
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.itineraries-center-column > .itineraries-container > h4 > img, .itineraries-center-column > .bookmarked-container > h4 > img {
+    height: 30px;
+    margin: 0 10px;
 }
 
 
 
 
 
-
-/* === Itineraries General View === */
 /* right column */
-/* center column */
+
+.itineraries-right-column {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 300px;
+    min-width: 300px;
+    margin: 0px 25px;
+}
+
+.itineraries-right-column > div {
+    outline: 1px solid red;
+    width: 100%;
+}
+
+
+.itineraries-right-column > div > h4 {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    padding: 20px 0 10px 0;
+}
+
+.itineraries-right-column > div > h4 > img {
+    height: 30px;
+    margin: 0 10px;
+}
+
+.itineraries-right-column > .checklists {
+    margin-top: 10px;
+}
+
+
 
 /* === Itineraries Detailed View === */
 /* right column */
 /* center column */
+
+
+
+
+
+
+
 
 /* === About === */
 .about-body {
