@@ -688,7 +688,6 @@ a:visited {
 }
 
 .itineraries-right-column > div {
-    outline: 1px solid red;
     width: 100%;
 }
 
@@ -706,8 +705,134 @@ a:visited {
 }
 
 .itineraries-right-column > .checklists {
-    margin-top: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 25px;
+    border-radius: 15px;
+    border: 2px solid #E5DCBC;
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
 }
+
+.itineraries-right-column > .checklists > .checklist-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+}
+
+.itineraries-right-column > .checklists > .checklist-name > a > img {
+    height: 22px;
+}
+
+.itineraries-right-column > .checklists > hr {
+    border: 1px solid #E5DCBC;
+    margin: 3px 0;
+}
+
+.itineraries-right-column > .checklists > ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.itineraries-right-column > .checklists > ul > li {
+    cursor: pointer;
+    position: relative;
+    padding: 2px 8px 2px 40px;
+    list-style-type: none;
+    background: none;
+    font-size: 18px;
+    transition: 0.2s;
+    
+    /* make the list items unselectable */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+  /* strike out text on hover and click */
+  .itineraries-right-column > .checklists > ul > li:hover, .itineraries-right-column > .checklists > ul > li.checked {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: rgba(0, 0, 0, 0.75);
+}
+
+  /* Add a "checked" mark when clicked on */
+.itineraries-right-column > .checklists > ul > li.checked::before {
+    content: '';
+    position: absolute;
+    border-color: rgba(0, 0, 0, 0.75);
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    top: 5px;
+    left: 16px;
+    transform: rotate(45deg);
+    height: 15px;
+    width: 5px;
+    display: flex;
+}
+
+  /* Style the close button */
+.itineraries-right-column > .checklists > ul .close {
+    position: absolute;
+    height: 100%;
+    right: 0;
+    top: 0;
+    padding: 0px 16px 0px 16px;
+  }
+
+  .itineraries-right-column > .checklists > ul .close:hover {
+    background-color: #f44336;
+    color: white;
+  }
+
+/* Style the list input */
+.itineraries-right-column > .checklists > .checklist-input-div {
+    position: relative;
+    background-color: none;
+    border: 2px solid #E5DCBC;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top:5px;
+}
+  
+/* Style the input */
+.itineraries-right-column > .checklists > .checklist-input-div > input {
+    border: none;
+    padding: 10px;
+    float: left;
+    font-size: 16px;
+    background-color: transparent;
+}
+
+.itineraries-right-column > .checklists > .checklist-input-div > input:focus {
+    outline: none;
+}
+  
+/* Style the "Add" button */
+.itineraries-right-column > .checklists > .checklist-input-div > .addBtn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    padding: 0px 10px;
+    height: 100%;
+    background: #FFF8E0;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-left: 2px solid #E5DCBC;
+    top: 0;
+    right: 0;
+}
+  
+.itineraries-right-column > .checklists > .checklist-input-div > .addBtn:hover {
+    background-color: #FFB039;
+}
+
+
+
+
 
 
 

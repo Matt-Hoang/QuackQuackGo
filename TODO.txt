@@ -22,3 +22,7 @@ search:
 - filter button needs to show an option for filter
 - make scroll bar nicer
 
+itineraries:
+- checklist works perfect with one list but breaks with 2+
+    (make 1 big checklist easier, how to delete and add checklist?)
+- need to make it link with database

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images/ducky.png">
     <title>QQG - Itineraries</title>
+    <script src="javascript/itineraries.js" async></script>
 </head>
 <body class="flex-container">
     <div class="nav-column">
@@ -37,13 +38,13 @@
     </div>
 
     <div class="itineraries-right-column">
-        <!-- https://www.w3schools.com/howto/howto_js_todolist.asp -->
         <div>
             <h4>Checklist<img src="images/checklist-icon-2.png" alt=""></h4>
         </div>
         <div class="checklists">
             <h5 class="checklist-name">Pre-Trip<a href=""><img src="images/checklist-more.png" alt=""></a></h5>
-            <ul>
+            <hr>
+            <ul class="individual-checklist">
                 <li>Shampoo</li>
                 <li class="checked">Conditioner</li>
                 <li>Razor</li>
@@ -52,10 +53,16 @@
                 <li>Book</li>
                 <li>Family's gifts</li>
             </ul>
+            <div class="checklist-input-div">
+                <input type="text" class="checklist-input" placeholder="Add new item">
+                <span onclick="newElement()" class="addBtn">Add</span>
+            </div>
         </div>
-        <div class="checklists">
+
+        <!-- <div class="checklists">
             <h5 class="checklist-name">Post-Trip<a href=""><img src="images/checklist-more.png" alt=""></a></h5>
-            <ul>
+            <hr>
+            <ul class="individual-checklist">
                 <li>Shampoo</li>
                 <li class="checked">Conditioner</li>
                 <li>Laptop</li>
@@ -64,7 +71,11 @@
                 <li>Souvenirs</li>
                 <li>Snacks</li>
             </ul>
-        </div>
+            <div class="checklist-input-div">
+                <input type="text" class="checklist-input" placeholder="Add new item">
+                <span onclick="newElement()" class="addBtn">Add</span>
+            </div>
+        </div> -->
         
     </div>
 </body>
