@@ -1,4 +1,24 @@
+/* === Itineraries Main Center === */
+$('#slick-carousel-1').slick({
+  rows: 2,
+  dots: false,
+  arrows: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 3,
+  slidesToScroll: 3
+});
 
+
+$('#slick-carousel-2 ').slick({
+  rows: 2,
+  dots: false,
+  arrows: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 4,
+  slidesToScroll: 3
+});
 
 
 /* === Itineraries Checklist === */

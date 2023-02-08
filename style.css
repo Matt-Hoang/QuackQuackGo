@@ -654,6 +654,8 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 25px 30px;
+    /* limit width of center column to contain slick sliders - (100vw - (nav width + checklist width)) */
+    max-width: calc(100vw - (200px + 350px)); 
 }
 
 .itineraries-center-column > .itineraries-container > h4, .itineraries-center-column > .bookmarked-container > h4 {
@@ -664,13 +666,88 @@ a:visited {
 
 .itineraries-center-column > .itineraries-container > h5, .itineraries-center-column > .bookmarked-container > h5 {
     font-size: 15px;
-    margin-bottom: 12px;
 }
 
 .itineraries-center-column > .itineraries-container > h4 > img, .itineraries-center-column > .bookmarked-container > h4 > img {
     height: 30px;
     margin: 0 10px;
 }
+
+
+
+
+
+
+
+
+
+/* CSS for sLick sliders */
+.itinerary-wrapper, .bookmarked-wrapper {
+	width: 98%;
+    margin: auto;
+	/* background-color: aqua; */
+}
+
+.itinerary-item, .bookmarked-item {
+	background-color: white;
+	color: aqua;
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	height: 150px;
+	border-radius: 20px;
+}
+
+.itinerary-item, .bookmarked-item {
+	margin-top: 20px;
+}
+
+.slick-slide {
+	margin: 0 10px;
+}
+
+.slick-list {
+	margin: 0 -20px;
+}
+
+.slick-arrow:before{
+	content:""!important;
+    width: 100%!important;
+    height: 100%!important;
+    position: absolute;
+    top: 0;
+    left: 0;
+	opacity: 1!important;
+}
+
+.slick-next:before{
+    background: url(images/carousel-chevron-right-icon.png)!important;
+    background-size: contain!important;
+}
+
+.slick-prev:before{
+    background: url(images/carousel-chevron-left-icon.png)!important;
+    background-size: contain!important;
+}
+
+.slick-arrow {
+    z-index: 2 !important;
+    width: 35px!important;
+    height: 35px!important;
+}
+
+.slick-next{
+    right: -30px!important;
+}
+
+.slick-prev{
+    left: -30px!important;
+}
+
+
+
+
 
 
 
