@@ -22,6 +22,38 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
+
+/* ===== Scrollbar CSS ===== */
+/* *::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+*::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+*::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+} */
+
+
 /* === Login and Registration Page === */
 
 .login-signup-container {
@@ -305,6 +337,7 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 25px 30px;
+    overflow-y: scroll;
 }
 
 .home-center-column > .trending-explore-container > h4 {
@@ -483,6 +516,37 @@ a:visited {
 .home-center-column > .trending-explore-container > .explore-locations > .create-itinerary > a:hover {
     outline: 2px solid white;
 }
+
+/* home scroll bar */
+.home-center-column::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.home-center-column::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.home-center-column::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.home-center-column::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.home-center-column::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.home-center-column::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
+
 
 /* === Search === */
 .search-results {
