@@ -14,59 +14,64 @@
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 </head>
 <body class="flex-container">
+    <!-- navigation column -->
     <div class="nav-column">
-        <img src="images/quack-quack-go-logo.png" alt="">
-        <a href="home.html" ><img src="images/nav-home-icon.png" alt="">Home</a>
-        <a href="search.html"><img src="images/nav-search-icon.png" alt="">Search</a>
-        <a href="itineraries.html" class="active"><img src="images/nav-itineraries-icon.png" alt="">Itineraries</a>
-        <a href="about.html"><img src="images/nav-about-icon.png" alt="">About</a>
-        <a href="support.html"><img src="images/nav-support-icon.png" alt="">Support</a>
-        <a href="login.html" class="logout-button"><img src="images/nav-log-out-icon.png" alt="">Log Out</a>
+        <img src="images/nav/quack-quack-go-logo.png" alt="">
+        <a href="home.html"><img src="images/nav/home-icon.png" alt="">Home</a>
+        <a href="search.html"><img src="images/nav/search-icon.png" alt="">Search</a>
+        <a href="itineraries.html" class="active"><img src="images/nav/itineraries-icon.png" alt="">Itineraries</a>
+        <a href="about.html"><img src="images/nav/about-icon.png" alt="">About</a>
+        <a href="support.html"><img src="images/nav/support-icon.png" alt="">Support</a>
+        <a href="login.html" class="logout-button"><img src="images/nav/log-out-icon.png" alt="">Log Out</a>
     </div>
+    <!-- main itineraries column -->
     <div class="itineraries-center-column">
+        <!-- itineraries carousel -->
         <div class="itineraries-container">
-            <h4>Itineraries<img src="images/itineraries-icon.png" alt=""></h4>
+            <a href=""><div class="add-button">+</div></a>
+            
+            <h4>Itineraries<img src="images/titles/itineraries-icon.png" alt=""></h4>
             <h5>Take a look at all your itineraries here!</h5>
             <div class="itinerary-wrapper">
                 <div id="slick-carousel-1">
-                    <a href="" class="itinerary-item">1</a>
-                    <a href="" class="itinerary-item">2</a>
-                    <a href="" class="itinerary-item">3</a>
-                    <a href="" class="itinerary-item">4</a>
-                    <a href="" class="itinerary-item">5</a>
-                    <a href="" class="itinerary-item">6</a>
-                    <a href="" class="itinerary-item">7</a>
+                    <a href="" class="itinerary-item">NY 2022</a>
+                    <a href="" class="itinerary-item">Potental SF Trip</a>
+                    <a href="" class="itinerary-item">SD Road Trip</a>
+                    <a href="" class="itinerary-item">Tokyo Trip</a>
+                    <a href="" class="itinerary-item">Orlando Theme Parks</a>
+                    <a href="" class="itinerary-item">Manila Summer</a>
+                    <a href="" class="itinerary-item">CSULB: CS BS</a>
                 </div>
             </div>
         </div>
-
+        <!-- bookmarked carousel -->
         <div class="bookmarked-container">
-            <h4>Bookmarked<img src="images/bookmark-icon.png" alt=""></h4>
+            <h4>Bookmarked<img src="images/titles/bookmark-icon.png" alt=""></h4>
             <h5>Revisit your bookmarked itineraries here!</h5>
             <div class="bookmarked-wrapper">
                 <div id="slick-carousel-2">
-                    <a href="" class="bookmarked-item">1</a>
-                    <a href="" class="bookmarked-item">2</a>
-                    <a href="" class="bookmarked-item">3</a>
-                    <a href="" class="bookmarked-item">4</a>
-                    <a href="" class="bookmarked-item">5</a>
-                    <a href="" class="bookmarked-item">6</a>
-                    <a href="" class="bookmarked-item">7</a>
-                    <a href="" class="bookmarked-item">8</a>
-                    <a href="" class="bookmarked-item">9</a>
+                    <a href="" class="bookmarked-item">Anaheim Adventure</a>
+                    <a href="" class="bookmarked-item">Sin City</a>
+                    <a href="" class="bookmarked-item">Big Bear Trip</a>
+                    <a href="" class="bookmarked-item">CSULB Go-Tos</a>
+                    <a href="" class="bookmarked-item">LB CS BS 0</a>
+                    <a href="" class="bookmarked-item">LB CS BS 1</a>
+                    <a href="" class="bookmarked-item">LB CS BS 2</a>
+                    <a href="" class="bookmarked-item">LB CS BS 3</a>
+                    <a href="" class="bookmarked-item">LB CS BS 4</a>
                 </div>
             </div> 
         </div>
     </div>
-
+    <!-- check list column -->
     <div class="itineraries-right-column">
         <div>
-            <h4>Checklist<img src="images/checklist-icon-2.png" alt=""></h4>
+            <h4>Checklist<img src="images/titles/checklist-icon-2.png" alt=""></h4>
         </div>
+        <!--  pre-trip checklist -->
         <div class="checklists">
-            <h5 class="checklist-name">Pre-Trip<a href=""><img src="images/checklist-more.png" alt=""></a></h5>
-            <hr>
-            <ul class="individual-checklist">
+            <h5 class="checklist-name">Pre-Trip<hr></h5>
+            <ul class="individual-checklist pretrip-checklist">
                 <li>Shampoo</li>
                 <li class="checked">Conditioner</li>
                 <li>Razor</li>
@@ -75,16 +80,19 @@
                 <li>Book</li>
                 <li>Family's gifts</li>
             </ul>
-            <div class="checklist-input-div">
-                <input type="text" class="checklist-input" placeholder="Add new item">
-                <span onclick="newElement()" class="addBtn">Add</span>
+            <div class="checklist-spacer">
+                <div class="checklist-input-div">
+                    <input type="text" class="pretrip-checklist-input" placeholder="Add new item">
+                    <span onclick="newElementPre()" class="addBtn">Add</span>
+                </div>
             </div>
+
         </div>
 
-        <!-- <div class="checklists">
-            <h5 class="checklist-name">Post-Trip<a href=""><img src="images/checklist-more.png" alt=""></a></h5>
-            <hr>
-            <ul class="individual-checklist">
+        <!-- post-trip checklist -->
+        <div class="checklists">
+            <h5 class="checklist-name">Post-Trip<hr></h5>
+            <ul class="individual-checklist posttrip-checklist">
                 <li>Shampoo</li>
                 <li class="checked">Conditioner</li>
                 <li>Laptop</li>
@@ -93,11 +101,13 @@
                 <li>Souvenirs</li>
                 <li>Snacks</li>
             </ul>
-            <div class="checklist-input-div">
-                <input type="text" class="checklist-input" placeholder="Add new item">
-                <span onclick="newElement()" class="addBtn">Add</span>
+            <div class="checklist-spacer">
+                <div class="checklist-input-div">
+                    <input type="text" class="posttrip-checklist-input" placeholder="Add new item">
+                    <span onclick="newElementPost()" class="addBtn">Add</span>
+                </div>
             </div>
-        </div> -->
+        </div>
         
     </div>
 </body>

@@ -1,5 +1,6 @@
 /* ===== Gerneral === */
 
+/* custom font for title */
 @font-face {
     font-family: 'QuackQuackGoTitle';
     src: url('fonts/Cagliostro-Regular.ttf');
@@ -7,6 +8,7 @@
     font-style: normal;
 }
 
+/* custom font for all other text */
 @font-face {
     font-family: 'Cantarell'; 
     src: url('fonts/Cantarell-Regular.ttf');
@@ -14,6 +16,8 @@
     font-style: normal;
 }
 
+
+/* remove default margin from all elemetns */
 *, body {
     margin: 0;
 }
@@ -390,21 +394,21 @@ a:visited {
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(1) {
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url("images/temp-kyoto-japan.png");
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+        url("images/temp/temp-kyoto-japan.png");
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(2) {
     margin: 0px 25px;
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 35%),
-    url("images/temp-seoul-korea.png");
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+        url("images/temp/temp-seoul-korea.png");
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(3) {
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url("images/temp-cebu-philippines.png");
+        linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 35%),
+        url("images/temp/temp-cebu-philippines.png");
 }
 
 .home-center-column > .trending-explore-container > .explore-locations {
@@ -442,25 +446,25 @@ a:visited {
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(1) {
     background-image: 
     linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp-anaheim.png');
+    url('images/temp/temp-anaheim.png');
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(2) {
     background-image: 
     linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp-vegas.png');
+    url('images/temp/temp-vegas.png');
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(3) {
     background-image: 
     linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp-big-bear.png');
+    url('images/temp/temp-big-bear.png');
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(4) {
     background-image: 
     linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp-csulb.png');
+    url('images/temp/temp-csulb.png');
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a > div {
@@ -653,7 +657,7 @@ a:visited {
     min-width: 150px;
     border: 1px solid;
     border-radius: 10px;
-    background-image: url("images/temp-search-image.png");
+    background-image: url("images/temp/temp-search-image.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -722,6 +726,21 @@ a:visited {
     max-width: calc(100vw - (200px + 350px)); 
 }
 
+.itineraries-center-column > .itineraries-container > a > .add-button {
+    box-sizing: border-box;
+    background-color: #58A4B0;
+    height: 43px;
+    width: 43px;
+    border-radius: 50%;
+    float: right;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    padding-bottom: 5px;
+}
+
 .itineraries-center-column > .itineraries-container > h4, .itineraries-center-column > .bookmarked-container > h4 {
     display: flex;
     align-items: center;
@@ -743,8 +762,6 @@ a:visited {
 
 
 
-
-
 /* CSS for sLick sliders */
 .itinerary-wrapper, .bookmarked-wrapper {
 	width: 98%;
@@ -753,18 +770,31 @@ a:visited {
 }
 
 .itinerary-item, .bookmarked-item {
-	background-color: white;
-	color: aqua;
+    box-sizing: border-box;
+	background-color: #d4e9df;
+	color: white;
 	display: flex !important;
 	justify-content: center;
-	align-items: center;
+	align-items: end;
 	text-align: center;
 	height: 150px;
 	border-radius: 20px;
+    text-decoration: none;
+    padding: 7px 10px;
+    background-image: 
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+        url("images/defaults/default-itineraries-background.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .itinerary-item, .bookmarked-item {
-	margin-top: 20px;
+	margin: 15px 0;
+}
+
+.itinerary-item:visited, .bookmarked-item:visited {
+    color: white;
 }
 
 .slick-slide {
@@ -786,12 +816,12 @@ a:visited {
 }
 
 .slick-next:before{
-    background: url(images/carousel-chevron-right-icon.png)!important;
+    background: url(images/nav/carousel-chevron-right-icon.png)!important;
     background-size: contain!important;
 }
 
 .slick-prev:before{
-    background: url(images/carousel-chevron-left-icon.png)!important;
+    background: url(images/nav/carousel-chevron-left-icon.png)!important;
     background-size: contain!important;
 }
 
@@ -808,7 +838,6 @@ a:visited {
 .slick-prev{
     left: -30px!important;
 }
-
 
 
 
@@ -847,30 +876,29 @@ a:visited {
 
 .itineraries-right-column > .checklists {
     box-sizing: border-box;
-    padding: 10px;
+    padding: 0 10px;
     margin-bottom: 25px;
     border-radius: 15px;
     border: 2px solid #E5DCBC;
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
+    overflow-x: hidden;
 }
 
 .itineraries-right-column > .checklists > .checklist-name {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 20px;
+    background-color: white;
+    font-size: 22px;
+    padding-top: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
-.itineraries-right-column > .checklists > .checklist-name > a > img {
-    height: 22px;
-}
-
-.itineraries-right-column > .checklists > hr {
+.itineraries-right-column > .checklists > h5 > hr {
     border: 1px solid #E5DCBC;
     margin: 3px 0;
 }
 
-.itineraries-right-column > .checklists > ul {
+.itineraries-right-column > .checklists > .individual-checklist {
     list-style-type: none;
     padding: 0;
 }
@@ -928,17 +956,19 @@ a:visited {
   }
 
 /* Style the list input */
-.itineraries-right-column > .checklists > .checklist-input-div {
+.itineraries-right-column > .checklists > .checklist-spacer > .checklist-input-div {
     position: relative;
     background-color: none;
     border: 2px solid #E5DCBC;
     border-radius: 10px;
     overflow: hidden;
     margin-top:5px;
+    position: sticky;
+    bottom: 0;
 }
   
 /* Style the input */
-.itineraries-right-column > .checklists > .checklist-input-div > input {
+.itineraries-right-column > .checklists > .checklist-spacer > .checklist-input-div > input {
     border: none;
     padding: 10px;
     float: left;
@@ -946,12 +976,12 @@ a:visited {
     background-color: transparent;
 }
 
-.itineraries-right-column > .checklists > .checklist-input-div > input:focus {
+.itineraries-right-column > .checklists > .checklist-spacer > .checklist-input-div > input:focus {
     outline: none;
 }
   
 /* Style the "Add" button */
-.itineraries-right-column > .checklists > .checklist-input-div > .addBtn {
+.itineraries-right-column > .checklists > .checklist-spacer > .checklist-input-div > .addBtn {
     display: flex;
     align-items: center;
     position: absolute;
@@ -967,12 +997,17 @@ a:visited {
     right: 0;
 }
   
-.itineraries-right-column > .checklists > .checklist-input-div > .addBtn:hover {
+.itineraries-right-column > .checklists > .checklist-spacer > .checklist-input-div > .addBtn:hover {
     background-color: #FFB039;
 }
 
 
-
+.itineraries-right-column > .checklists > .checklist-spacer {
+    background-color: white;
+    padding-bottom: 10px;
+    position: sticky;
+    bottom: 0;
+}
 
 
 

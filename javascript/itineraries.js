@@ -1,4 +1,6 @@
 /* === Itineraries Main Center === */
+
+// Settings for itineraries carousel 
 $('#slick-carousel-1').slick({
   rows: 2,
   dots: false,
@@ -9,7 +11,7 @@ $('#slick-carousel-1').slick({
   slidesToScroll: 3
 });
 
-
+// Settings for bookmarked carousel 
 $('#slick-carousel-2 ').slick({
   rows: 2,
   dots: false,
@@ -52,9 +54,9 @@ for (let i = 0; i < list.length; i++) {
   }, false);
 }
 
-// Create a new list item when clicking on the "Add" button
-function newElement() {
-  var inputValue = document.getElementsByClassName("checklist-input")
+// Create a new list item when clicking on the "Add" button for pre-trip check list
+function newElementPre() {
+  var inputValue = document.getElementsByClassName("pretrip-checklist-input")
   for (var i = 0; i < inputValue.length; i++) {
     var li = document.createElement("li");
     var t = document.createTextNode(inputValue[i].value);
@@ -62,12 +64,12 @@ function newElement() {
     if (inputValue[i].value === '') {
       alert("You must write something!");
     } else {
-      var ul = document.getElementsByClassName("individual-checklist")
+      var ul = document.getElementsByClassName("pretrip-checklist")
       for (var j = 0; j < ul.length; j++) {
         ul[j].appendChild(li);
       }
     }
-    document.getElementsByClassName("checklist-input")[i].value = ""
+    document.getElementsByClassName("pretrip-checklist-input")[i].value = ""
 
     var span = document.createElement("SPAN");
     var txt = document.createTextNode("\u00D7");
@@ -82,29 +84,36 @@ function newElement() {
       }
     }
   } 
+}
 
-  // // use ID, works for one list but breaks for multi
-  // var li = document.createElement("li");
-  // var inputValue = document.getElementsByClassName("checklist-input").value;
-  // var t = document.createTextNode(inputValue);
-  // li.appendChild(t);
-  // if (inputValue === '') {
-  //   alert("You must write something!");
-  // } else {
-  //   document.getElementById("myUL").appendChild(li);
-  // }
-  // document.getElementById("myInput").value = "";
+// Create a new list item when clicking on the "Add" button for post-trip check list
+function newElementPost() {
+  var inputValue = document.getElementsByClassName("posttrip-checklist-input")
+  for (var i = 0; i < inputValue.length; i++) {
+    var li = document.createElement("li");
+    var t = document.createTextNode(inputValue[i].value);
+    li.appendChild(t);
+    if (inputValue[i].value === '') {
+      alert("You must write something!");
+    } else {
+      var ul = document.getElementsByClassName("posttrip-checklist")
+      for (var j = 0; j < ul.length; j++) {
+        ul[j].appendChild(li);
+      }
+    }
+    document.getElementsByClassName("posttrip-checklist-input")[i].value = ""
 
-  // var span = document.createElement("SPAN");
-  // var txt = document.createTextNode("\u00D7");
-  // span.className = "close";
-  // span.appendChild(txt);
-  // li.appendChild(span);
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    li.appendChild(span);
 
-  // for (i = 0; i < close.length; i++) {
-  //   close[i].onclick = function() {
-  //     var div = this.parentElement;
-  //     div.style.display = "none";
-  //   }
-  // }
+    for (i = 0; i < close.length; i++) {
+      close[i].onclick = function() {
+        var div = this.parentElement;
+        div.style.display = "none";
+      }
+    }
+  } 
 }
