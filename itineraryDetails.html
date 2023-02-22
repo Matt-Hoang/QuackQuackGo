@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="images/ducky.png">
+    <title>QQG - Itinerary Details</title>
+    <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
+    <script type="text/javascript" src="slick/slick.min.js" defer></script>
+    <script src="javascript/itineraries.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+</head>
+<body class="flex-container">
+    <!-- navigation column -->
+    <div class="nav-column">
+        <img src="images/nav/quack-quack-go-logo.png" alt="">
+        <a href="home.html"><img src="images/nav/home-icon.png" alt="">Home</a>
+        <a href="search.html"><img src="images/nav/search-icon.png" alt="">Search</a>
+        <a href="itineraries.html" class="active"><img src="images/nav/itineraries-icon.png" alt="">Itineraries</a>
+        <a href="about.html"><img src="images/nav/about-icon.png" alt="">About</a>
+        <a href="support.html"><img src="images/nav/support-icon.png" alt="">Support</a>
+        <a href="login.html" class="logout-button"><img src="images/nav/log-out-icon.png" alt="">Log Out</a>
+    </div>
+
+    <!-- main itineraries column -->
+    <div class="itinerary-details-center-column">
+        <div class="itinerary-header">
+            <!-- back button -->
+            <a href="itineraries.html"><div></div></a>
+            <!-- itinerary header -->
+            <div class="trip-title">
+                <h2 contenteditable="true">Name of Trip</h2>
+                <h3>Origin: </h3><h3 contenteditable="true">Insert Location</h3>
+                <br>
+                <h3>Dates: </h3><h3 contenteditable="true"> Insert Date</h3>
+            </div>
+        </div>
+        <!-- view map button -->
+        <div class="button-container">
+            <a href=""><div class="view-map">View Map</div></a>
+        </div>
+        
+        <!-- details container -->
+        <div class="location-container">
+            <div class="location-item">
+                <div class="decoration">
+                    <img src="images/pin-logo.png" alt="">
+                    <div></div>
+                </div>
+                <div class="details">
+                    <h4 contenteditable="true">Location Title</h4>
+                    <div>
+                       <img src="images/pin-logo.png" alt="">
+                        <h5 contenteditable="true"> Location Address</h5> 
+                    </div>
+                    <div>
+                        <img src="images/calendar-logo.png" alt="">
+                        <h5 contenteditable="true"> Date and Time</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="location-item">
+                <div class="decoration">
+                    <img src="images/pin-logo.png" alt="">
+                    <div></div>
+                </div>
+                <div class="details">
+                    <h4 contenteditable="true">Location Title</h4>
+                    <div>
+                       <img src="images/pin-logo.png" alt="">
+                        <h5 contenteditable="true"> Location Address</h5> 
+                    </div>
+                    <div>
+                        <img src="images/calendar-logo.png" alt="">
+                        <h5 contenteditable="true"> Date and Time</h5>
+                    </div>
+                </div>
+            </div>
+            
+            
+
+        </div>
+    </div>
+
+    <!-- check list column -->
+    <div class="itineraries-right-column">
+        <div>
+            <h4>Checklist<img src="images/titles/checklist-icon-2.png" alt=""></h4>
+        </div>
+        <!--  pre-trip checklist -->
+        <div class="checklists">
+            <h5 class="checklist-name">Pre-Trip<hr></h5>
+            <ul class="individual-checklist pretrip-checklist">
+                <li>Shampoo</li>
+                <li class="checked">Conditioner</li>
+                <li>Razor</li>
+                <li>Laptop</li>
+                <li>Chargers</li>
+                <li>Book</li>
+                <li>Family's gifts</li>
+            </ul>
+            <div class="checklist-spacer">
+                <div class="checklist-input-div">
+                    <input type="text" class="pretrip-checklist-input" placeholder="Add new item">
+                    <span onclick="newElementPre()" class="addBtn">Add</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- post-trip checklist -->
+        <div class="checklists">
+            <h5 class="checklist-name">Post-Trip<hr></h5>
+            <ul class="individual-checklist posttrip-checklist">
+                <li>Shampoo</li>
+                <li class="checked">Conditioner</li>
+                <li>Laptop</li>
+                <li>Chargers</li>
+                <li>Book</li>
+                <li>Souvenirs</li>
+                <li>Snacks</li>
+            </ul>
+            <div class="checklist-spacer">
+                <div class="checklist-input-div">
+                    <input type="text" class="posttrip-checklist-input" placeholder="Add new item">
+                    <span onclick="newElementPost()" class="addBtn">Add</span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>
