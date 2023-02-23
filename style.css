@@ -1016,7 +1016,13 @@ a:visited {
     margin-bottom: 85px;
 }
 
+.itinerary-details-center-column > .itinerary-header > a {
+    display: block;
+    width: 50px;
+}
+
 .itinerary-details-center-column > .itinerary-header > a > div {
+    display: block;
     background-color: #58A4B0;
     border-radius: 50px;
     height: 30px;
@@ -1052,8 +1058,11 @@ a:visited {
     font-size: 18px;
     display: inline;
 }
+
 .itinerary-details-center-column > .button-container {
-    width: 110px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .itinerary-details-center-column > div > a {
@@ -1067,8 +1076,14 @@ a:visited {
     background-color: #58A4B0;
     border-radius: 50px;
     height: 35px;
+    width: 90px;
     padding-top: 5px;
     margin-bottom: 15px;
+}
+
+.itinerary-details-center-column > div > a > .view-map:hover, 
+.itinerary-details-center-column > .itinerary-header > a > div:hover {
+    background-color: rgba(33, 134, 171, 0.75);
 }
 
 .itinerary-details-center-column > .location-container {
