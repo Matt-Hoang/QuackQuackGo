@@ -91,16 +91,16 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
 }
 
-.background {
+/* .background {
     width: 30%;
-}
+} */
 
-.login-signup-info > form {
+.login-signup-info > .login-signup-form {
     width: 40%;
     margin: 10vh auto;
 }
 
-.login-signup-info > form > h1 {
+.login-signup-info > .login-signup-form > h1 {
     font-family: 'QuackQuackGoTitle';
     font-size: 50px;
     color: #FFB039;
@@ -108,13 +108,13 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
-.login-signup-info > form > h3 {
+.login-signup-info > .login-signup-form > h3 {
     font-family: 'Cantarell';
     font-size: 40px;
     margin-top: 35px;
 }
 
-.login-signup-info > form > input {
+.login-signup-info > .login-signup-form > input {
     box-sizing: border-box;
     background-color: #FFF8E0;
     font-size: 25px;
@@ -125,15 +125,14 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 25px;
 }
 
-.login-signup-info > form > a {
+.login-signup-info > .login-signup-form > a {
     font-family: 'Cantarell';
     float: right;
     font-size: 18px;
     margin-top: 5px;
-    color: black;
 }
 
-.login-signup-info > form > button{
+.login-signup-info > .login-signup-form > button{
     box-sizing: border-box;
     background-color: #FFB039;
     font-size: 25px;
@@ -145,7 +144,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 25px;
 }
 
-.login-signup-info > form > h5 {
+.login-signup-info > .login-signup-form > h5 {
     font-family: 'Cantarell';
     font-weight: 400;
     float: left;
@@ -212,7 +211,7 @@ a:visited {
     margin: 25px 0px;
 }
 
-.confirmation-info > button:hover, .login-signup-info > form > button:hover, .support-body > .contact-form > form > button:hover {
+.confirmation-info > button:hover, .login-signup-info > .login-signup-form > button:hover, .support-body > .contact-form > form > button:hover {
     background-color: rgba(255, 176, 57, .9);
 }
 
@@ -1050,10 +1049,6 @@ a:visited {
     font-size: 30px;
 }
 
-.itinerary-details-center-column > .itinerary-header > .trip-title > div {
-
-}
-
 .itinerary-details-center-column > .itinerary-header > .trip-title > h3 {
     font-size: 18px;
     display: inline;
@@ -1119,10 +1114,6 @@ a:visited {
     width: 0;
     height: 75px;
     margin: 10px 0;
-}
-
-.itinerary-details-center-column > .location-container > .location-item > .details {
-    /* background-color: lightcoral; */
 }
 
 .itinerary-details-center-column > .location-container > .location-item > .details > h4 {

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images/ducky.png">
     <title>QQG - Login</title>
+    <script type="module" src="javascript/login.js"></script>
 </head>
 <body>
     <!-- login page -->
@@ -14,13 +15,13 @@
         <div class="login-signup-info">
             <img src="images/ducky.png" alt="">
             <!-- login form -->
-            <form action="home.html">
+            <form class="login-signup-form" id="loginForm">
                 <h1><u>QuackQuackGo</u></h1>
                 <h3>User Login</h3>
-                <input type="text" placeholder="Email Address"><br>
-                <input type="password" placeholder="Password"><br>
+                <input type="email" id="email" name="email" placeholder="Email Address" required><br>
+                <input type="password" id="password" name="password" placeholder="Password" required><br>
                 <a href="url">Forgot Password?</a><br>
-                <button type="submit">Login</button>
+                <button id="loginSubmit">Log In</button>
                 <h5>Not Registered? <a href="registration.html">Create an Account</a></h5>
             </form>
         </div>
