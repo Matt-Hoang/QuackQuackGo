@@ -723,6 +723,7 @@ a:visited {
     padding: 25px 30px;
     /* limit width of center column to contain slick sliders - (100vw - (nav width + checklist width)) */
     max-width: calc(100vw - (200px + 350px)); 
+    overflow-x: hidden;
 }
 
 .itineraries-center-column > .itineraries-container > a > .add-button {
@@ -749,10 +750,68 @@ a:visited {
 .itineraries-center-column > .itineraries-container > h5, .itineraries-center-column > .bookmarked-container > h5 {
     font-size: 15px;
 }
+/* itineraries scroll bar */
+.itineraries-center-column::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
 
+.itineraries-center-column::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
 .itineraries-center-column > .itineraries-container > h4 > img, .itineraries-center-column > .bookmarked-container > h4 > img {
     height: 30px;
     margin: 0 10px;
+}
+
+/* itineraries scroll bar */
+.itineraries-center-column::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.itineraries-center-column::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
 }
 
 /* CSS for sLick sliders */
@@ -869,6 +928,7 @@ a:visited {
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
     overflow-x: hidden;
 }
+
 
 .itineraries-right-column > .checklists > .checklist-name {
     background-color: white;
@@ -994,6 +1054,35 @@ a:visited {
     bottom: 0;
 }
 
+/* checklist scroll bar */
+.checklists::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.checklists::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.checklists::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid white;
+}
+
+.checklists::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.checklists::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 5px; 
+}
+
+.checklists::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 5px;
+}
 
 /* === Itineraries Detailed View === */
 /* center column */
@@ -1003,6 +1092,7 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 20px 20px;
+    overflow-x: hidden;
 }
 
 .itinerary-details-center-column > .itinerary-header {
@@ -1153,6 +1243,7 @@ a:visited {
     height: 97vh;
     padding: 25px 30px;
     margin-right: 12px;
+    overflow-x: hidden;
 }
 
 .about-body > .about-title {
@@ -1232,6 +1323,36 @@ a:visited {
     font-size: 18px;
 }
 
+/* about scroll bar */
+.about-body::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.about-body::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.about-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.about-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.about-body::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.about-body::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
+
 
 /* === Support === */
 .support-body {
@@ -1244,6 +1365,7 @@ a:visited {
     height: 97vh;
     padding: 25px 30px;
     margin-right: 12px;
+    overflow-x: hidden;
 }
 
 .support-body > div {
@@ -1341,4 +1463,32 @@ a:visited {
     font-size: 20px;
 }
 
+/* support scroll bar */
+.support-body::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
 
+.support-body::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.support-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.support-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.support-body::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.support-body::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
