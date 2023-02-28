@@ -1350,4 +1350,384 @@ a:visited {
     font-size: 20px;
 }
 
+/* === Profile Info By Mariel Urbano=== */
+/* This is the styling for the Profile page*/
+.profile-edit-body{
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+    background-color: #FFF8E0;
+    border-radius: 35px;
+    height: 97vh;
+    padding: 25px 30px;
+    margin-right: 12px;
+    position: relative;
+    overflow-y: scroll;
+}
+
+/* profile scroll bar */
+.profile-edit-body::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.profile-edit-body::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.profile-edit-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.profile-edit-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.profile-edit-body::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.profile-edit-body::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
+
+.profile-edit-body > .user-tile{
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 30px;
+    min-width: 700px;
+}
+
+.profile-edit-body > div > .profile-background{
+    display: flex ;
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+    min-width: 500px;
+    padding: 10px;
+    max-height: 250px;
+}
+
+.profile-edit-body > div > .profile-background > img{
+    width: 100%;
+    border-radius: 30px;
+    object-fit: cover;
+}
+
+.profile-edit-body > div >  .profile-pic{
+    border:10px solid rgba(255, 255, 255, 0.75);
+    position: relative;
+    margin-left: 8%;
+    margin-bottom: -130px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    top: -90px;
+    overflow: hidden;
+    color: transparent;
+    background-color: #FFF8E0;
+}
+
+.profile-edit-body > div > .profile-pic > img{
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+    z-index: 0;
+}
+
+.profile-pic > input{
+    display: none;
+}
+
+.change-pfp{
+    position: relative;
+    top: -110%;
+    left: -2%;
+    width: 140px;
+    height: 160px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.change-pfp:hover{
+    background-color: #2b2b2b93;
+    color: rgb(255, 247, 232);
+    display: block;
+    text-align: center;
+    font-style: bold;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background-color .2s ease-in-out;
+    z-index: 1000;
+    padding-top: 60px;
+}
+
+.profile-edit-body > div > .name-location{
+    position: relative;
+    margin-left: 8%;
+    top: -25px;
+    left: 190px;
+    width: 250px;
+}
+
+.profile-edit-body > div > .name-location > h3{
+    font-size: 30px;
+    margin-bottom: -10px;
+    font-style: bold;
+}
+
+.profile-edit-body > div > .name-location > h5{
+    font-size: 15px;
+    margin-bottom: -10px;
+    
+}
+.profile-edit-body > div > .name-location > h5 > img{
+    padding: 1px;
+    width: 15px;
+}
+
+.info-title{
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+.info-title > h4{
+    font-size: 20px;
+    font-style: bold;
+    margin-bottom: -5px;
+}
+
+.info-title > h4 > img{
+    height: 30px;
+}
+
+.info-title > h5{
+    font-size: 12px;
+}
+
+.info-form{
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 30px;
+    width: 70%;
+    min-width: 500px;
+    float: left;
+}
+
+.user-details{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 70px;
+    padding-right: 70px;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    justify-content: space-between;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.user-details > div {
+    width: 100%;
+    margin: auto;
+    padding-bottom: 15px;
+}
+
+.user-details > .form-names{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    gap: 50px;
+}
+
+.user-details > .form-names > div,
+.user-details > .form-username-pass > div{
+    width: 100%;
+}
+
+.user-details > .form-names > div > input , 
+.user-details > .form-username-pass > div > input{
+    height: 30px;
+    border-radius: 10px;
+    width: 100%;
+    border-style: solid;
+    border-color: #FFB341;
+    padding-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.user-details > .form-email , 
+.user-details > .form-location{
+    width: 100%;
+}
+
+.form-email > input , 
+.form-location > input{
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: #FFB341;
+    padding-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.form-email > input:focus , 
+.form-location > input:focus ,
+.user-details > .form-names > div > input:focus  , 
+.user-details > .form-username-pass > div > input:focus {
+    border-color: #58A4B0;
+    outline: none;
+} 
+
+.user-details > .form-username-pass{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    gap: 50px;
+}
+
+.user-details > button{
+    background-color: #58A4B0;
+    color: white;
+    border-radius: 20px;
+    border-style: none;
+    width: 120px;
+    height: 40px;
+    margin: auto;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.user-details > .form-names > div > h6 ,
+.user-details > .form-username-pass > div > h6,
+.user-details > .form-email > h6, 
+.user-details > .form-location > h6{
+    font-size: 12px;
+}
+
+.profile-edit-boxes {
+    width: 100%;
+    height: fit-content;
+    min-width: 700px;
+    margin: 0 auto;
+    max-width: inherit;
+    box-sizing: border-box;
+    display: flex;
+    gap: 3%;
+}
+
+
+.counters-create-itinerary{
+    float: right;
+    width: 27%;
+}
+
+.counters-create-itinerary > .itinerary-counter,
+.counters-create-itinerary > .location-counter{
+    background-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    border-radius: 30px;
+    border: 3px solid #EAE3CB;
+    margin-bottom: 10px;
+    padding: 10px;
+    max-height: 120px;
+    min-height: 60px;
+    height: auto;
+    display: flex;
+}
+
+.location-counter > .location-counter-icon{
+    background: #e9adad7e;
+    width: 65px;
+    height: 65px;
+    min-width: 60px;
+    min-height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.itinerary-counter > .itinerary-counter-icon{
+    background: #ade9df86;
+    width: 65px;
+    height: 65px;
+    min-width: 60px;
+    min-height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.itinerary-counter > div > img,
+.location-counter > div > img{
+    min-width: 30px;
+    min-height: 30px;
+    height: 60%;
+    width: 60%;
+    object-fit: contain;
+}
+
+.counter-text{
+    margin-left: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 10px;
+}
+
+.counter-text > h4{
+    font-size: 25px;
+    font-style: bold;
+    font-weight: 500;
+    margin-bottom: -10px;
+}
+
+.counter-text > p{
+    font-size: 15px;
+    color: #000000ad;
+    margin-bottom: -5px;
+}
+
+.counters-create-itinerary > .profile-create-itinerary{
+    background-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    border-radius: 30px;
+    border: 3px solid #EAE3CB;
+    padding: 10px;
+    min-height: 180px;
+    height: auto;
+    flex-direction: column;
+}
+
+.profile-create-itinerary > img{
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+.profile-create-itinerary > a{
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    color: white;
+    background: #58A4B0;
+    border-radius: 20px;
+    font-size: 15px;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
