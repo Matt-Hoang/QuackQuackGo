@@ -58,7 +58,7 @@ async function formSubmit(e) {
                 document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Incorrect password!</p>"
             }
             else if (errorCode == "auth/too-many-requests") {
-                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Account has been temporarily disabled due to many failed login attemps! Restore it by resetting your password or try again later.</p>"
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Account has been temporarily disabled due to many failed login attempts! Restore it by resetting your password or try again later.</p>"
             }           
         });
         
