@@ -33,27 +33,51 @@ async function formSubmit(e) {
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
 
-    // sign in with email and password
-    var userCredential = await signInWithEmailAndPassword(auth, email, password).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+    if (email == "" && password == "") {
+        document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please input an email and password!</p>"
+    } 
+    else if (email == "") {
+        document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please input an email!</p>"
+    } 
+    else if (password == "") {
+        document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please input a password!</p>"
+    }
+    else {
+        // sign in with email and password
+        var userCredential = await signInWithEmailAndPassword(auth, email, password).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
 
-        alert(errorMessage);
-    });
-    
-    // check if user email is verified, deny access if not
-    onAuthStateChanged(auth, async (user) => {
-        if (user.emailVerified) {
-            // write date and time to database (last login date/time)
-            const user = userCredential.user;
-            const dt = new Date();
-            await update(ref(database, 'users/' + user.uid),{lastLogin: dt})
+            console.log(errorCode)
+            console.log(errorMessage)
 
-            // clear form and redirect page
-            document.getElementById('loginForm').reset();
-            window.location.href = "home.html";     
-        } else {
-            alert('Please verify Email!')
-        }
-      });
+            if (errorCode == "auth/invalid-email") {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Email is not registered!</p>"
+            }
+            else if (errorCode == "auth/wrong-password") {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Incorrect password!</p>"
+            }
+            else if (errorCode == "auth/too-many-requests") {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Account has been temporarily disabled due to many failed login attemps! Restore it by resetting your password or try again later.</p>"
+            }           
+        });
+        
+        // check if user email is verified, deny access if not
+        onAuthStateChanged(auth, async (user) => {
+            if (user.emailVerified == false) {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please verify your email!</p>"
+            }
+            else {
+                // write date and time to database (last login date/time)
+                const user = userCredential.user;
+                const dt = new Date();
+                await update(ref(database, 'users/' + user.uid),{lastLogin: dt})
+
+                // clear form and redirect page
+                document.getElementById('loginForm').reset();
+                window.location.href = "home.html";     
+            }
+            
+        });
+    }
 }

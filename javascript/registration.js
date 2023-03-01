@@ -39,7 +39,7 @@ async function registrationSubmit(e) {
 
     // make sure both passwords identical 
     if (password != passwordCheck) {
-        alert ("\nPassword did not match! Please try again.")
+        document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Passwords do not match!</p>"
     }
     else {
         // Sign up and sign in
@@ -47,7 +47,15 @@ async function registrationSubmit(e) {
             const errorCode = error.code;
             const errorMessage = error.message;
 
-            alert(errorMessage)
+            console.log(errorCode)
+            console.log(errorMessage)
+
+            if (errorCode == "auth/weak-password") {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Password must be at least 6 characters!</p>"
+            } 
+            else if (errorCode == "auth/email-already-in-use") {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Email is already used!</p>"
+            }
         }));
 
         // set profile display name to full name
@@ -55,7 +63,8 @@ async function registrationSubmit(e) {
             const errorCode = error.code;
             const errorMessage = error.message;
 
-            alert(errorMessage)
+            console.log(errorCode)
+            console.log(errorMessage)
         }));
 
         // send email verifcation
