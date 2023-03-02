@@ -1,11 +1,11 @@
 /*== adds close button to all locations ==*/
-var myNodelist = document.getElementsByClassName("hamburger");
-for (var i = 0; i < myNodelist.length; i++) {
+var hamlist = document.getElementsByClassName("hamburger");
+for (var i = 0; i < hamlist.length; i++) {
   var but = document.createElement("button");
   var txt = document.createTextNode("\u00D7");
   but.className = "close-loc";
   but.appendChild(txt);
-  myNodelist[i].appendChild(but);
+  hamlist[i].appendChild(but);
 }
 
 // Click on a close button to hide the location item
@@ -77,6 +77,7 @@ function handleDrop(item) {
 (()=> {enableDragSort('location-container')})();
 
 // This is the old Drag and drop list function, didnt work when you add a new item
+
 // const sortableList = document.querySelector(".location-container");
 // var items = document.querySelectorAll(".location-item");
 
