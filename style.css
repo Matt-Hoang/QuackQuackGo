@@ -1731,3 +1731,237 @@ a:visited {
     margin-right: auto;
 }
 
+
+/* === Itineraries Edit View === */
+/* center column */
+.itinerary-edit-center-column {
+    box-sizing: border-box;
+    background-color: #FFF8E0;
+    border-radius: 35px;
+    height: 97vh;
+    padding: 20px 20px;
+    overflow-y: scroll;
+    min-width: 520px;
+}
+
+.itinerary-edit-center-column > .itinerary-header {
+    background-color: lightgray;
+    width: 97%;
+    height: 250px;
+    border-radius: 20px;
+    padding: 10px;
+    margin: auto;
+    margin-bottom: 85px;
+   
+}
+
+.itinerary-edit-center-column > .itinerary-header > a {
+    display: block;
+    width: 50px;
+}
+
+.itinerary-edit-center-column > .itinerary-header > a > div {
+    display: block;
+    background-color: #58A4B0;
+    border-radius: 50px;
+    height: 30px;
+    width: 50px;
+    background-image: url(images/back-arrow.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 30px;
+}
+
+.itinerary-edit-center-column > .itinerary-header > .trip-title {
+    box-sizing: border-box;
+    position: relative;
+    height: 150px;
+    width: 80%;
+    margin: auto;
+    background-color: #FFFDF7;
+    top: 150px;
+    border-radius: 25px;
+    padding: 15px 30px;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+}
+
+
+.itinerary-edit-center-column > .itinerary-header > .trip-title > form > .trip-name > input{
+    height: 40px;
+    border-radius: 10px;
+    width: 100%;
+    border-style: solid;
+    border-color: #FFB341;
+    padding-left: 5px;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.trip-name > input:focus,
+.origin-input > input:focus,
+.date-input > input:focus
+{
+    outline-color: #58A4B0;
+}
+
+.origin-input > input{
+    height: 22px;
+    border-radius: 10px;
+    width: 55%;
+    border-style: solid;
+    border-color: #FFB341;
+    padding-left: 5px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.date-input > input {
+    height: 22px;
+    border-radius: 10px;
+    width: 150px;
+    border-style: solid;
+    border-color: #FFB341;
+    padding-left: 5px;
+    transition: all 0.3s ease;
+    cursor: text;
+}
+
+.itinerary-edit-center-column > .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.itinerary-edit-center-column > div > a {
+    text-decoration: none;
+    color: white;
+}
+
+.itinerary-edit-center-column > div > a > .view-map {
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #58A4B0;
+    border-radius: 50px;
+    height: 35px;
+    width: 90px;
+    padding-top: 5px;
+    margin-bottom: 15px;
+}
+
+.itinerary-edit-center-column > div > button {
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #58A4B0;
+    border-radius: 50px;
+    height: 35px;
+    width: 90px;
+    margin-bottom: 15px;
+    border: none;
+    color: white;
+    font-family: 'Cantarell';
+    cursor: pointer;
+}
+
+.itinerary-edit-center-column > div > a > .view-map:hover, 
+.itinerary-edit-center-column > .itinerary-header > a > div:hover {
+    background-color: rgba(33, 134, 171, 0.75);
+}
+
+.itinerary-edit-center-column > .location-container {
+    box-sizing: border-box;
+    background-color: #FFFDF7;
+    width: 97%;
+    border-radius: 20px;
+    padding: 20px 20px 20px 0;
+    margin: auto;
+    height: fit-content;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+}
+
+.itinerary-edit-center-column > .location-container > .location-item {
+    display: flex;
+    border: 3px solid #ffb34183;
+    border-radius: 20px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    /* background-color: lightblue; */
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .hamburger{
+    position: relative;
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .hamburger > button{
+    background-color: lightgrey;
+    border-radius: 50%;
+    border: none;
+    position: absolute;
+    right: 0;
+    margin-right: -5px;
+    margin-top: -10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .hamburger > button:hover{
+    background-color: #f44336;
+    color: white;
+}
+
+.location-item.dragging :where(.location-container, div){
+    opacity: 0;
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .decoration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* width: 150px; */
+    min-width: 150px;
+    height: 100px;
+    /* background-color: lightgoldenrodyellow; */
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .decoration > img {
+    height: 35px;
+    margin-top: 30px;
+}
+
+
+.itinerary-edit-center-column > .location-container > .location-item > .hamburger > img {
+    height: 30px;
+    margin-top: 35px;
+    margin-left: 35px;
+    margin-right: 20px
+}
+
+
+.itinerary-edit-center-column > .location-container > .location-item > .details {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    margin-right: auto;
+    /* background-color: lightcoral; */
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .details > h4 {
+    font-size: 22px;
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .details > div {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .details > div > h5 {
+    word-wrap: normal;
+    font-size: 16px;
+    padding: 0 5px;
+}
+
+.itinerary-edit-center-column > .location-container > .location-item > .details > div > img {
+    height: 18px;
+    padding-right: 5px;
+    opacity: 50%;
+}
