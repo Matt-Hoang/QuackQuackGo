@@ -1,3 +1,24 @@
+/*== adds close button to all locations ==*/
+var myNodelist = document.getElementsByClassName("hamburger");
+for (var i = 0; i < myNodelist.length; i++) {
+  var but = document.createElement("button");
+  var txt = document.createTextNode("\u00D7");
+  but.className = "close-loc";
+  but.appendChild(txt);
+  myNodelist[i].appendChild(but);
+}
+
+// Click on a close button to hide the location item
+var close = document.getElementsByClassName("close-loc");
+for (var i = 0; i < close.length; i++) {
+  close[i].onclick = function() {
+    var div = this.parentElement;
+    var sdiv = div.parentElement;
+    sdiv.style.display = "none";
+  }
+}
+
+/*== Allows drag and drop to arrange order of locations ==*/
 const sortableList = document.querySelector(".location-container");
 const items = document.querySelectorAll(".location-item");
 
