@@ -1,36 +1,56 @@
 import {db, ref, onValue} from "./db.js";
 
+// Container element of itineraries
 const itineraryContainerList = document.getElementsByClassName("itineraries-container")[0];
+
+// Container element of bookmarked itineraries
 const bookmarkedContainerList = document.getElementsByClassName("bookmarked-container")[0];
 
+// get ID of user currently logged in
 const userID = localStorage.getItem("userID");
 
+// Reference of user's itineraries in Firebase
 const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
 onValue(userItinerariesRef, (snapshot) => {
   const userItineraries = snapshot.val();
   displayUserItineraries(userItineraries);
 })
 
+// Reference of user's bookmarked itineraries in Firebase
 const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
 onValue(userBMItinerariesRef, (snapshot) => {
   const userBMItineraries = snapshot.val();
   displayUserBMItineraries(userBMItineraries);
 });
 
+/** Display user's itineraries on itineraries page with "a" HTML elements on carousel element
+ * 
+ * @param {*} userItineraries - list of itineraries that the user has created
+ */
 function displayUserItineraries(userItineraries)
 {
+  // Get array of user itinerary IDs from Firebase
   var userItinerariesIDs = Object.keys(userItineraries);
 
+  // Wrapper element to store "a" HTML elements as child nodes
   var wrapperElement = document.createElement("div");
+
+  // Carousel element to store wrapper element to be scrolled on page
   var carouselElement = document.createElement("div");
 
+  // Assign class name of wrapper
   wrapperElement.className = "itinerary-wrapper";
+
+  // Assign ID of carousel
   carouselElement.id = "slick-carousel-1";
 
+  // Loop through all itineraries of users
   for (let i = 0; i < userItinerariesIDs.length; i++) 
   {
+    // "a" HTML element
     var aElement = document.createElement("a");
 
+    // assign itinerary information in element
     aElement.href = "itineraryDetails.html";
     aElement.id = `itinerary-${i + 1}`;
     aElement.className = "itinerary-item";
@@ -39,15 +59,19 @@ function displayUserItineraries(userItineraries)
     aElement.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%), 
       url('${userItineraries[userItinerariesIDs[i]].image}')`;
 
+    // Click listener to store itinerary ID if itinerary is clicked on in itinerary page 
     aElement.addEventListener("click", function() {
       localStorage.setItem("itineraryID", String(userItinerariesIDs[i]));
     });
 
+    // Add element to carousel to be displayed 
     carouselElement.appendChild(aElement);
   }
 
+  // add carousel to wrapper
   wrapperElement.appendChild(carouselElement);
 
+  // add wrapper to container
   itineraryContainerList.appendChild(wrapperElement);
 
   // Settings for itineraries carousel 
@@ -62,6 +86,10 @@ function displayUserItineraries(userItineraries)
   });
 }
 
+/** Display bookmarked itineraries that user has bookmarked
+ * 
+ * @param {*} userBMItineraries 
+ */
 function displayUserBMItineraries(userBMItineraries)
 {
   var userBMItinerariesIDs = Object.keys(userBMItineraries);
@@ -108,12 +136,13 @@ function displayUserBMItineraries(userBMItineraries)
 }
 
 /* === Itineraries Checklist === */
+
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
 for (var i = 0; i < myNodelist.length; i++) {
   var span = document.createElement("SPAN");
   var txt = document.createTextNode("\u00D7");
-  span.className = "close";
+  span.className = "close";  
   span.appendChild(txt);
   myNodelist[i].appendChild(span);
 }

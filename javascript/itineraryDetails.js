@@ -1,21 +1,27 @@
 import {db, ref, onValue} from "./db.js";
 
-// Get element of container to store location elements
+// Get location container element
 const locationClass = document.getElementsByClassName("location-container")[0];
 
+// Get user ID
 const userID = localStorage.getItem("userID");
+
+// Get itinerary ID from itineraries.js
 const itineraryID = localStorage.getItem("itineraryID");
 
+// reference of itinerary that user clicked on in itineraries.js in Firebase
 const itineraryIDRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}`);
 onValue(itineraryIDRef, (snapshot) => {
   const itineraryInfo = snapshot.val();
-  
-  console.log(itineraryInfo)
 
   displayInfo(itineraryInfo);
   displayLocations(itineraryInfo.locationList);
 })
 
+/** Display main information of itinerary like name of trip, duration of trip, etc
+ * 
+ * @param {*} itineraryInfo - information of itinerary pulled from Firebase
+ */
 function displayInfo(itineraryInfo)
 {
   // Get element of each date and name
@@ -28,8 +34,13 @@ function displayInfo(itineraryInfo)
   date.innerText = itineraryInfo.duration.start + " - " + itineraryInfo.duration.end;
 }
 
+/** Display all locations stored in itinerary that user clicked on in itineraries page
+ * 
+ * @param {*} locationList - list of locations from itinerary
+ */
 function displayLocations(locationList)
 {
+  // Array of all location IDs from itinerary
   const locationIDs = Object.keys(locationList);
 
   // Get array of locations in itinerary  
@@ -63,6 +74,9 @@ function displayLocations(locationList)
   }
 }
 
+/** Display duck.png on location that user is at currently
+ * 
+ */
 function displayCurrentLocation()
 {
   // Get HTML element that contains image src
