@@ -35,6 +35,5 @@ export async function formSubmit(e) {
         } else {
             alert('Please verify Email!')
         }
-      });
-    
+    }); 
 }
