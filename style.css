@@ -394,21 +394,18 @@ a:visited {
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(1) {
     background-image: 
-        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/temp/temp-kyoto-japan.png");
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(2) {
     margin: 0px 25px;
     background-image: 
-        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/temp/temp-seoul-korea.png");
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(3) {
     background-image: 
-        linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/temp/temp-cebu-philippines.png");
+        linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .explore-locations {
@@ -445,26 +442,22 @@ a:visited {
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(1) {
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp/temp-anaheim.png');
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(2) {
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp/temp-vegas.png');
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(3) {
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp/temp-big-bear.png');
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(4) {
     background-image: 
-    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%),
-    url('images/temp/temp-csulb.png');
+    linear-gradient(0deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 35%)
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a > div {
@@ -774,10 +767,7 @@ a:visited {
 	height: 150px;
 	border-radius: 20px;
     text-decoration: none;
-    padding: 7px 10px;
-    background-image: 
-        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/defaults/default-itineraries-background.png");
+    padding: 7px 10px;  
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -1019,6 +1009,7 @@ a:visited {
 .itinerary-details-center-column > .itinerary-header > a {
     display: block;
     width: 50px;
+    
 }
 
 .itinerary-details-center-column > .itinerary-header > a > div {
@@ -1031,6 +1022,7 @@ a:visited {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 30px;
+    
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title {
