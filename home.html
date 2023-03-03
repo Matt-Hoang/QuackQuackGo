@@ -10,6 +10,7 @@
 </head>
 <body class="flex-container">
     <!-- navigation column -->
+    <script type="module" src="javascript/home.js"></script>
     <div class="nav-column">
         <img src="images/nav/quack-quack-go-logo.png" alt="">
         <a href="home.html" class="active"><img src="images/nav/home-icon.png" alt="">Home</a>
@@ -19,58 +20,57 @@
         <a href="support.html"><img src="images/nav/support-icon.png" alt="">Support</a>
         <a href="login.html" class="logout-button"><img src="images/nav/log-out-icon.png" alt="">Log Out</a>
     </div>
-    <!-- main home column -->
+    <<!-- main home column -->
     <div class="home-center-column">
-        <!-- trending section -->
         <div class="trending-explore-container">
             <h4>Trending<img src="images/titles/trending-icon.png" alt=""></h4>
             <h5>Locations that are popular now</h5>
             <div class="trending-locations">
-                <a href="">Kyoto, Japan</a>
-                <a href="">Seoul, South Korea</a>
-                <a href="">Cebu Philippines</a>
+                <!-- Added IDs to trending locations to program in images and text and click listener -->
+                <a href="" id="trending-locations-1"></a>
+                <a href="" id="trending-locations-2"></a>
+                <a href="" id="trending-locations-3"></a>
             </div>
         </div>
-
-        <!-- explore section -->
         <div class="trending-explore-container">
-            <h4>Explore<img src="images/titles/explore-icon.png" alt=""></h4>
+            <h4>Explore<img src="images/explore-icon.png" alt=""></h4>
             <h5>Check out new itineraries</h5>
             <div class="explore-locations">
                 <div class="new-itineraries">
-                    <a href="">
+                    <!-- Added IDs to itineraries and titles to program in images and text and click listener-->
+                    <a href="" id="new-itineraries-1">
                         <div>
-                            <h5>Anaheim Adventure</h5>
+                            <h5 id="new-itineraries-1-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.5</h5>
+                                <h5 id="new-itineraries-1-rating"></h5>
                             </div>
                         </div>
                     </a> 
-                    <a href="">
+                    <a href="" id="new-itineraries-2">
                         <div>
-                            <h5>Sin City</h5>
+                            <h5 id="new-itineraries-2-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.8</h5>
+                                <h5 id="new-itineraries-2-rating"></h5>
                             </div>
                         </div>
                     </a> 
-                    <a href="">
+                    <a href="" id="new-itineraries-3">
                         <div>
-                            <h5>Big Bear Trip</h5>
+                            <h5 id="new-itineraries-3-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.3</h5>
+                                <h5 id="new-itineraries-3-rating"></h5>
                             </div>
                         </div>
                     </a> 
-                    <a href="">
+                    <a href="" id="new-itineraries-4">
                         <div>
-                            <h5>CSULB</h5>
+                            <h5 id="new-itineraries-4-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.0</h5>
+                                <h5 id="new-itineraries-4-rating"></h5>
                             </div>
                         </div>
                     </a> 
@@ -83,24 +83,27 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div
     <!-- profile and upcoming trips column -->
     <div class="home-right-column">
-        <a href=""><img src="images/profile-picture.jpeg" alt="">John Doe</a>
+        <a href="" id="profile-info">
+            <img src="" id="profile-info-picture" alt="">
+        </a>
         <h3>Upcoming Trips</h3>
         <div>
-            <a href="">
-                <img src="images/temp/temp-new-york.png" alt="">
+            <!-- Added IDs to elements to program in images, name of trip, and duration of trip-->
+            <a href="" id="trip-1">
+                <img src="" id="trip-picture-1" alt="">
                 <div>
-                    <h4>New York 2022</h4>
-                    <h5>Nov. 21 - Nov.25</h5>
+                    <h4 id="trip-1-title"></h4>
+                    <h5 id="duration-trip-1"></h5>
                 </div>
             </a>
-            <a href="">
-                <img src="images/temp/temp-tokyo.png" alt="">
+            <a href="" id="trip-2">
+                <img src="" id="trip-picture-2" alt="">
                 <div>
-                    <h4>Tokyo Trip</h4>
-                    <h5>Mar. 12 - Mar. 18</h5>
+                    <h4 id="trip-2-title"></h4>
+                    <h5 id="duration-trip-2"></h5>
                 </div>
             </a>            
         </div>
