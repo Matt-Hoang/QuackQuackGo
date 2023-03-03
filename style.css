@@ -589,21 +589,18 @@ a:visited {
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(1) {
     background-image: 
-        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/temp/temp-kyoto-japan.png");
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%);
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(2) {
     margin: 0px 25px;
     background-image: 
-        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/temp/temp-seoul-korea.png");
+        linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%);
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(3) {
     background-image: 
-        linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/temp/temp-cebu-philippines.png");
+        linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 35%);
 }
 
 .home-center-column > .trending-explore-container > .explore-locations {
