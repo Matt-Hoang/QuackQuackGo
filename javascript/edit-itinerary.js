@@ -12,32 +12,36 @@ for (var i = 0; i < hamlist.length; i++) {
 var closeloc = document.getElementsByClassName("close-loc");
 for (var i = 0; i < closeloc.length; i++) {
   closeloc[i].onclick = function() {
-    var div = this.parentElement;
-    var sdiv = div.parentElement;
-    sdiv.style.display = "none";
+    var div = this.parentElement; // hamburger div
+    var sdiv = div.parentElement; // location-item div
+    var cdiv = sdiv.parentElement; // location-contianer div
+    cdiv.removeChild(sdiv);
   }
   node = document.getElementsByClassName("location-item");
 }
 
-var add = document.getElementsByClassName("add-loc");
-add[0].onclick = function() {
-  var container = document.getElementsByClassName("location-container")
-  var node = document.getElementsByClassName("location-item");
-  var clone = node[0].cloneNode(true);
-  clone.style.display = "flex"
-  var child = clone.getElementsByClassName("loc-title");
-  var locItems = document.getElementsByClassName("location-item");
-  child[0].innerHTML = "Location Title " + (locItems.length + 1);
-  container[0].appendChild(clone);
-  for (var i = 0; i < closeloc.length; i++) {
-    closeloc[i].onclick = function() {
-      var div = this.parentElement;
-      var sdiv = div.parentElement;
-      sdiv.style.display = "none";
-    }
-  }
-  (()=> {enableDragSort('location-container')})();
-}
+// Temporary add location item 
+//
+// var add = document.getElementsByClassName("add-loc");
+// add[0].onclick = function() {
+//   var container = document.getElementsByClassName("location-container")
+//   var node = document.getElementsByClassName("location-item");
+//   var clone = node[0].cloneNode(true);
+//   clone.style.display = "flex"
+//   var child = clone.getElementsByClassName("loc-title");
+//   var locItems = document.getElementsByClassName("location-item");
+//   child[0].innerHTML = "Location Title " + (locItems.length + 1);
+//   container[0].appendChild(clone);
+//   for (var i = 0; i < closeloc.length; i++) {
+//     closeloc[i].onclick = function() {
+//       var div = this.parentElement;
+//       var sdiv = div.parentElement;
+//       var cdiv = sdiv.parentElement; // location-contianer div
+//       cdiv.removeChild(sdiv);
+//     }
+//   }
+//   (()=> {enableDragSort('location-container')})();
+// }
 
 /*== Allows drag and drop to arrange order of locations ==*/
 function enableDragSort(listClass) {
