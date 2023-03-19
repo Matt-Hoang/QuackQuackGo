@@ -1769,7 +1769,7 @@ a:visited {
 .itinerary-edit-center-column > .itinerary-header > .trip-title {
     box-sizing: border-box;
     position: relative;
-    height: 150px;
+    height: 185px;
     width: 80%;
     margin: auto;
     background-color: #FFFDF7;
@@ -1820,12 +1820,14 @@ a:visited {
     padding-left: 5px;
     transition: all 0.3s ease;
     cursor: text;
+    margin-bottom: 10px;
 }
 
 .itinerary-edit-center-column > .button-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    padding-top: 30px;
 }
 
 .itinerary-edit-center-column > div > a {
