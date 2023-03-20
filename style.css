@@ -1876,7 +1876,7 @@ a:visited {
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
 }
 
-.itinerary-edit-center-column > .location-container > .location-item {
+.location-item {
     display: flex;
     border: 3px solid #ffb34183;
     border-radius: 20px;
@@ -1885,11 +1885,11 @@ a:visited {
     /* background-color: lightblue; */
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .hamburger{
+.location-item > .hamburger{
     position: relative;
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .hamburger > button{
+.location-item > .hamburger > button{
     background-color: lightgrey;
     border-radius: 50%;
     border: none;
@@ -1901,7 +1901,7 @@ a:visited {
     cursor: pointer;
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .hamburger > button:hover{
+.location-item > .hamburger > button:hover{
     background-color: #f44336;
     color: white;
 }
@@ -1910,7 +1910,7 @@ a:visited {
     opacity: 0;
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .decoration {
+.location-item > .decoration {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1920,13 +1920,13 @@ a:visited {
     /* background-color: lightgoldenrodyellow; */
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .decoration > img {
+.location-item > .decoration > img {
     height: 35px;
     margin-top: 30px;
 }
 
 
-.itinerary-edit-center-column > .location-container > .location-item > .hamburger > img {
+.location-item > .hamburger > img {
     height: 30px;
     margin-top: 35px;
     margin-left: 35px;
@@ -1934,30 +1934,30 @@ a:visited {
 }
 
 
-.itinerary-edit-center-column > .location-container > .location-item > .details {
+.location-item > .details {
     margin-top: 15px;
     margin-bottom: 20px;
     margin-right: auto;
     /* background-color: lightcoral; */
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .details > h4 {
+.location-item > .details > h4 {
     font-size: 22px;
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .details > div {
+.location-item > .details > div {
     display: flex;
     align-items: center;
     margin-left: 5px;
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .details > div > h5 {
+.location-item > .details > div > h5 {
     word-wrap: normal;
     font-size: 16px;
     padding: 0 5px;
 }
 
-.itinerary-edit-center-column > .location-container > .location-item > .details > div > img {
+.location-item > .details > div > img {
     height: 18px;
     padding-right: 5px;
     opacity: 50%;

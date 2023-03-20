@@ -24,7 +24,7 @@ for (var i = 0; i < closeloc.length; i++) {
 //
 // var add = document.getElementsByClassName("add-loc");
 // add[0].onclick = function() {
-//   var container = document.getElementsByClassName("location-container")
+//   var container = document.getElementsByClassName("itinterary-locs")
 //   var node = document.getElementsByClassName("location-item");
 //   var clone = node[0].cloneNode(true);
 //   clone.style.display = "flex"
