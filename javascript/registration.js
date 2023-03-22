@@ -84,3 +84,50 @@ async function registrationSubmit(e) {
         window.location.href = "confirmation.html";  
     }
 }
+
+// Password strength checker
+function getPasswordStrength(password) {
+    let s = 0;
+    if (password.length > 6) {
+      s++;
+    }
+    if (password.length > 10) {
+      s++;
+    }
+    if (/[A-Z]/.test(password)) {
+      s++;
+    }
+    if (/[0-9]/.test(password)) {
+      s++;
+    }
+    if (/[^A-Za-z0-9]/.test(password)) {
+      s++;
+    }
+    return s;
+  }
+  
+  document.querySelector(".pw-meter #password1").addEventListener("keyup", function (e) {
+    let password = e.target.value;
+    let strength = getPasswordStrength(password);
+    let passwordStrengthSpans = document.querySelectorAll(".pw-meter .pw-strength span");
+    strength = Math.max(strength, 1);
+    passwordStrengthSpans[1].style.width = strength * 20 + "%";
+    if (password.length == 0) {
+      passwordStrengthSpans[0].innerText = "Password Strength";
+      passwordStrengthSpans[0].style.color = "#111";
+      passwordStrengthSpans[1].style.width = 0;
+    }
+    else if (strength < 2) {
+      passwordStrengthSpans[0].innerText = "Weak";
+      passwordStrengthSpans[0].style.color = "#111";
+      passwordStrengthSpans[1].style.background = "#d2222d";
+    } else if (strength >= 2 && strength <= 4) {
+      passwordStrengthSpans[0].innerText = "Medium";
+      passwordStrengthSpans[0].style.color = "#111";
+      passwordStrengthSpans[1].style.background = "#ffbf00";
+    } else {
+      passwordStrengthSpans[0].innerText = "Strong";
+      passwordStrengthSpans[0].style.color = "#fff";
+      passwordStrengthSpans[1].style.background = "#238823";
+    }
+  });
