@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
 import { getDatabase, push, ref, update, increment, onValue, set, limitToLast, query, get } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-export { push, ref, update, increment, onValue, limitToLast, query, set, get, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut };
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+export { push, ref, update, increment, onValue, limitToLast, query, set, get, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential,EmailAuthProvider};
 
 const firebaseConfig = {
   apiKey: "AIzaSyCIe_m8KoEs0d9tucnrfTk2i9DUNT-Tul4",

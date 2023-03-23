@@ -1,11 +1,4 @@
-//This is a function to change the user profile picture
-//Need to update this so that it can upload to database
-// var loadFile = function (event) {
-//     var image = document.getElementById("pfp");
-//     image.src = URL.createObjectURL(event.target.files[0]);
-//   }; 
-  
-import {set, ref, db, onValue} from "./db.js";
+import {set, ref, db, onValue, auth, updatePassword, reauthenticateWithCredential,EmailAuthProvider} from "./db.js";
 //This is a function to change the user profile picture
 //Need to update this so that it can upload to database
 
@@ -31,6 +24,7 @@ displayAccount(userID);
 
 document.getElementById("userProfileDetails").addEventListener("submit", profileUpdate);
 
+// displays the user's information & profile pic
 function displayAccount(accountID)
 {
   // Reference of a user's account information from the database
@@ -48,7 +42,7 @@ function displayAccount(accountID)
     var lname = document.getElementById("lastName");
     var mail = document.getElementById("email");
     var uname = document.getElementById("username");
-    // var pass = document.getElementById("password");
+    //var pass = document.getElementById("password");
     var loc = document.getElementById("location");
     var uloc = document.getElementById("user-location");
 
@@ -81,7 +75,29 @@ async function profileUpdate(e)
   const userName = document.getElementById("username").value;
   const location = document.getElementById("location").value;
   const profilepic = document.getElementById("pfp").src;
+  const pass = document.getElementById("password").value;
+  const npass = document.getElementById("new-password").value;
+  const user = auth.currentUser;
 
+  const accountID = localStorage.getItem("userID");
+  const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
+
+  onValue(accountRef, (snapshot) => {
+    // Retrieve user's account information as object
+    const data = snapshot.val();   
+    const credential = EmailAuthProvider.credential(
+      data.email,
+      pass
+    );
+    reauthenticateWithCredential(user, credential).then(() => {
+    updatePassword(user,npass).then(() => {
+      console.log("Password updated!");
+    }).catch((error) => {
+      console.log(error);
+      // ...
+    });
+    });
+  });
   await set(ref(db, `Users/${userID}/AccountInfo`), {
     fullName: firstName + " " + lastName,
     email: email,
@@ -89,5 +105,7 @@ async function profileUpdate(e)
     location: location,
     profilePicture: profilepic
   });
+  document.getElementById("password").value = "";
+  document.getElementById("new-password").value = "";
 }
 
