@@ -1473,12 +1473,15 @@ a:visited {
 
 .profile-edit-body > div > .name-location > h5{
     font-size: 15px;
-    margin-bottom: -10px;
+    margin-top: 8px;
     
 }
-.profile-edit-body > div > .name-location > h5 > img{
+.profile-edit-body > div > .name-location > img{
     padding: 1px;
     width: 15px;
+    float: left;
+    margin-top: 8px;
+    
 }
 
 .info-title{

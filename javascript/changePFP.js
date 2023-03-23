@@ -43,17 +43,20 @@ function displayAccount(accountID)
     // Image element of profile picture
     var image = document.getElementById("profile-info-picture");
     var image2 = document.getElementById("pfp");
+    var fullN = document.getElementById("fullname");
     var fname = document.getElementById("firstName");
     var lname = document.getElementById("lastName");
     var mail = document.getElementById("email");
     var uname = document.getElementById("username");
     // var pass = document.getElementById("password");
     var loc = document.getElementById("location");
+    var uloc = document.getElementById("user-location");
 
     // Assign picture's src to picture from user's account information
     image.src = data.profilePicture;
     image2.src = data.profilePicture;
     var fullname = data.fullName;
+    fullN.innerText = fullname;
     var firstlastname = fullname.split(" ");
     fname.value = firstlastname[0];
     lname.value = firstlastname[1];
@@ -61,6 +64,7 @@ function displayAccount(accountID)
     uname.value = data.username;
     // pass.value = data.password;
     loc.value = data.location;
+    uloc.innerText = data.location;
 
     // Display user's full name next to profile picture
     image.insertAdjacentText("afterend", data.fullName)
