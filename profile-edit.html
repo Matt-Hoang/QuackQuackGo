@@ -10,6 +10,7 @@
 </head>
 <body class="flex-container">
     <!--Navigation bar on the left side-->
+    <script type="module" src="javascript/changePFP.js"></script>
     <div class="nav-column">
         <img src="images/nav/quack-quack-go-logo.png" alt="">
         <a href="home.html" class="active"><img src="images/nav/home-icon.png" alt="">Home</a>
@@ -28,16 +29,15 @@
                 <img src="images/defaults/default-profile-background.png" alt="">
             </div>
             <div class="profile-pic">
-                <img src="images/profile-picture.jpeg" id="output" />
-                <input id="file" type="file" onchange="loadFile(event)"/>
+                <img src="images/profile-picture.jpeg" id="pfp" />
+                <input id="file" type="file" />
                 <label class="change-pfp" for="file">
                     Change Photo
                 </label>
             </div>
-            <script src="javascript/changePFP.js"></script>
             <div class="name-location">
-                <h3>John Doe</h3>
-                <h5><img src="images/location-icon.png" alt="">Los Angeles, California</h5>
+                <h3 id="fullname">John Doe</h3>
+                <h5 id="user-location"><img src="images/location-icon.png" alt="">Los Angeles, California</h5>
             </div>
         </div>
         <!--Profile Information Title/Lable-->
@@ -78,7 +78,7 @@
                         <h6>Location</h6>
                         <input type="text" id="location">
                     </div> 
-                    <button type="submit">Save</button>
+                    <button type="submit" id="edit-save">Save</button>
                 </form>
             </div>
             <!--These are the trackers/counters-->
@@ -113,7 +113,9 @@
     </div>
     <!-- profile and upcoming trips column -->
     <div class="home-right-column">
-        <a href="profile-edit.html"><img src="images/profile-picture.jpeg" alt="">John Doe</a>
+        <a href="profile-edit.html" id="profile-info">
+            <img src="" id="profile-info-picture" alt="">
+        </a>
         <h3>Upcoming Trips</h3>
         <div>
             <a href="">
