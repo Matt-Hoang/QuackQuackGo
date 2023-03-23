@@ -486,40 +486,80 @@ a:visited {
     margin-right: 5px;
 }
 
-.home-center-column > .trending-explore-container > .explore-locations > .create-itinerary {
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
     border-radius: 30px;
-    background-color: #373F51;
+    background: rgba(51, 58, 95, 0.8);
     padding: 30px 25px 25px 25px;
     margin-left: 20px;
-}
-
-.home-center-column > .trending-explore-container > .explore-locations > div > img {
-    height: 200px;
-    margin-bottom: 15px;
-}
-
-.home-center-column > .trending-explore-container > .explore-locations > .create-itinerary > h5 {
     font-weight: normal;
     color: white;
     font-size: 18px;
+    max-width: 300px;
+    max-height: 450px;
 }
-
-.home-center-column > .trending-explore-container > .explore-locations > .create-itinerary > a {
-    text-decoration: none;
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search> button {
+    margin: 0.5em;
+    border-radius: 50%;
+    border: none;
+    height: 44px;
+    width: 44px;
+    outline: none;
+    background: #0000002b;
     color: white;
-    font-size: 18px;
-    background-color: #58A4B0;
-    border-radius: 15px;
-    padding: 10px;
-    margin-top: 15px;
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .search> .search-button:hover {
+    background: #7c7c7c6b;
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .search> .search-bar {
+    border: none;
+    outline: none;
+    padding: 0.4em 1em;
+    border-radius: 24px;
+    background: #0000002b;
+    color: white;
+    font-family: inherit;
+    font-size: 105%;
+    width: calc(100% - 120px);
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather {
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>img {
+    height: 100px;
+    display: block;
+    text-align: center;
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>.icon {
+    margin-bottom: -25px;
+    margin-top: -25px;
+}
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>.description {
+    text-transform: Capitalize;
 }
 
-.home-center-column > .trending-explore-container > .explore-locations > .create-itinerary > a:hover {
-    outline: 2px solid white;
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather.loading{
+    visibility: hidden;
+    max-height: 20px;
+    position: relative
 }
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather.loading:after{
+    visibility: visible;
+    content: "Loading...";
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+
 
 /* home scroll bar */
 .home-center-column::-webkit-scrollbar {
