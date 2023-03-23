@@ -1,27 +1,4 @@
-// reference documentation: https://firebase.google.com/docs/auth/web/start
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAGNTPXS5ljCUD_ihtUkzlwRKRgdG6CgrQ",
-    authDomain: "senior-project-qqg.firebaseapp.com",
-    databaseURL: "https://senior-project-qqg-default-rtdb.firebaseio.com",
-    projectId: "senior-project-qqg",
-    storageBucket: "senior-project-qqg.appspot.com",
-    messagingSenderId: "770896520630",
-    appId: "1:770896520630:web:ca79157ceee5d7ffc0cd17"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-const auth = getAuth();
+import  { db, ref, auth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, set } from "./db.js"
 
 // listen for submit event 
 document.getElementById("registrationForm").addEventListener("submit", registrationSubmit);
@@ -39,7 +16,7 @@ async function registrationSubmit(e) {
 
     // make sure both passwords identical 
     if (password != passwordCheck) {
-        document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Passwords do not match!</p>"
+        alert ("\nPassword did not match! Please try again.")
     }
     else {
         // Sign up and sign in
@@ -47,15 +24,7 @@ async function registrationSubmit(e) {
             const errorCode = error.code;
             const errorMessage = error.message;
 
-            console.log(errorCode)
-            console.log(errorMessage)
-
-            if (errorCode == "auth/weak-password") {
-                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Password must be at least 6 characters!</p>"
-            } 
-            else if (errorCode == "auth/email-already-in-use") {
-                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Email is already used!</p>"
-            }
+            alert(errorMessage)
         }));
 
         // set profile display name to full name
@@ -63,19 +32,28 @@ async function registrationSubmit(e) {
             const errorCode = error.code;
             const errorMessage = error.message;
 
-            console.log(errorCode)
-            console.log(errorMessage)
+            console.log("error")
+            alert(errorMessage)
         }));
 
         // send email verifcation
         await sendEmailVerification(auth.currentUser); 
 
-        // add information to authentication and realtime database
         const user = userCredential.user;
-        await set(ref(database, 'users/' + user.uid),{
-            fullName: fullName,
-            userName: userName,
-            email: email
+        // add information to authentication and realtime database
+        await set(ref(db, 'Users/' + user.uid), {
+            "AccountInfo": {
+                "fullName": fullName, 
+                "username": userName, 
+                "email": email, 
+                "profilePicture": "images/profile-picture.jpeg"
+              },
+              "CheckList": {
+                "preTrip": "",
+                "postTrip": ""
+              },
+              "Bookmarked": "",
+              "Itineraries": ""
             // dont save password to DB
         })
 
