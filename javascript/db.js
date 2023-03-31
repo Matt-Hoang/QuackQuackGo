@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getDatabase, push, ref, update, increment, onValue, set, limitToLast, query, get } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+import { getDatabase, push, ref, update, increment, onValue, set, limitToLast, query, get, orderByChild, orderByKey, orderByValue } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-export { push, ref, update, increment, onValue, limitToLast, query, set, get, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut };
+export { push, ref, update, orderByChild, orderByKey, orderByValue, increment, onValue, limitToLast, query, set, get, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut };
 
 const firebaseConfig = {
   apiKey: "AIzaSyCIe_m8KoEs0d9tucnrfTk2i9DUNT-Tul4",
@@ -22,171 +22,101 @@ export const db = getDatabase(firebaseApp);
 
 export const auth = getAuth();
 
-export function pushAccountItinerary(accountID, itineraryName, start, end, imagePic)
+export function createAccount(fullName, email, location, username)
 {
-  push(ref(db, "Users/" + accountID + "/Itineraries"), {
-    "name": itineraryName,
-    "duration": {
-      "start": start,
-      "end": end
+  push(ref(db, "Users"), {
+    "AccountInfo": {
+      "fullName": fullName,
+      "email": email,
+      "location": location,
+      "profilePicture": "images/profile-picture.jpeg",
+      "username": username
     },
-    image: imagePic
+    "Bookmarked": "",
+    "CheckList": "",
+    "Itineraries": ""
   });
 }
 
-export function pushBookmarkedItinerary(accountID, itineraryName, start, end, image)
+export function pushUserItineraryBM(userID, name, image, startDate, endDate)
 {
-  push(ref(db, "Users/" + accountID + "/Bookmarked"), {
-    "name": itineraryName,
+  push(ref(db, `Users/${userID}/Bookmarked`), {
     "duration": {
-      "start": start,
-      "end": end
+      "start": startDate,
+      "end": endDate
     },
-    image: image
+    "image": image,
+    "name": name,
+    "locationList": "",
+    "stats": {
+      "rating": 0.0,
+      "clicks": 0
+    }
   });
 }
 
-export function pushUserItineraryLocations(accountID, itineraryID, locationName, address, date)
+export function pushLocation(address, image, name, rating, clicks)
 {
-  push(ref(db, `Users/${accountID}/Itineraries/${itineraryID}/locationList`), {
+  push(ref(db, `Locations`), {
     "address": address,
-    "stats": {
-      "clicks": 0
-    },
-    "image": "images/defaults/default-itineraries-background.jpg",
-    "name": locationName,
-    "rating": 0.0,
-    "date": date
-  });
-}
-
-/** When updating account information, we update it in Firebase
- * 
- * @param {*} accountID - ID of the user in Firebase
- * @param {*} profilePictureImage - User's profile picture image to upload in Firbease
- * @param {*} fullName - Full name of user
- * @param {*} username - username of user
- * @param {*} email - Email of user
- * @param {*} password - Password of user
- */
-export function updateAccountInfo(accountID, profilePictureImage, fullName, username, email, password)
-{
-  set(ref(db, "Users/" + accountID + "/AccountInfo"), {
-    "fullName": fullName, 
-    "username": username, 
-    "email": email, 
-    "password": password, 
-    "profilePicture": profilePictureImage
-  });
-}
-
-/** Pushes itinerary into Firebase
- * 
- * @param {*} image - image of the itinerary
- * @param {*} itineraryName - name of the itinerary
- */
-export function pushItinerary(itineraryName, image)
-{
-  push(ref(db, "Itineraries"), {
-    "stats": {
-      "clicks": 0
-    },
     "image": image,
-    "name": itineraryName,
-    "locations": "",
-    "rating": 0.0
-  });
+    "name": name,
+    "rating": rating,
+    "click": clicks
+  })
 }
 
-
-/** Pushes location into Firebase
- * 
- * @param {*} locationName - Name of the location
- * @param {*} image - Image of the location
- */
-export function pushLocation(locationName, image)
-{
-  push(ref(db, "Locations"), {
-    "address": "",
-    "stats": {
-      "clicks": 0
-    },
-    "image": image,
-    "name": locationName,
-    "rating": 0.0
-  });
-}
-
-/** Updates number of clicks for a given location or itinerary using Firebase Realtime Database
- * 
- * @param {*} locationRef - Reference of location or itinerary's click in database
- */
-export function updateClick(locationRef)
-{
-  var updates = {};
-  updates[locationRef] = increment(1);
-
-  update(ref(db), updates);
-}
-
-// Test functions to push data into Firebase programmatically
-
-/*
-pushItinerary("Anaheim Adventure", "images/temp-anaheim.png")
-pushItinerary("Big Bear Trip", "images/temp-big-bear.png")
-pushItinerary("CSULB", "images/temp-csulb.png")
-pushItinerary("Las Vegas", "images/temp-vegas.png")
-*/
-
-
+// pushUserItinerary(userID, name, image, startDate, endDate)
+//pushUserItinerary( "5P1tWJRUipSv248dfuAdiLQlkpO2", "test", "test", new Date("2023-03-18"), new Date("2023-03-27"))
 /*
 pushLocation("Cebu, Philippines", "images/temp-cebu-philippines.png")
 pushLocation("Seoul, South Korea", "images/temp-seoul-korea.png")
 pushLocation("Kyoto, Japan", "images/temp-kyoto-japan.png")
 */
 
-//Adding in accounts
+/*
+Create test accounts
+createAccount("test1", "test1@gmail.com", "test", "test1");
+createAccount("test2", "test2@gmail.com", "test", "test2");
+createAccount("test3", "test3@gmail.com", "test", "test3");
+createAccount("test4", "test4@gmail.com", "test", "test4");
+*/
 
+// Create Locations for itineraries up above
+/*
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB-Go4oI-rAPo_p", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB-Go4oI-rAPo_p", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB-Go4oI-rAPo_p", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB-Go4oI-rAPo_p", "123 test4", "Jan. 4", "test4");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB0JGboHaQLksTL", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB0JGboHaQLksTL", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB0JGboHaQLksTL", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB0JGboHaQLksTL", "123 test4", "Jan. 4", "test4");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Haa", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Haa", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Haa", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Haa", "123 test4", "Jan. 4", "test4");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Hab", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Hab", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Hab", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGHLY3MhzKM68gx", "-NPfRlB1YDJMvLur8Hab", "123 test4", "Jan. 4", "test4");
 
-const userIDRef = query(ref(db, "Users"), limitToLast(1));
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgCSrqhFcI1U4Al", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgCSrqhFcI1U4Al", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgCSrqhFcI1U4Al", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgCSrqhFcI1U4Al", "123 test4", "Jan. 4", "test4");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhU", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhU", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhU", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhU", "123 test4", "Jan. 4", "test4");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhV", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhV", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhV", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhV", "123 test4", "Jan. 4", "test4");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhW", "123 test1", "Jan. 1", "test1");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhW", "123 test2", "Jan. 2", "test2");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhW", "123 test3", "Jan. 3", "test3");
+pushLocationItinerary("-NPfOxGJXkoZrDD5UaZZ", "-NPfRrgDt4bc4BdImAhW", "123 test4", "Jan. 4", "test4");
+*/
 
-get(userIDRef).then((snapshot) => {
-  const userID = Object.keys(snapshot.val())[0];
   
-  /*
-  pushAccountItinerary(userID, "New York Trip", "Mar. 11", "Mar. 16", "images/defaults/default-itineraries-background.jpg");
-  pushAccountItinerary(userID, "Tokyo Trip", "Nov. 8", "Dec. 8", "images/defaults/default-itineraries-background.jpg");
-  pushAccountItinerary(userID, "SD Road Trip", "Jan. 5", "Jan. 20", "images/defaults/default-itineraries-background.jpg");
-  pushAccountItinerary(userID, "Orlando Theme Parks", "Jul. 4", "Jul. 4", "images/defaults/default-itineraries-background.jpg");
-  pushAccountItinerary(userID, "Potential SF Trip", "Aug. 4", "Aug. 10", "images/defaults/default-itineraries-background.jpg");
-  pushAccountItinerary(userID, "Manila Summer", "Oct. 12", "Oct. 31", "images/defaults/default-itineraries-background.jpg");
-  pushAccountItinerary(userID, "CS BS", "Apr. 1", "Apr. 1", "images/defaults/default-itineraries-background.jpg");
-  
-  pushBookmarkedItinerary(userID, "Anaheim Adventure", "Jan. 1", "Jan. 1", "images/defaults/default-itineraries-background.jpg")
-  pushBookmarkedItinerary(userID, "Big Bear Trip", "Feb. 1", "Feb. 1", "images/defaults/default-itineraries-background.jpg")
-  pushBookmarkedItinerary(userID, "LS CS BS 2", "Mar. 1", "Mar. 1", "images/defaults/default-itineraries-background.jpg")
-  pushBookmarkedItinerary(userID, "Sin City", "Apr. 1", "Apr. 1", "images/defaults/default-itineraries-background.jpg")
-  */
-
-  /*
-  const itineraryID = query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1));
-
-  get(itineraryID).then((snapshot) => {
-    const itineraryID = Object.keys(snapshot.val())[0];
-
-    pushUserItineraryLocations(userID, itineraryID, "Senso-ji Temple", "3-1-1 Kudan-kita, Chiyoda-ku, Tokyo, 102-8246, Japan", "Jan. 1")
-    pushUserItineraryLocations(userID, itineraryID, "Shibuya Crossing", "2 Dogenzaka, Shibuya-ku, Tokyo, 150-0043, Japan", "Jan. 3")
-    pushUserItineraryLocations(userID, itineraryID, "Takeshita Street", "1 Chome Jingumae, Shibuya City, Tokyo 150-0001, Japan", "Jan. 5")
-    pushUserItineraryLocations(userID, itineraryID, "Roppongi Hills Mori Tower", "6 Chrome-10-1 Roppongi, Minato City, Tokyo 106-0032, Japan", "Jan. 7")
-
-  })
-  */
-  
-  
-})
-
-
-
-
-
-
