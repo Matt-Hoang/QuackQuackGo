@@ -3,14 +3,15 @@ import {db, ref, onValue} from "./db.js";
 // Get location container element
 const locationClass = document.getElementsByClassName("location-container")[0];
 
-// Get user ID
-const userID = localStorage.getItem("userID");
-
-// Get itinerary ID from itineraries.js
+// Get user ID (only if user clicked on it from home.js)
+const userIDItinerary = localStorage.getItem("userIDItinerary");
 const itineraryID = localStorage.getItem("itineraryID");
 
+console.log(userIDItinerary);
+console.log(itineraryID)
+
 // reference of itinerary that user clicked on in itineraries.js in Firebase
-const itineraryIDRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}`);
+const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
 onValue(itineraryIDRef, (snapshot) => {
   const itineraryInfo = snapshot.val();
 
@@ -32,6 +33,8 @@ function displayInfo(itineraryInfo)
   // Set date and name with information from ID in database
   title.innerText = itineraryInfo.name;
   date.innerText = itineraryInfo.duration.start + " - " + itineraryInfo.duration.end;
+
+  // set background image and delete css for it in css
 }
 
 /** Display all locations stored in itinerary that user clicked on in itineraries page
@@ -58,7 +61,7 @@ function displayLocations(locationList)
                             <div></div>
                         </div>
                         <div class="details">
-                            <h4>${locationList[locationIDs[i]].name}</h4>
+                            <h4>${locationList[locationIDs[i]].locationName}</h4>
                             <div>
                                 <img src="images/pin-logo.png" alt="">
                                 <h5>${locationList[locationIDs[i]].address}</h5> 
@@ -67,22 +70,17 @@ function displayLocations(locationList)
                                 <img src="images/calendar-logo.png" alt="">
                                 <h5>${locationList[locationIDs[i]].date}</h5>
                             </div>
-                        </div>`
+                            <div class="location-cost">
+                                <h4>$0</h4>
+                            </div>
+                        </div>`;
     
     // Append div element class to container
     locationClass.appendChild(element);
   }
 }
 
-/** Display duck.png on location that user is at currently
- * 
- */
-function displayCurrentLocation()
-{
-  // Get HTML element that contains image src
-  const decoration = locationClass.children[0].getElementsByClassName("decoration");
-  var decorationImage = decoration[0].children[0];
-
-  // Set image of duck.png while every other location has pin
-  decorationImage.src = "images/ducky.png";
-}
+document.getElementsByClassName("itin-button")[1].addEventListener("click", function() {
+  localStorage.setItem("hasItinerary", "True");
+  window.location.href = "itineraryEdit.html";  
+});

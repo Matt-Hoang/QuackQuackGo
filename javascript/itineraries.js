@@ -1,32 +1,28 @@
-import {db, ref, onValue} from "./db.js";
+import {db, ref, get} from "./db.js";
 
 // Container element of itineraries
-const itineraryContainerList = document.getElementsByClassName("itineraries-container")[0];
+var itineraryContainerList = document.getElementsByClassName("itineraries-container")[0];
 
 // Container element of bookmarked itineraries
-const bookmarkedContainerList = document.getElementsByClassName("bookmarked-container")[0];
+var bookmarkedContainerList = document.getElementsByClassName("bookmarked-container")[0];
 
 // get ID of user currently logged in
 const userID = localStorage.getItem("userID");
 
 // Reference of user's itineraries in Firebase
 const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
-onValue(userItinerariesRef, (snapshot) => {
+get(userItinerariesRef).then((snapshot) => {
   const userItineraries = snapshot.val();
   displayUserItineraries(userItineraries);
-})
+});
 
 // Reference of user's bookmarked itineraries in Firebase
 const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
-onValue(userBMItinerariesRef, (snapshot) => {
+get(userBMItinerariesRef).then((snapshot) => {
   const userBMItineraries = snapshot.val();
   displayUserBMItineraries(userBMItineraries);
 });
 
-/** Display user's itineraries on itineraries page with "a" HTML elements on carousel element
- * 
- * @param {*} userItineraries - list of itineraries that the user has created
- */
 function displayUserItineraries(userItineraries)
 {
   // Get array of user itinerary IDs from Firebase
@@ -62,6 +58,7 @@ function displayUserItineraries(userItineraries)
     // Click listener to store itinerary ID if itinerary is clicked on in itinerary page 
     aElement.addEventListener("click", function() {
       localStorage.setItem("itineraryID", String(userItinerariesIDs[i]));
+      localStorage.setItem("userIDItinerary", String(userID));
     });
 
     // Add element to carousel to be displayed 
@@ -86,10 +83,6 @@ function displayUserItineraries(userItineraries)
   });
 }
 
-/** Display bookmarked itineraries that user has bookmarked
- * 
- * @param {*} userBMItineraries 
- */
 function displayUserBMItineraries(userBMItineraries)
 {
   var userBMItinerariesIDs = Object.keys(userBMItineraries);
@@ -135,7 +128,7 @@ function displayUserBMItineraries(userBMItineraries)
   });
 }
 
-/* === Itineraries Checklist === */
+// === Itineraries Checklist - Coded by Matthew Hoang ===
 
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");

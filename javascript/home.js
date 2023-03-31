@@ -1,4 +1,4 @@
-import {db, updateClick, ref, onValue} from "./db.js";
+import {db, ref, onValue, update, increment, get} from "./db.js";
 
 // Retrieve ID of user that just logged in
 const userID = localStorage.getItem("userID");
@@ -20,23 +20,24 @@ onValue(locationRef, (snapshot) => {
   displayTrendingLocations(locations);
 })
 
-// Retrieve a reference from database of all itineraries in database
-const itineraryRef = ref(db, "Itineraries");
-onValue(itineraryRef, (snapshot) => {
-  // Sort itineraries by number of clicks from greatest to least
-  const itineraries = sortClicks(snapshot.val());
-  displayExploreLocations(itineraries);
+const userRef = ref(db, "Users");
+get(userRef).then((snapshot) => {
+  const users = snapshot.val();
+  var itinerariesList = getAllItineraries(users);
+  displayExploreLocations(itinerariesList);
+
 })
 
 const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
-  onValue(tripDisplayRef, (snapshot) => {
-    const userTrips = snapshot.val(); 
+onValue(tripDisplayRef, (snapshot) => {
+  const userTrips = snapshot.val(); 
+  displayTrips(userTrips);
+});
 
-    if (userTrips.length > 0)
-    {
-      displayTrips(userTrips);
-    }
-  });
+
+document.getElementById("edit-button").addEventListener("click", function() {
+  localStorage.setItem("hasItinerary", "False");
+});
 
 function displayAccount(accountID)
 {
@@ -86,24 +87,55 @@ function displayTrendingLocations(locations)
  */
 function displayExploreLocations(itineraries)
 {
-  // Get list of itinerary names from itineraries dictionary
-  const itineraryNames = Object.keys(itineraries);
-
-  for (let i = 0; i < 4; i++)
+  for (let i = 0; i < newItineraryList.length; i++)
   {
-    // Get itinerary, title, and rating element
-    var itinerary = document.getElementById(`new-itineraries-${i + 1}`);
+    const randomItinerary = Math.floor(Math.random() * newItineraryList.length);
+
+    newItineraryList[i].id = itineraries[randomItinerary][0];
+
+    var itinerary = document.getElementById(newItineraryList[i].id);
     var title = document.getElementById(`new-itineraries-${i + 1}-title`);
     var rating = document.getElementById(`new-itineraries-${i + 1}-rating`);
 
     // Assign title from itinerary list
-    title.innerHTML = itineraries[itineraryNames[i]].name;
+    title.innerHTML = itineraries[randomItinerary][1].name;
 
     // Assign rating from itineraries object
-    rating.innerHTML = Number(itineraries[itineraryNames[i]].rating).toPrecision(2);
+    rating.innerHTML = Number(itineraries[randomItinerary][1].stats.rating).toPrecision(2);
 
     // Assign location image and CSS styling
-    itinerary.style.backgroundImage = `url('${itineraries[itineraryNames[i]].image}')`;
+    itinerary.style.backgroundImage = `url('${itineraries[randomItinerary][1].image}')`;
+
+    itineraries.splice(randomItinerary, 1);
+
+    document.getElementById(newItineraryList[i].id).addEventListener("click", function(e) {
+      e.preventDefault();
+
+      console.log("Clicked!");
+
+      retrieveUserID(newItineraryList[i].id).then(
+        function(value)
+        {
+          var userIDItinerary = value;
+          var updates = {};
+
+          console.log(userIDItinerary);
+
+          updates[`Users/${userIDItinerary}/Itineraries/${newItineraryList[i].id}/stats/clicks`] = increment(1);
+
+          update(ref(db), updates);
+          
+          localStorage.setItem("itineraryID", String(newItineraryList[i].id));
+          localStorage.setItem("userIDItinerary", String(userIDItinerary));
+
+          window.location.href = "itineraryDetails.html";
+        },
+        function(error)
+        {
+          console.error(error);
+        }
+      )
+    });
   }
 }
 
@@ -115,16 +147,28 @@ function displayTrips(accountTrips)
 {
   const itineraryIDs = Object.keys(accountTrips);
 
-  for (let i = 0; i < 2; i++)
+  var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
+  var upcomingTripElement = rightColumnHome[2];
+
+  for (let i = 0; i < itineraryIDs.length; i++)
   {
+    var aElement = document.createElement("a");
+    aElement.href = "";
+    aElement.id = `trip-${i + 1}`;
+    aElement.innerHTML = `<img src="" id="trip-picture-${i + 1}" alt="">
+                          <div>
+                              <h4 id="trip-${i + 1}-title"></h4>
+                              <h5 id="duration-trip-${i + 1}"></h5>
+                          </div>`;
+    
+    upcomingTripElement.appendChild(aElement);
+
     // Image element 
     var image = document.getElementById(`trip-picture-${i + 1}`);
     
     // Format date
     const date = accountTrips[itineraryIDs[i]].duration.start + " - " + accountTrips[itineraryIDs[i]].duration.end;
     
-    console.log(accountTrips[itineraryIDs[i]].image)
-
     // Set image
     image.src = accountTrips[itineraryIDs[i]].image;
 
@@ -132,6 +176,24 @@ function displayTrips(accountTrips)
     document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[itineraryIDs[i]].name;
     document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
   }
+}
+
+function getAllItineraries(users)
+{
+  const userIDs = Object.keys(users);
+  var itinerariesList = [];
+
+  for(let i = 0; i < userIDs.length; i++)
+  {
+    var itineraries = Object.entries(users[userIDs[i]].Itineraries);
+
+    for(let i = 0; i < itineraries.length; i++)
+    {
+      itinerariesList.push(itineraries[i]);
+    }
+  }
+
+  return itinerariesList;
 }
 
 /** Sorts a list of locations by number of clicks from greatest to least
@@ -158,7 +220,7 @@ function sortClicks(userTrips)
  * @param {*} elementList - List of HTML elements 
  * @param {*} tableRef - Name of table in Firebase
  */
-function increaseClicks(elementList, tableRef)
+function increaseLocationClicks(elementList)
 {
   for (let i = 0; i < elementList.length; i++)
   {
@@ -168,10 +230,6 @@ function increaseClicks(elementList, tableRef)
 
       // Get location name based on ID
       var name = document.getElementById(elementList[i].id).innerHTML;
-
-      // If statement is called only when it pulls a name from the Itinerary table in Firebase due to how different of a structure it has compared to Locations.
-      if (tableRef == "Itineraries")
-        name = document.getElementById(`new-itineraries-${i + 1}-title`).innerHTML;
       
       // The "Consuming code" of a Promise
       retrieveLocation(ref(db, tableRef), name).then(
@@ -183,7 +241,7 @@ function increaseClicks(elementList, tableRef)
           console.log(`Now adding click to ${name}!`);
 
           // Update click in Firebase
-          updateClick(`${tableRef}/${location}/stats/clicks`)
+          updateClick(`${tableRef}/${location}/stats/clicks`);
         },
         function(error) 
         {
@@ -195,52 +253,35 @@ function increaseClicks(elementList, tableRef)
   }
 }
 
-/** Retrieve all entries in Firebase with the locationName parameter and 
- *  return the location with the most clicks
- * 
- * @param {*} tableRef - Reference of table in Firebase 
- * @param {*} locationName - name of the location to search up in database
- * @returns Promise object that contains an object of all locations with the locationName
- */
-function retrieveLocation(tableRef, locationName)
+function retrieveUserID(itineraryID)
 {
-  // A promise object produces code and calls code
   let promise = new Promise(function(resolve, reject) {
-    // Loop through Firebase's tables
-    onValue(tableRef, (snapshot) => {
-      // Object to store location objects
-      var locationList = {};
+    onValue(ref(db, "Users"), (snapshot) => {
+      var users = Object.entries(snapshot.val());
+      var foundUserID = "";
 
-      // Loop through each table in Firebase
-      snapshot.forEach(element => {
-        // Get key of location ID
-        var locationKey = element.key;
-
-        // Compare location's name with locationName
-        if (element.val().name == locationName)
+      for(let i = 0; i < users.length; i++)
+      {
+        const userItinerary = Object.entries(users[i][1].Itineraries);
+  
+        for(let j = 0; j < userItinerary.length; j++)
         {
-          // If similar, assign database object in array
-          locationList[locationKey] = element.val();
+          if (itineraryID == String(userItinerary[j][0]))
+          {
+            foundUserID = users[i][0];
+          }
         }
-      });
-
+      }
       try
       {
-        // Success in retrieving list of locations
-        resolve(sortClicks(locationList));
+        resolve(foundUserID);
       }
       catch(error)
       {
-        // Error in retrieving list of locations
-        reject(error);
+        reject(error)
       }
-    });
-  });
+    })
+  })
 
   return promise;
 }
-
-
-// Method calls
-increaseClicks(trendingLocationList, "Locations")
-increaseClicks(newItineraryList, "Itineraries")
