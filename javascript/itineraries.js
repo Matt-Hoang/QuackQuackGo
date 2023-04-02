@@ -13,7 +13,9 @@ const userID = localStorage.getItem("userID");
 const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
 get(userItinerariesRef).then((snapshot) => {
   const userItineraries = snapshot.val();
+
   displayUserItineraries(userItineraries);
+  addItineraryTransition(userItineraries)
 });
 
 // Reference of user's bookmarked itineraries in Firebase
@@ -21,6 +23,10 @@ const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
 get(userBMItinerariesRef).then((snapshot) => {
   const userBMItineraries = snapshot.val();
   displayUserBMItineraries(userBMItineraries);
+});
+
+document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
+  localStorage.setItem("hasItinerary", "False");
 });
 
 function displayUserItineraries(userItineraries)
@@ -55,12 +61,6 @@ function displayUserItineraries(userItineraries)
     aElement.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%), 
       url('${userItineraries[userItinerariesIDs[i]].image}')`;
 
-    // Click listener to store itinerary ID if itinerary is clicked on in itinerary page 
-    aElement.addEventListener("click", function() {
-      localStorage.setItem("itineraryID", String(userItinerariesIDs[i]));
-      localStorage.setItem("userIDItinerary", String(userID));
-    });
-
     // Add element to carousel to be displayed 
     carouselElement.appendChild(aElement);
   }
@@ -81,6 +81,7 @@ function displayUserItineraries(userItineraries)
     slidesToShow: 3,
     slidesToScroll: 3
   });
+
 }
 
 function displayUserBMItineraries(userBMItineraries)
@@ -105,9 +106,11 @@ function displayUserBMItineraries(userBMItineraries)
     aElement.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%), 
       url('${userBMItineraries[userBMItinerariesIDs[i]].image}')`;
 
+    /*
     aElement.addEventListener("click", function() {
       localStorage.setItem("itineraryID", String(userBMItinerariesIDs[i]));
     });
+    */
 
     carouselElement.appendChild(aElement);
   }
@@ -126,6 +129,20 @@ function displayUserBMItineraries(userBMItineraries)
     slidesToShow: 4,
     slidesToScroll: 3
   });
+}
+
+function addItineraryTransition(userItineraries)
+{
+  const userItinerariesIDs = Object.keys(userItineraries);
+
+  for(let i = 0; i < userItinerariesIDs.length; i++)
+  {
+    document.getElementById(`itinerary-${i + 1}`).addEventListener("click", function() {
+      localStorage.setItem("itineraryID", String(userItinerariesIDs[i]));
+      localStorage.setItem("userIDItinerary", String(userID));
+      window.location.href = "itineraryDetails.html";
+    })
+  }
 }
 
 // === Itineraries Checklist - Coded by Matthew Hoang ===
