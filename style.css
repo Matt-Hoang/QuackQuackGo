@@ -101,9 +101,10 @@ h1, h2, h3, h4, h5, h6 {
     overflow-x: hidden;
 }
 
-.login-signup-info > .login-signup-form {
+.login-signup-info > form.login-signup-form {
     width: 40%;
     margin: 10vh auto;
+    margin: 10vh auto 7vh auto;
 }
 
 .login-signup-info > .login-signup-form > h1 {
@@ -166,6 +167,55 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 18px;
     margin-top: 5px;
     text-align: left;
+}
+
+.login-signup-info > div.login-signup-form {
+    width: 40%;
+    margin: 5vh auto;
+}
+
+.login-signup-info > div.login-signup-form > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-signup-info > div.login-signup-form > h4 {
+    font-family: 'Cantarell';
+    padding-top: 5px;
+    font-size: 15px;
+    float: left;
+}
+
+.login-signup-info > div.login-signup-form > div > h4 {
+    font-family: 'Cantarell';
+    padding: 0px 15px;
+    font-size: 20px;
+}
+
+.login-signup-info > div.login-signup-form > div > div {
+    flex-grow: 1;
+    outline: 1px solid rgba(0, 0, 0, 1);
+}
+
+.login-signup-info > .login-signup-form> .googleLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-weight: normal;
+}
+
+.login-signup-info > .login-signup-form> .googleLogin:hover {
+    background-color: rgb(252, 252, 252);
+}
+
+.login-signup-info > .login-signup-form> .googleLogin > img {
+    height: 25px;
+    padding: 3px 12px 3px 0;
+    margin-right: 12px;
+    border-right: 2px solid rgba(0, 0, 0, 0.75);
 }
 
 /* Password strength checker */
@@ -240,7 +290,9 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     z-index: 0;
     bottom: 283px;
-    left: 23vw;    
+    left: 23vw;
+    opacity: 0;
+    transition: visibility 0s 500ms, opacity 500ms linear;
 }
 
 a:visited {

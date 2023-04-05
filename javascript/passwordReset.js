@@ -1,22 +1,10 @@
-// reference documentation: https://firebase.google.com/docs/auth/web/start
-
-// Import the functions you need from the SDKs you need
+// Firebase Key
+import { firebaseConfig } from "./firebaseKey.js";
+// Firebase Functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
 import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
 import { getAuth, sendPasswordResetEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAGNTPXS5ljCUD_ihtUkzlwRKRgdG6CgrQ",
-    authDomain: "senior-project-qqg.firebaseapp.com",
-    databaseURL: "https://senior-project-qqg-default-rtdb.firebaseio.com",
-    projectId: "senior-project-qqg",
-    storageBucket: "senior-project-qqg.appspot.com",
-    messagingSenderId: "770896520630",
-    appId: "1:770896520630:web:ca79157ceee5d7ffc0cd17"
-};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -51,7 +39,7 @@ async function passwordReset(e) {
 
                 // clear form and redirect
                 document.getElementById('passResetForm').reset();
-                window.location.href = "login.html";     
+                window.location.href = "login.html";
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -59,10 +47,13 @@ async function passwordReset(e) {
 
                 if (errorCode == "auth/user-not-found") {
                     document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Email is not registered!</p>"
-                } 
+                }
                 else if (errorCode == "auth/too-many-requests") {
                     document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Too many requests!</p>"
                 }
             });
-        }
+    }
+    // fade in and fade out after 5 seconds 
+    document.getElementById("bubble-container").style.opacity = 1;
+    setTimeout(function () { document.getElementById("bubble-container").style.opacity = 0; }, 5000);
 }

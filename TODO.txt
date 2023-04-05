@@ -1,7 +1,9 @@
 ===== READ ME ===== 
 login/registration: 
-- if pass not strong, dont allow reg (global pass strength?)
+- create acc b4 login with google or else no email login
+    - store name, email, etc
 - password show/hide (need JS)
+- https://www.youtube.com/watch?v=X_twiDVZ4PY&ab_channel=Stevdza-San
 
 confirmation:
 - ducky border, square boxes and gaps

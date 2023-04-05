@@ -1,31 +1,17 @@
-// reference documentation: https://firebase.google.com/docs/auth/web/start
-
-// Import the functions you need from the SDKs you need
+// Firebase Key
+import { firebaseConfig } from "./firebaseKey.js";
+// Firebase Functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
 import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAGNTPXS5ljCUD_ihtUkzlwRKRgdG6CgrQ",
-    authDomain: "senior-project-qqg.firebaseapp.com",
-    databaseURL: "https://senior-project-qqg-default-rtdb.firebaseio.com",
-    projectId: "senior-project-qqg",
-    storageBucket: "senior-project-qqg.appspot.com",
-    messagingSenderId: "770896520630",
-    appId: "1:770896520630:web:ca79157ceee5d7ffc0cd17"
-};
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth();
 
-// listen for submit event 
+// email and password login
 document.getElementById("loginSubmit").addEventListener("click", formSubmit);
-
 async function formSubmit(e) {
     e.preventDefault();
 
@@ -35,10 +21,10 @@ async function formSubmit(e) {
 
     if (email == "" && password == "") {
         document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please input an email and password!</p>"
-    } 
+    }
     else if (email == "") {
         document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please input an email!</p>"
-    } 
+    }
     else if (password == "") {
         document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please input a password!</p>"
     }
@@ -51,7 +37,7 @@ async function formSubmit(e) {
             console.log(errorCode)
             console.log(errorMessage)
 
-            if (errorCode == "auth/invalid-email") {
+            if (errorCode == "auth/user-not-found") {
                 document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Email is not registered!</p>"
             }
             else if (errorCode == "auth/wrong-password") {
@@ -59,9 +45,12 @@ async function formSubmit(e) {
             }
             else if (errorCode == "auth/too-many-requests") {
                 document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Account has been temporarily disabled due to many failed login attempts! Restore it by resetting your password or try again later.</p>"
-            }           
+            }
+            else {
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Error, please try again.</p>"
+            }
         });
-        
+
         // check if user email is verified, deny access if not
         onAuthStateChanged(auth, async (user) => {
             if (user.emailVerified == false) {
@@ -71,13 +60,55 @@ async function formSubmit(e) {
                 // write date and time to database (last login date/time)
                 const user = userCredential.user;
                 const dt = new Date();
-                await update(ref(database, 'users/' + user.uid),{lastLogin: dt})
+                document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Login successful</p>"
+                await update(ref(database, "users/" + user.uid + "/personal-info/"), { lastLogin: dt })
 
                 // clear form and redirect page
                 document.getElementById('loginForm').reset();
-                window.location.href = "home.html";     
+                window.location.href = "home.html";
             }
-            
+
         });
     }
+    // fade in and fade out after 5 seconds 
+    document.getElementById("bubble-container").style.opacity = 1;
+    setTimeout(function () { document.getElementById("bubble-container").style.opacity = 0; }, 5000);
 }
+
+// google login
+document.getElementById("googleLogin").addEventListener("click", googleAcc);
+function googleAcc() {
+    const provider = new GoogleAuthProvider(app);
+
+    signInWithPopup(auth, provider)
+        .then(async (result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+
+            // The signed-in user info.
+            const user = result.user;
+
+            // update last login date
+            const dt = new Date();
+            document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Login successful</p>"
+            await update(ref(database, "users/" + user.uid + "/personal-info/"), { lastLogin: dt })
+
+            // redirect page
+            window.location.href = "home.html";
+        }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+
+            console.log(errorCode)
+            console.log(errorMessage)
+            console.log(email)
+            console.log(credential)
+        });
+}
+
