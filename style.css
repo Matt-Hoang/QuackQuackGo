@@ -71,7 +71,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-.login-signup-info > img {
+.login-signup-info > .ducky {
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: 21vw;
+    height: 300px;
+    filter: drop-shadow(0px 20px 5px rgba(0, 0, 0, 0.33));
+}
+
+.login-signup-info > .bubble {
     position: absolute;
     z-index: 0;
     bottom: 0;
@@ -89,32 +98,29 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
     -moz-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
     box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    overflow-x: hidden;
 }
 
-.background {
-    width: 30%;
-}
-
-.login-signup-info > form {
+.login-signup-info > form.login-signup-form {
     width: 40%;
     margin: 10vh auto;
+    margin: 10vh auto 7vh auto;
 }
 
-.login-signup-info > form > h1 {
+.login-signup-info > .login-signup-form > h1 {
     font-family: 'QuackQuackGoTitle';
     font-size: 50px;
     color: #FFB039;
     text-underline-offset: 15px;
-
 }
 
-.login-signup-info > form > h3 {
+.login-signup-info > .login-signup-form > h3 {
     font-family: 'Cantarell';
     font-size: 40px;
     margin-top: 35px;
 }
 
-.login-signup-info > form > input {
+.login-signup-info > .login-signup-form > input {
     box-sizing: border-box;
     background-color: #FFF8E0;
     font-size: 25px;
@@ -125,15 +131,23 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 25px;
 }
 
-.login-signup-info > form > a {
+.login-signup-info > .login-signup-form > input.password {
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid black;
+}
+
+.login-signup-info > .login-signup-form > input:focus{
+    outline: none;
+}
+
+.login-signup-info > .login-signup-form > a {
     font-family: 'Cantarell';
     float: right;
     font-size: 18px;
     margin-top: 5px;
-    color: black;
 }
 
-.login-signup-info > form > button{
+.login-signup-info > .login-signup-form > button{
     box-sizing: border-box;
     background-color: #FFB039;
     font-size: 25px;
@@ -143,18 +157,264 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     padding: 8px;
     margin-top: 25px;
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25);
 }
 
-.login-signup-info > form > h5 {
+.login-signup-info > .login-signup-form > h5 {
     font-family: 'Cantarell';
     font-weight: 400;
     float: left;
     font-size: 18px;
     margin-top: 5px;
+    text-align: left;
+}
+
+.login-signup-info > div.login-signup-form {
+    width: 40%;
+    margin: 5vh auto;
+}
+
+.login-signup-info > div.login-signup-form > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-signup-info > div.login-signup-form > h4 {
+    font-family: 'Cantarell';
+    padding-top: 5px;
+    font-size: 15px;
+    float: left;
+}
+
+.login-signup-info > div.login-signup-form > div > h4 {
+    font-family: 'Cantarell';
+    padding: 0px 15px;
+    font-size: 20px;
+}
+
+.login-signup-info > div.login-signup-form > div > div {
+    flex-grow: 1;
+    outline: 1px solid rgba(0, 0, 0, 1);
+}
+
+.login-signup-info > .login-signup-form> .googleLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-weight: normal;
+}
+
+.login-signup-info > .login-signup-form> .googleLogin:hover {
+    background-color: rgb(252, 252, 252);
+}
+
+.login-signup-info > .login-signup-form> .googleLogin > img {
+    height: 25px;
+    padding: 3px 12px 3px 0;
+    margin-right: 12px;
+    border-right: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+/* Password strength checker */
+.pw-meter .pw-strength {
+    box-sizing: border-box;
+    font-family: 'Cantarell';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    width:100%;
+    height:30px;
+    background:rgba(211, 211, 211, 0.75);
+    border: 2px solid black;
+    border-top: 1px solid black;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
+.pw-meter .pw-strength span:nth-child(1) {
+    position:relative;
+    font-size:15px;
+    color: black;
+    z-index:2;
+    font-weight:bold;
+}
+.pw-meter .pw-strength span:nth-child(2) {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:0%;
+    height:100%;
+    z-index:1;
+    transition:all 300ms ease-in-out;
+}
+
+/* Message pop up */
+.bubble {
+    /* layout */
+    position: relative;
+
+    /* looks */
+    background-color: #fff;
+    padding: 18px 15px;
+    font-size: 25px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.33);
+}
+
+.bubble::before {
+    /* layout */
+    content: '';
+    position: absolute;
+    rotate: 180deg;
+    width: 0;
+    height: 0;
+    top: 100%;
+    left: 45px;  /* offset should move with padding of parent */
+    border: 20px solid transparent;
+    border-top: none;
+
+    /* looks */
+    border-bottom-color: #fff;
+    filter: drop-shadow(0 -3px 1px rgba(0, 0, 0, 0.25));
+}
+
+.bubble-container {
+    font-family: 'Cantarell';
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    max-width: 225px;
+    position: absolute;
+    z-index: 0;
+    bottom: 283px;
+    left: 23vw;
+    opacity: 0;
+    transition: visibility 0s 500ms, opacity 500ms linear;
 }
 
 a:visited {
     color: #0000EE;
+}
+
+/* login scroll bar */
+.login-signup-info::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.login-signup-info::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.login-signup-info::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.login-signup-info::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.login-signup-info::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 5px; 
+}
+
+.login-signup-info::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 5px;
+}
+
+/* === Terms and Condition Page === */
+.terms-conditions-container {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    background: url('images/background-image.jpg') no-repeat center fixed;
+    background-size: cover;
+}
+
+.terms-conditions-info{
+    box-sizing: border-box;
+    width: 50%;
+    height: 100vh;
+    background: #FFF8E0;
+    text-align: center;
+    border-radius: 75px;
+    box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    -webkit-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    -moz-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    color: #FFB039;
+    overflow-x: hidden;
+    padding: 10px;
+}
+
+.terms-conditions-info > h1 {
+    font-family: 'QuackQuackGoTitle';
+    font-size: 50px;
+    text-underline-offset: 15px;
+    margin: 50px 0
+}
+
+.terms-conditions-info > img { 
+    width: 300px; 
+    margin: 25px 0;
+    filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.25));
+}
+
+.terms-conditions-info > h3 {
+    font-family: 'Cantarell';
+    font-size: 35px;
+}
+
+.terms-conditions-info > a > button {
+    margin: 30px 0;
+    font-size: 25px;
+    font-weight:bolder;
+    padding: 15px 40px;
+    border-radius: 12px;
+    border: none;
+    background-color: #FFB039;
+    transition: 0.15s;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.25);
+}
+
+.terms-conditions-info > a > button:hover {
+    background-color: rgba(255, 176, 57, 0.9);
+}
+
+/* terms and condition scroll bar */
+.terms-conditions-info::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.terms-conditions-info::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.terms-conditions-info::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.terms-conditions-info::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.terms-conditions-info::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 75px; 
+}
+
+.terms-conditions-info::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 75px;
 }
 
 /* === Confirmation Page === */
@@ -175,6 +435,7 @@ a:visited {
     box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
     -webkit-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
     -moz-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
+    overflow-x: hidden;
 }
 
 .confirmation-info > div { 
@@ -212,8 +473,38 @@ a:visited {
     margin: 25px 0px;
 }
 
-.confirmation-info > button:hover, .login-signup-info > form > button:hover, .support-body > .contact-form > form > button:hover {
+.confirmation-info > button:hover, .login-signup-info > .login-signup-form > button:hover, .support-body > .contact-form > form > button:hover {
     background-color: rgba(255, 176, 57, .9);
+}
+
+/* confirmation scroll bar */
+.confirmation-info::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.confirmation-info::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.confirmation-info::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.confirmation-info::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.confirmation-info::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 50px; 
+}
+
+.confirmation-info::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 50px;
 }
 
 /* === Home Page === */
@@ -257,9 +548,10 @@ a:visited {
     font-size: 22px;
     margin: 15px 0px;
     box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.3);
+    transition: 0.3s;
 }
 
-.nav-column > .active, .nav-column > a:hover {
+.nav-column > .active, .nav-column > a:hover, .home-right-column > a:hover {
     background-color: #FFB039;
 }
 
@@ -312,10 +604,12 @@ a:visited {
 
 .home-right-column > div > a:hover {
     border-color: #FFB039;
+    transition: 0.3s;
 }
 
 .home-right-column > div > a > img {
     height: 75px;
+    width: 75px;
     margin-right: 10px;
 }
 
@@ -341,7 +635,7 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 25px 30px;
-    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .home-center-column > .trending-explore-container > h4 {
@@ -370,6 +664,7 @@ a:visited {
     justify-content: space-between;
 }
 
+
 .home-center-column > .trending-explore-container > .trending-locations > a {
     box-sizing: border-box;
     display: flex;
@@ -386,10 +681,12 @@ a:visited {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.5);
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:hover {
     outline: 5px solid #FFB039;
+    transition: 0.15s;
 }
 
 .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(1) {
@@ -437,10 +734,12 @@ a:visited {
     min-width: 175px;
     background-size: cover;
     background-position: center;
+    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.5);
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:hover {
-    border: 5px solid #FFB039;
+    outline: 5px solid #FFB039;
+    transition: 0.15s;
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a:nth-child(1) {
@@ -494,6 +793,15 @@ a:visited {
     background: rgba(51, 58, 95, 0.8);
     padding: 30px 25px 25px 25px;
     margin-left: 20px;
+    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.5);
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > div > img {
+    height: 200px;
+    margin-bottom: 15px;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .create-itinerary > h5 {
     font-weight: normal;
     color: white;
     font-size: 18px;
@@ -591,6 +899,44 @@ a:visited {
     margin-top: 22px;
 }
 
+@media (max-width: 1200px) {
+    .home-center-column > .trending-explore-container > .trending-locations {
+        flex-direction: column;
+    }
+
+    .home-center-column > .trending-explore-container > .trending-locations > a:nth-child(2) {
+        margin: 20px 0;
+    }
+
+    .home-center-column > .trending-explore-container > .explore-locations {
+        flex-direction: column;
+    }
+
+    .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries {
+        height: 400px;
+    }
+
+    .home-center-column > .trending-explore-container > .explore-locations > .create-itinerary {
+        margin-left: 0px;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 950px) {
+    .flex-container {
+        flex-direction: c;
+    }
+
+    .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries {
+        display: flex;
+        flex-direction: column;
+        height: 800px;
+    }
+
+    .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a {
+        height: 300px;
+    }
+}
 
 /* === Search === */
 .search-results {
@@ -764,6 +1110,7 @@ a:visited {
     padding: 25px 30px;
     /* limit width of center column to contain slick sliders - (100vw - (nav width + checklist width)) */
     max-width: calc(100vw - (200px + 350px)); 
+    overflow-x: hidden;
 }
 
 .itineraries-center-column > .itineraries-container > a > .add-button {
@@ -779,6 +1126,12 @@ a:visited {
     justify-content: center;
     font-size: 40px;
     padding-bottom: 5px;
+    transition: 0.3s;
+    box-shadow: 0px 1px 5px 1px rgba(0,0,0,0.25);
+}
+
+.itineraries-center-column > .itineraries-container > a > .add-button:hover { 
+    background-color: #42939f;
 }
 
 .itineraries-center-column > .itineraries-container > h4, .itineraries-center-column > .bookmarked-container > h4 {
@@ -790,10 +1143,68 @@ a:visited {
 .itineraries-center-column > .itineraries-container > h5, .itineraries-center-column > .bookmarked-container > h5 {
     font-size: 15px;
 }
+/* itineraries scroll bar */
+.itineraries-center-column::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
 
+.itineraries-center-column::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
 .itineraries-center-column > .itineraries-container > h4 > img, .itineraries-center-column > .bookmarked-container > h4 > img {
     height: 30px;
     margin: 0 10px;
+}
+
+/* itineraries scroll bar */
+.itineraries-center-column::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.itineraries-center-column::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.itineraries-center-column::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.itineraries-center-column::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
 }
 
 /* CSS for sLick sliders */
@@ -817,14 +1228,17 @@ a:visited {
     padding: 7px 10px;
     background-image: 
         linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
-        url("images/defaults/default-itineraries-background.png");
-    background-size: contain;
+        url("images/defaults/default-itineraries-background.jpg");
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    margin: 15px 0;
+    transition: 0.15s;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
 }
 
-.itinerary-item, .bookmarked-item {
-	margin: 15px 0;
+.itinerary-item:hover, .bookmarked-item:hover {
+    outline: 4px solid #FFB039;
 }
 
 .itinerary-item:visited, .bookmarked-item:visited {
@@ -861,8 +1275,12 @@ a:visited {
 
 .slick-arrow {
     z-index: 2 !important;
-    width: 35px!important;
-    height: 35px!important;
+    width: 40px!important;
+    height: 40px!important;
+}
+
+.slick-arrow:hover {
+    filter: invert(87%) sepia(14%) saturate(6679%) hue-rotate(329deg) brightness(103%) contrast(101%);
 }
 
 .slick-next{
@@ -910,6 +1328,7 @@ a:visited {
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
     overflow-x: hidden;
 }
+
 
 .itineraries-right-column > .checklists > .checklist-name {
     background-color: white;
@@ -1028,6 +1447,10 @@ a:visited {
     background-color: #FFB039;
 }
 
+.individual-checklist > li > span {
+    transition: 0.3s;
+}
+
 .itineraries-right-column > .checklists > .checklist-spacer {
     background-color: white;
     padding-bottom: 10px;
@@ -1035,6 +1458,35 @@ a:visited {
     bottom: 0;
 }
 
+/* checklist scroll bar */
+.checklists::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.checklists::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.checklists::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid white;
+}
+
+.checklists::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.checklists::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 5px; 
+}
+
+.checklists::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 5px;
+}
 
 /* === Itineraries Detailed View === */
 /* center column */
@@ -1044,16 +1496,22 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 20px 20px;
+    overflow-x: hidden;
 }
 
 .itinerary-details-center-column > .itinerary-header {
-    background-color: lightgray;
+    background-color: lightgray; 
     width: 97%;
     height: 250px;
     border-radius: 20px;
     padding: 10px;
     margin: auto;
     margin-bottom: 85px;
+    background-image: url("images/defaults/default-itineraries-background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
 .itinerary-details-center-column > .itinerary-header > a {
@@ -1071,6 +1529,8 @@ a:visited {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 30px;
+    transition: 0.3s;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25);
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title {
@@ -1083,15 +1543,12 @@ a:visited {
     top: 150px;
     border-radius: 25px;
     padding: 15px 30px;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title > h2 {
     font-weight: bold;
     font-size: 30px;
-}
-
-.itinerary-details-center-column > .itinerary-header > .trip-title > div {
-
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title > h3 {
@@ -1110,7 +1567,7 @@ a:visited {
     color: white;
 }
 
-.itinerary-details-center-column > div > a > .view-map {
+.itinerary-details-center-column > div > a > .itin-button {
     box-sizing: border-box;
     text-align: center;
     background-color: #58A4B0;
@@ -1119,44 +1576,58 @@ a:visited {
     width: 90px;
     padding-top: 5px;
     margin-bottom: 15px;
+    transition: 0.3s;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25);
 }
 
-.itinerary-details-center-column > div > a > .view-map:hover, 
+.itinerary-details-center-column > div > a > .itin-button:hover, 
 .itinerary-details-center-column > .itinerary-header > a > div:hover {
-    background-color: rgba(33, 134, 171, 0.75);
+    background-color: #42939f;
 }
 
 .itinerary-details-center-column > .location-container {
     box-sizing: border-box;
     background-color: #FFFDF7;
     width: 97%;
-    height: 350px;
     border-radius: 20px;
-    padding: 20px 20px 20px 0;
+    padding: 20px 0;
     margin: auto;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
 .itinerary-details-center-column > .location-container > .location-item {
     display: flex;
-    /* background-color: lightblue; */
 }
 
 .itinerary-details-center-column > .location-container > .location-item > .decoration {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* width: 150px; */
     min-width: 150px;
-    /* background-color: lightgoldenrodyellow; */
 }
 
 .itinerary-details-center-column > .location-container > .location-item > .decoration > img {
     height: 35px;
 }
 
+.itinerary-details-center-column > .location-container > .location-item:first-child > .decoration > img {
+    content:url("images/ducky.png");
+    height: 50px;
+}
 
-.itinerary-details-center-column > .location-container > .location-item > .details {
-    /* background-color: lightcoral; */
+.itinerary-details-center-column > .location-container > .location-item > .decoration > div {
+    border: 1px solid #58A4B0;
+    width: 0;
+    height: 75px;
+    margin: 10px 0;
+}
+
+.itinerary-details-center-column > .location-container > .location-item:first-child > .decoration > div {
+    height: 60px;
+}
+
+.itinerary-details-center-column > .location-container > .location-item:last-child > .decoration > div {
+    height: 0;
 }
 
 .itinerary-details-center-column > .location-container > .location-item > .details > h4 {
@@ -1181,10 +1652,42 @@ a:visited {
     opacity: 50%;
 }
 
+.itinerary-details-center-column > .location-container > .location-item > .location-cost {
+    flex-grow: 1;
+    text-align: end;
+    margin-right: 30px;
+    font-size: 20px;
+}
 
+/* itinerary detail scroll bar */
+.itinerary-details-center-column::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
 
+.itinerary-details-center-column::-webkit-scrollbar-track {
+    background-color: none;
+}
 
+.itinerary-details-center-column::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
 
+.itinerary-details-center-column::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.itinerary-details-center-column::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 30px; 
+}
+
+.itinerary-details-center-column::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 30px;
+}
 
 /* === About === */
 .about-body {
@@ -1196,6 +1699,7 @@ a:visited {
     height: 97vh;
     padding: 25px 30px;
     margin-right: 12px;
+    overflow-x: hidden;
 }
 
 .about-body > .about-title {
@@ -1219,7 +1723,7 @@ a:visited {
 .about-body > .about-description {
     display: flex;
     flex-wrap: wrap;
-    gap: 25px
+    gap: 25px;
 }
 
 .about-body > .about-description > img {
@@ -1227,6 +1731,7 @@ a:visited {
     background-color: #373F51;
     padding: 50px 15px 25px 15px;
     border-radius: 20px;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3);
 }
 
 
@@ -1261,10 +1766,16 @@ a:visited {
     padding: 15px;
     border-radius: 15px;
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    transition: 0.1s;
+}
+
+.about-body > .about-features > div > a:hover {
+    outline: 3px solid #FFB039;
 }
 
 .about-body > .about-features > div > a > img {
     height: 100px;
+    filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.25));
 }
 
 .about-body > .about-features > div > a > h4 {
@@ -1273,6 +1784,36 @@ a:visited {
 
 .about-body > .about-features > div > a > h5 {
     font-size: 18px;
+}
+
+/* about scroll bar */
+.about-body::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.about-body::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.about-body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid #fff8e0;
+}
+
+.about-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.about-body::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.about-body::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
 }
 
 
@@ -1287,6 +1828,7 @@ a:visited {
     height: 97vh;
     padding: 25px 30px;
     margin-right: 12px;
+    overflow-x: hidden;
 }
 
 .support-body > div {
@@ -1343,6 +1885,7 @@ a:visited {
 
 .support-body > .contact-form > form > button {
     border: 0px;
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25);
 }
 
 .support-body > .contact-form > form > button {
@@ -1378,6 +1921,13 @@ a:visited {
 .support-body > .team > div > a > img {
     height: 175px;
     border-radius: 50%;
+    outline: 2px solid black;
+    box-shadow: 0px 3px 5px 3px rgba(0, 0, 0, 0.5);
+    transition: 0.25s;
+}
+
+.support-body > .team > div > a > img:hover {
+    outline: 3px solid #FFB039;
 }
 
 .support-body > .team > div > a > h5 {
