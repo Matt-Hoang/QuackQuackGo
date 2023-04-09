@@ -10,6 +10,9 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth();
 
+// Sign out user
+auth.signOut();
+
 // email and password login
 document.getElementById("loginSubmit").addEventListener("click", formSubmit);
 async function formSubmit(e) {
@@ -111,4 +114,3 @@ function googleAcc() {
             console.log(credential)
         });
 }
-
