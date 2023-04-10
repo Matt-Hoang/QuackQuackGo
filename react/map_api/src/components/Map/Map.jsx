@@ -19,7 +19,7 @@ const Map = ({setCoordinates, setBounds, coordinates, places, setChildClicked}) 
     return (
         <div className={classes.mapContainer}>
             <GoogleMapReact 
-                bootstrapURLKeys={{key: 'AIzaSyDByp8eaogO54rrKLlGEPxrTjCta2Kv5EM'}} // api key from google cloud TODO: convert to environmental var so it is secure
+                bootstrapURLKeys={{key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY}} // api key from google cloud TODO: convert to environmental var so it is secure
                 defaultCenter={coordinates}
                 center={coordinates}
                 defaultZoom={14}

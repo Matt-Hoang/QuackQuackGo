@@ -71,13 +71,13 @@ const App = () => {
             <CssBaseline />
             <Grid container spacing={0} style = {{width: '100%'}}>
                 <div class="nav-column">
-                    {/* Son contributed to adding the logos images and buttons for ui */}
                     <img src="./images/quack-quack-go-logo.png" alt=""/>
                     <a href="home.html"><img src="./images/nav-home-icon.png" alt=""/>Home</a>
                     <a href="search.html" class="active"><img src="./images/nav-search-icon.png" alt=""/>Search</a>
                     <a href="itineraries.html"><img src="./images/nav-itineraries-icon.png" alt=""/>Itineraries</a>
                     <a href="about.html"><img src="./images/nav-about-icon.png" alt=""/>About</a>
                     <a href="support.html"><img src="./images/nav-support-icon.png" alt=""/>Support</a>
+                    <img src="./images/searchduck.png" alt=""/>
                     <a href="login.html" class="logout-button"><img src="./images/nav-log-out-icon.png" alt=""/>Log Out</a>
                 </div>
                 <Grid item xs = {12} md = {5}>

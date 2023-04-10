@@ -69,13 +69,13 @@ const List = ({ places, childClicked, isLoading, type, setType, rating, setRatin
                 </Select>
             </FormControl>
             {/* Search box feature */}
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl2}>
             <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon/>
                     </div>
-                <InputBase placeholder="Search for places..." classes={{root:classes.inputRoot, input: classes.inputInput}} />
+                <InputBase placeholder="Find a starting point..." classes={{root:classes.inputRoot, input: classes.inputInput}} />
                 </div>
             </Autocomplete>
             </FormControl>

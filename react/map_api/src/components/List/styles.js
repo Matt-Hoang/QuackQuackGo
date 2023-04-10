@@ -3,10 +3,19 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 export default makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0), 
-    minWidth: 100, 
+    width:'25%',
     marginBottom: '30px', 
     border: 'solid',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF8E0',
+    borderWidth: '0px',
+    padding: '5px',
+  },
+  formControl2: {
+    margin: theme.spacing(0), 
+    width: '50%',
+    marginBottom: '30px', 
+    border: 'solid',
+    backgroundColor: '#FFF8E0',
     borderWidth: '1px',
     padding: '5px',
   },
