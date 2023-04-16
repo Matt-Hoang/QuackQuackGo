@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images/ducky.png">
     <script src="javascript/weather.js" defer></script>
+    <script type="module" src="javascript/home.js"></script>
     <title>QQG - Home</title>
 </head>
 <body class="flex-container">
@@ -20,61 +21,66 @@
         <a href="support.html"><img src="images/nav/support-icon.png" alt="">Support</a>
         <a href="login.html" class="logout-button"><img src="images/nav/log-out-icon.png" alt="">Log Out</a>
     </div>
-    <!-- main home column -->
+    <<!-- main home column -->
     <div class="home-center-column">
-        <!-- trending section -->
         <div class="trending-explore-container">
             <h4>Trending<img src="images/titles/trending-icon.png" alt=""></h4>
             <h5>Locations that are popular now</h5>
             <div class="trending-locations">
-                <a href="">Kyoto, Japan</a>
-                <a href="">Seoul, South Korea</a>
-                <a href="">Cebu Philippines</a>
+                <!-- Added IDs to trending locations to program in images and text and click listener -->
+                <a href="" id="trending-locations-1"></a>
+                <a href="" id="trending-locations-2"></a>
+                <a href="" id="trending-locations-3"></a>
             </div>
         </div>
-
-        <!-- explore section -->
         <div class="trending-explore-container">
             <h4>Explore<img src="images/titles/explore-icon.png" alt=""></h4>
             <h5>Check out new itineraries</h5>
             <div class="explore-locations">
                 <div class="new-itineraries">
+                    <!-- Added IDs to itineraries and titles to program in images and text and click listener-->
                     <a href="">
                         <div>
-                            <h5>Anaheim Adventure</h5>
+                            <h5 id="new-itineraries-1-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.5</h5>
+                                <h5 id="new-itineraries-1-rating"></h5>
                             </div>
                         </div>
                     </a> 
                     <a href="">
                         <div>
-                            <h5>Sin City</h5>
+                            <h5 id="new-itineraries-2-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.8</h5>
+                                <h5 id="new-itineraries-2-rating"></h5>
                             </div>
                         </div>
                     </a> 
                     <a href="">
                         <div>
-                            <h5>Big Bear Trip</h5>
+                            <h5 id="new-itineraries-3-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.3</h5>
+                                <h5 id="new-itineraries-3-rating"></h5>
                             </div>
                         </div>
                     </a> 
                     <a href="">
                         <div>
-                            <h5>CSULB</h5>
+                            <h5 id="new-itineraries-4-title"></h5>
                             <div>
                                 <img src="images/rating-icon.png" alt="">
-                                <h5>4.0</h5>
+                                <h5 id="new-itineraries-4-rating"></h5>
                             </div>
                         </div>
                     </a> 
+                </div>
+                <div class="create-itinerary">
+                    <img src="images/ducky.png" alt="">
+                    <h5>Make Your Own</h5>
+                    <h5>Adventure</h5>
+                    <a href="itineraryEdit.html" id="edit-button">Create itinerary</a>
                 </div>
                 <div class="weather-card">
                     <div class="search">
@@ -94,26 +100,14 @@
             </div>
         </div>
     </div>
-    <!-- profile and upcoming trips column -->
-    <div class="home-right-column">
-        <a href="profile-edit.html"><img src="images/profile-picture.jpeg" alt="">John Doe</a>
-        <h3>Upcoming Trips</h3>
-        <div>
-            <a href="">
-                <img src="images/temp/temp-new-york.png" alt="">
-                <div>
-                    <h4>New York 2022</h4>
-                    <h5>Nov. 21 - Nov.25</h5>
-                </div>
-            </a>
-            <a href="">
-                <img src="images/temp/temp-tokyo.png" alt="">
-                <div>
-                    <h4>Tokyo Trip</h4>
-                    <h5>Mar. 12 - Mar. 18</h5>
-                </div>
-            </a>            
-        </div>
-    </div>
+</div>
+<!-- profile and upcoming trips column -->
+<div class="home-right-column">
+    <a href="" id="profile-info">
+        <img src="" id="profile-info-picture" alt="">
+    </a>
+    <h3>Upcoming Trips</h3>
+    <div></div>
+</div>
 </body>
 </html>

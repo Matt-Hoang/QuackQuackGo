@@ -9,7 +9,7 @@
     <title>QQG - Itinerary Details</title>
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
-    <script type="module" src="javascript/itineraries.js" defer></script>
+    <script type="module" src="javascript/itineraryDetails.js" defer></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 </head>
@@ -30,14 +30,12 @@
         <div class="itinerary-header">
             <!-- back button -->
             <a href="itineraries.html"><div></div></a>
-            <!-- bookmark button -->
-            
             <!-- itinerary header -->
             <div class="trip-title">
-                <h2>Name of Trip</h2>
-                <h3>Origin: </h3><h3>Insert Location</h3>
+                <h2 id="trip-name"></h2>
+                <h3>Origin: </h3><h3 id="origin-location-name">Insert Location</h3>
                 <br>
-                <h3>Dates: </h3><h3>Insert Date</h3>
+                <h3>Dates: </h3><h3 id="itinerary-date-interval">Insert Date</h3>
                 <br>
                 <h3>Total Cost: </h3><h3>$0</h3>
             </div>
@@ -49,136 +47,8 @@
         </div>
         
         <!-- details container -->
-        <div class="location-container">
-            <div class="location-item">
-                <div class="decoration">
-                    <img src="images/pin-logo.png" alt="">
-                    <div></div>
-                </div>
-                <div class="details">
-                    <h4>Location Title</h4>
-                    <div>
-                       <img src="images/pin-logo.png" alt="">
-                        <h5>Location Address</h5> 
-                    </div>
-                    <div>
-                        <img src="images/calendar-logo.png" alt="">
-                        <h5>Date and Time</h5>
-                    </div>
-                </div>
-                <div class="location-cost">
-                    <h4>$0</h4>
-                </div>
-            </div>
-            
-            <div class="location-item">
-                <div class="decoration">
-                    <img src="images/pin-logo.png" alt="">
-                    <div></div>
-                </div>
-                <div class="details">
-                    <h4>Location Title</h4>
-                    <div>
-                       <img src="images/pin-logo.png" alt="">
-                        <h5>Location Address</h5> 
-                    </div>
-                    <div>
-                        <img src="images/calendar-logo.png" alt="">
-                        <h5>Date and Time</h5>
-                    </div>
-                </div>
-                <div class="location-cost">
-                    <h4>$0</h4>
-                </div>
-            </div>
-            
-            <div class="location-item">
-                <div class="decoration">
-                    <img src="images/pin-logo.png" alt="">
-                    <div></div>
-                </div>
-                <div class="details">
-                    <h4>Location Title</h4>
-                    <div>
-                       <img src="images/pin-logo.png" alt="">
-                        <h5>Location Address</h5> 
-                    </div>
-                    <div>
-                        <img src="images/calendar-logo.png" alt="">
-                        <h5>Date and Time</h5>
-                    </div>
-                </div>
-                <div class="location-cost">
-                    <h4>$0</h4>
-                </div>
-            </div>
-
-            <div class="location-item">
-                <div class="decoration">
-                    <img src="images/pin-logo.png" alt="">
-                    <div></div>
-                </div>
-                <div class="details">
-                    <h4>Location Title</h4>
-                    <div>
-                       <img src="images/pin-logo.png" alt="">
-                        <h5>Location Address</h5> 
-                    </div>
-                    <div>
-                        <img src="images/calendar-logo.png" alt="">
-                        <h5>Date and Time</h5>
-                    </div>
-                </div>
-                <div class="location-cost">
-                    <h4>$0</h4>
-                </div>
-            </div>
-
-            <div class="location-item">
-                <div class="decoration">
-                    <img src="images/pin-logo.png" alt="">
-                    <div></div>
-                </div>
-                <div class="details">
-                    <h4>Location Title</h4>
-                    <div>
-                       <img src="images/pin-logo.png" alt="">
-                        <h5>Location Address</h5> 
-                    </div>
-                    <div>
-                        <img src="images/calendar-logo.png" alt="">
-                        <h5>Date and Time</h5>
-                    </div>
-                </div>
-                <div class="location-cost">
-                    <h4>$0</h4>
-                </div>
-            </div>
-
-            <div class="location-item">
-                <div class="decoration">
-                    <img src="images/pin-logo.png" alt="">
-                    <div></div>
-                </div>
-                <div class="details">
-                    <h4>Location Title</h4>
-                    <div>
-                       <img src="images/pin-logo.png" alt="">
-                        <h5>Location Address</h5> 
-                    </div>
-                    <div>
-                        <img src="images/calendar-logo.png" alt="">
-                        <h5>Date and Time</h5>
-                    </div>
-                </div>
-                <div class="location-cost">
-                    <h4>$0</h4>
-                </div>
-            </div>
-            
-        </div>
+        <div class="location-container"></div>
     </div>
-
     <!-- check list column -->
     <div class="itineraries-right-column">
         <div>
