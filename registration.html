@@ -7,21 +7,28 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images/ducky.png">
     <title>QQG - Registration</title>
+    <script type="module" src="javascript/registration.js"></script>
 </head>
 <body>
+    <!-- registration page -->
     <div class="login-signup-container">
         <div class="login-signup-info">
-            <img src="images/ducky.png" alt="">
-            <form action="confirmation.html">
+            <img class="ducky" src="images/ducky.png" alt="">
+            <div class="bubble-container" id="bubble-container">
+                <!-- Display error message in text bubble -->
+                <!-- <p class="bubble">Display Error message!</p> -->
+            </div>
+            <!-- registration form -->
+            <form class="login-signup-form" id="registrationForm"> 
                 <h1><u>QuackQuackGo</u></h1>
                 <h3>Sign Up</h3>
-                <input type="text" placeholder="Full Name"><br>
-                <input type="text" placeholder="Username"><br>
-                <input type="text" placeholder="Email Address"><br>
-                <input type="password" placeholder="Password"><br>
-                <input type="password" placeholder="Retype Password"><br>
-                <h5><input type="checkbox"> I accept the <a href="url">Terms and Conditions</a><br></h5>
-                <button type="submit">Sign Up</button>
+                <input type="text" id="fullName" name="fullName" placeholder="Full Name" required><br>
+                <input type="text" id="userName" name="userName" placeholder="User Name" required><br>
+                <input type="email" id="email" name="email" placeholder="Email Address" required><br>
+                <input type="password" id="password1" name="password1" placeholder="Password" required><br>
+                <input type="password" id="password2" name="password2" placeholder="Retype Password" required><br>
+                <h5><input type="checkbox" required> I accept the <a href="terms-conditions.html" target="_blank">Terms and Conditions</a><br></h5>
+                <button type="submit">Register</button>
                 <h5>Already have an account? <a href="login.html">Login</a></h5>
             </form>
         </div>

@@ -9,19 +9,21 @@
     <title>QQG - Home</title>
 </head>
 <body class="flex-container">
+    <!-- navigation column -->
     <script type="module" src="javascript/home.js"></script>
     <div class="nav-column">
-        <img src="images/quack-quack-go-logo.png" alt="">
-        <a href="home.html" class="active"><img src="images/nav-home-icon.png" alt="">Home</a>
-        <a href="search.html"><img src="images/nav-search-icon.png" alt="">Search</a>
-        <a href="itineraries.html"><img src="images/nav-itineraries-icon.png" alt="">Itineraries</a>
-        <a href="about.html"><img src="images/nav-about-icon.png" alt="">About</a>
-        <a href="support.html"><img src="images/nav-support-icon.png" alt="">Support</a>
-        <a href="login.html" class="logout-button"><img src="images/nav-log-out-icon.png" alt="">Log Out</a>
+        <img src="images/nav/quack-quack-go-logo.png" alt="">
+        <a href="home.html" class="active"><img src="images/nav/home-icon.png" alt="">Home</a>
+        <a href="search.html"><img src="images/nav/search-icon.png" alt="">Search</a>
+        <a href="itineraries.html"><img src="images/nav/itineraries-icon.png" alt="">Itineraries</a>
+        <a href="about.html"><img src="images/nav/about-icon.png" alt="">About</a>
+        <a href="support.html"><img src="images/nav/support-icon.png" alt="">Support</a>
+        <a href="login.html" class="logout-button"><img src="images/nav/log-out-icon.png" alt="">Log Out</a>
     </div>
+    <<!-- main home column -->
     <div class="home-center-column">
         <div class="trending-explore-container">
-            <h4>Trending<img src="images/trending-icon.png" alt=""></h4>
+            <h4>Trending<img src="images/titles/trending-icon.png" alt=""></h4>
             <h5>Locations that are popular now</h5>
             <div class="trending-locations">
                 <a href="" id="trending-locations-1"></a>
@@ -30,7 +32,7 @@
             </div>
         </div>
         <div class="trending-explore-container">
-            <h4>Explore<img src="images/explore-icon.png" alt=""></h4>
+            <h4>Explore<img src="images/titles/explore-icon.png" alt=""></h4>
             <h5>Check out new itineraries</h5>
             <div class="explore-locations">
                 <div class="new-itineraries">
@@ -75,33 +77,17 @@
                     <img src="images/ducky.png" alt="">
                     <h5>Make Your Own</h5>
                     <h5>Adventure</h5>
-                    <a href="">Create itinerary</a>
+                    <a href="itineraryEdit.html" id="edit-button">Create itinerary</a>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="home-right-column">
         <a href="" id="profile-info">
             <img src="" id="profile-info-picture" alt="">
         </a>
         <h3>Upcoming Trips</h3>
-        <div>
-            <a href="" id="trip-1">
-                <img src="" id="trip-picture-1" alt="">
-                <div>
-                    <h4 id="trip-1-title"></h4>
-                    <h5 id="duration-trip-1"></h5>
-                </div>
-            </a>
-            <a href="" id="trip-2">
-                <img src="" id="trip-picture-2" alt="">
-                <div>
-                    <h4 id="trip-2-title"></h4>
-                    <h5 id="duration-trip-2"></h5>
-                </div>
-            </a>            
-        </div>
+        <div></div>
     </div>
 </body>
 </html>

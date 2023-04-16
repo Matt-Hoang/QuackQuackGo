@@ -6,5 +6,23 @@ login/registration:
 confirmation:
 - ducky border, square boxes and gaps
 
-home:
-- hovering upcoming trips text doesnt highlight entire border   
+contact:
+- message and input placeholder differnt fonts 
+- give small pop up after contact form is sent 
+- what to do with left over space? fill with background image?
+- add linkedin links and pictures to team div 
+
+about us:
+- add links to each feature 
+- what to do with dead space?
+
+search:
+- search result needs to be numbered correctly 
+- map needs to be implemented 
+- filter button needs to show an option for filter
+- make scroll bar nicer
+
+itineraries:
+- checklist works perfect with one list but breaks with 2+
+    (make 1 big checklist easier, how to delete and add checklist?)
+- need to make it link with database
