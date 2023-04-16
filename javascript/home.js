@@ -1,42 +1,32 @@
-import {db, ref, onValue, update, increment, get} from "./db.js";
+import {db, ref, onValue, update, increment, get, onAuthStateChanged, auth} from "./db.js";
 
-// Retrieve ID of user that just logged in
-const userID = localStorage.getItem("userID");
+onAuthStateChanged(auth, (user) => {
+  if (user) 
+  {
+    const userID = user.uid;
 
-// display user account information
-displayAccount(userID);
+    // display user account information
+    displayAccount(userID);
 
-// List of all elements inside the trending-locations class div
-const trendingLocationList = document.getElementsByClassName("trending-locations")[0].children;
+    const userRef = ref(db, "Users");
+    get(userRef).then((snapshot) => {
+      const users = snapshot.val();
+      var itinerariesList = getAllItineraries(users);
 
-// List of all elements inside the new-itineraries class div
-const newItineraryList = document.getElementsByClassName("new-itineraries")[0].children;
+      displayTrendingLocations(itinerariesList);
+      displayExploreLocations(itinerariesList);
+    })
 
-// Retrieve a reference from database of all locations in the database.
-const locationRef = ref(db, "Locations");
-onValue(locationRef, (snapshot) => {
-  // Sort locations by number of clicks from greatest to least (returns a JSON formatted object)
-  const locations = sortClicks(snapshot.val());
-  displayTrendingLocations(locations);
-})
+    const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
+    get(tripDisplayRef).then((snapshot) => {
+      const userTrips = snapshot.val(); 
+      displayTrips(userTrips);
+    });
 
-const userRef = ref(db, "Users");
-get(userRef).then((snapshot) => {
-  const users = snapshot.val();
-  var itinerariesList = getAllItineraries(users);
-  displayExploreLocations(itinerariesList);
-
-})
-
-const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
-onValue(tripDisplayRef, (snapshot) => {
-  const userTrips = snapshot.val(); 
-  displayTrips(userTrips);
-});
-
-
-document.getElementById("edit-button").addEventListener("click", function() {
-  localStorage.setItem("hasItinerary", "False");
+    document.getElementById("edit-button").addEventListener("click", function() {
+      localStorage.setItem("hasItinerary", "False");
+    });
+  }
 });
 
 function displayAccount(accountID)
@@ -44,7 +34,7 @@ function displayAccount(accountID)
   // Reference of a user's account information from the database
   const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
 
-  onValue(accountRef, (snapshot) => {
+  get(accountRef).then((snapshot) => {
     // Retrieve user's account information as object
     const data = snapshot.val();    
 
@@ -63,21 +53,24 @@ function displayAccount(accountID)
  * 
  * @param {*} locations - a JSON-formatted object of locations in the database
  */
-function displayTrendingLocations(locations) 
-{  
-  // Get list of location names from locations dictionary
-  const locationNames = Object.keys(locations);
+function displayTrendingLocations(itinerariesList) 
+{   
+  itinerariesList = sortClicks(itinerariesList);
+  
+  const top3Itineraries = itinerariesList.splice(0, 3);
 
-  for (let i = 0; i < 3; i++)
+  for (let i = 0; i < top3Itineraries.length; i++)
   {
     // Get each element's ID 
     var location = document.getElementById(`trending-locations-${i + 1}`);
     
     // Assign location name to element
-    location.innerHTML = locations[locationNames[i]].name;
+    location.innerHTML = top3Itineraries[i][1].name;
 
     // Assign location image and CSS styling
-    location.style.backgroundImage = `url('${locations[locationNames[i]].image}')`;
+    location.style.backgroundImage = `url('${top3Itineraries[i][1].image}')`;
+
+    addClicks(top3Itineraries[i][0], `trending-locations-${i + 1}`)
   }
 }
 
@@ -87,6 +80,9 @@ function displayTrendingLocations(locations)
  */
 function displayExploreLocations(itineraries)
 {
+  // List of all elements inside the new-itineraries class div
+  const newItineraryList = document.getElementsByClassName("new-itineraries")[0].children;
+  
   for (let i = 0; i < newItineraryList.length; i++)
   {
     const randomItinerary = Math.floor(Math.random() * newItineraryList.length);
@@ -105,38 +101,43 @@ function displayExploreLocations(itineraries)
 
     // Assign location image and CSS styling
     itinerary.style.backgroundImage = `url('${itineraries[randomItinerary][1].image}')`;
-
+    
     itineraries.splice(randomItinerary, 1);
 
-    document.getElementById(newItineraryList[i].id).addEventListener("click", function(e) {
-      e.preventDefault();
-
-      console.log("Clicked!");
-
-      retrieveUserID(newItineraryList[i].id).then(
-        function(value)
-        {
-          var userIDItinerary = value;
-          var updates = {};
-
-          console.log(userIDItinerary);
-
-          updates[`Users/${userIDItinerary}/Itineraries/${newItineraryList[i].id}/stats/clicks`] = increment(1);
-
-          update(ref(db), updates);
-          
-          localStorage.setItem("itineraryID", String(newItineraryList[i].id));
-          localStorage.setItem("userIDItinerary", String(userIDItinerary));
-
-          window.location.href = "itineraryDetails.html";
-        },
-        function(error)
-        {
-          console.error(error);
-        }
-      )
-    });
+    addClicks(newItineraryList[i].id, newItineraryList[i].id)
   }
+}
+
+function addClicks(itineraryID, htmlID)
+{
+  document.getElementById(htmlID).addEventListener("click", function(e) {
+    e.preventDefault();
+
+    console.log("Clicked!");
+
+    retrieveUserID(itineraryID).then(
+      function(value)
+      {
+        var userIDItinerary = value;
+        var updates = {};
+
+        console.log(userIDItinerary);
+
+        updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
+
+        update(ref(db), updates);
+        
+        localStorage.setItem("itineraryID", String(itineraryID));
+        localStorage.setItem("userIDItinerary", String(userIDItinerary));
+
+        window.location.href = "itineraryDetails.html";
+      },
+      function(error)
+      {
+        console.error(error);
+      }
+    )
+  });
 }
 
 /** Display all upcoming trips of that user
@@ -144,13 +145,13 @@ function displayExploreLocations(itineraries)
  * @param {*} accountTrips - An object of upcoming trips from the user 
  */
 function displayTrips(accountTrips)
-{
-  const itineraryIDs = Object.keys(accountTrips);
+{ 
+  accountTrips = sortDates(accountTrips);
 
   var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
   var upcomingTripElement = rightColumnHome[2];
 
-  for (let i = 0; i < itineraryIDs.length; i++)
+  for (let i = 0; i < accountTrips.length; i++)
   {
     var aElement = document.createElement("a");
     aElement.href = "";
@@ -167,14 +168,35 @@ function displayTrips(accountTrips)
     var image = document.getElementById(`trip-picture-${i + 1}`);
     
     // Format date
-    const date = accountTrips[itineraryIDs[i]].duration.start + " - " + accountTrips[itineraryIDs[i]].duration.end;
+    const date = accountTrips[i][1].duration.start;
     
     // Set image
-    image.src = accountTrips[itineraryIDs[i]].image;
+    image.src = accountTrips[i][1].image;
 
     // Set name of trip and duration
-    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[itineraryIDs[i]].name;
+    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[i][1].name;
     document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
+
+    document.getElementById(`trip-${i + 1}`).addEventListener("click", function(e) {
+      e.preventDefault();
+      console.log("Clicked!");
+
+      retrieveUserID(accountTrips[i][0]).then(
+        function(value)
+        {
+          var userIDItinerary = value;
+    
+          localStorage.setItem("itineraryID", String(accountTrips[i][0]));
+          localStorage.setItem("userIDItinerary", String(userIDItinerary));
+
+          window.location.href = "itineraryDetails.html";
+        },
+        function(error)
+        {
+          console.error(error);
+        }
+      )
+    })
   }
 }
 
@@ -201,16 +223,31 @@ function getAllItineraries(users)
  * @param {*} userTrips - a JSON-formatted object of itineraries a given user has 
  * @returns a JSON-formatted object sorted in order by number of clicks
  */
-function sortClicks(userTrips)
+function sortClicks(itinerariesList)
 {
-  var sortedTrips = {};
-  var userTripKeys = Object.keys(userTrips);
+  const sortedArray = function(a, b) {
+    const click1 = a[1].stats.clicks;
+    const click2 = b[1].stats.clicks;
 
-  // Sort keys based on click function
-  userTripKeys = userTripKeys.sort(function(a, b){return userTrips[b].stats.clicks - userTrips[a].stats.clicks;});
-  userTripKeys.forEach(function(key) {sortedTrips[key] = userTrips[key];});
+    return click2 - click1;
+  }
 
-  return sortedTrips;
+  itinerariesList.sort(sortedArray);
+  return itinerariesList;
+}
+
+function sortDates(tripList)
+{
+  tripList = Object.entries(tripList);
+  
+  const sortedDates = function(a, b) {
+    const date1 = Math.abs(new Date(a[1].duration.start) - new Date());
+    const date2 = Math.abs(new Date(b[1].duration.start) - new Date());
+
+    return date1 - date2;
+  }
+
+  return tripList.sort(sortedDates);
 }
 
 /** When a user clicks on a location, this function's event listener is called that handles a click event. 

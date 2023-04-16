@@ -1,23 +1,25 @@
-import {db, ref, onValue} from "./db.js";
+import {db, ref, onValue, onAuthStateChanged, auth} from "./db.js";
 
 // Get location container element
 const locationClass = document.getElementsByClassName("location-container")[0];
 
-// Get user ID (only if user clicked on it from home.js)
-const userIDItinerary = localStorage.getItem("userIDItinerary");
-const itineraryID = localStorage.getItem("itineraryID");
+onAuthStateChanged(auth, (user) => {
+  if (user) 
+  {
+    // Get user ID (only if user clicked on it from home.js)
+    const userIDItinerary = localStorage.getItem("userIDItinerary");
+    const itineraryID = localStorage.getItem("itineraryID");
+    
+    // reference of itinerary that user clicked on in itineraries.js in Firebase
+    const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+    onValue(itineraryIDRef, (snapshot) => {
+      const itineraryInfo = snapshot.val();
 
-console.log(userIDItinerary);
-console.log(itineraryID)
-
-// reference of itinerary that user clicked on in itineraries.js in Firebase
-const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
-onValue(itineraryIDRef, (snapshot) => {
-  const itineraryInfo = snapshot.val();
-
-  displayInfo(itineraryInfo);
-  displayLocations(itineraryInfo.locationList);
-})
+      displayInfo(itineraryInfo);
+      displayLocations(itineraryInfo.locationList);
+    });
+  }
+});
 
 /** Display main information of itinerary like name of trip, duration of trip, etc
  * 
@@ -70,11 +72,12 @@ function displayLocations(locationList)
                                 <img src="images/calendar-logo.png" alt="">
                                 <h5>${locationList[locationIDs[i]].date}</h5>
                             </div>
-                            <div class="location-cost">
-                                <h4>$0</h4>
-                            </div>
+                        </div>
+                        <div class="location-cost">
+                            <input type="number" placeholder="$0"></h4>
                         </div>`;
     
+    console.log(element)
     // Append div element class to container
     locationClass.appendChild(element);
   }

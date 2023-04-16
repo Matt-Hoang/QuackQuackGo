@@ -1,4 +1,4 @@
-import {db, ref, get} from "./db.js";
+import {db, ref, get, onAuthStateChanged, auth} from "./db.js";
 
 // Container element of itineraries
 var itineraryContainerList = document.getElementsByClassName("itineraries-container")[0];
@@ -6,27 +6,30 @@ var itineraryContainerList = document.getElementsByClassName("itineraries-contai
 // Container element of bookmarked itineraries
 var bookmarkedContainerList = document.getElementsByClassName("bookmarked-container")[0];
 
-// get ID of user currently logged in
-const userID = localStorage.getItem("userID");
+onAuthStateChanged(auth, (user) => {
+  if (user) 
+  {
+    const userID = user.uid;
+    // Reference of user's itineraries in Firebase
+    const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
+    get(userItinerariesRef).then((snapshot) => {
+      const userItineraries = snapshot.val();
 
-// Reference of user's itineraries in Firebase
-const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
-get(userItinerariesRef).then((snapshot) => {
-  const userItineraries = snapshot.val();
+      displayUserItineraries(userItineraries);
+      addItineraryTransition(userItineraries, userID);
+    });
 
-  displayUserItineraries(userItineraries);
-  addItineraryTransition(userItineraries)
-});
+    // Reference of user's bookmarked itineraries in Firebase
+    const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
+    get(userBMItinerariesRef).then((snapshot) => {
+      const userBMItineraries = snapshot.val();
+      displayUserBMItineraries(userBMItineraries);
+    });
 
-// Reference of user's bookmarked itineraries in Firebase
-const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
-get(userBMItinerariesRef).then((snapshot) => {
-  const userBMItineraries = snapshot.val();
-  displayUserBMItineraries(userBMItineraries);
-});
-
-document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
-  localStorage.setItem("hasItinerary", "False");
+    document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
+      localStorage.setItem("hasItinerary", "False");
+    });
+  }
 });
 
 function displayUserItineraries(userItineraries)
@@ -131,7 +134,7 @@ function displayUserBMItineraries(userBMItineraries)
   });
 }
 
-function addItineraryTransition(userItineraries)
+function addItineraryTransition(userItineraries, userID)
 {
   const userItinerariesIDs = Object.keys(userItineraries);
 

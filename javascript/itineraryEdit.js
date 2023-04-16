@@ -1,4 +1,4 @@
-import {push, update, ref, query, db, limitToLast, get, remove, limitToFirst} from "./db.js";
+import {push, update, ref, query, db, limitToLast, get, remove} from "./db.js";
 
 // Get user ID of user logged in
 const userID = localStorage.getItem("userID");
@@ -7,7 +7,7 @@ const userID = localStorage.getItem("userID");
 const hasItinerary = localStorage.getItem("hasItinerary");
 
 // Get most recent pushed itinerary from Firebase
-var pushedItinerary = query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1));
+var pushedItineraryRef = query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1));
 
 /*== CODE BELOW BY MARIEL URBANO ==*/
 var add = document.getElementsByClassName("add-loc");
@@ -17,7 +17,9 @@ var hamlist = document.getElementsByClassName("hamburger");
 
 add[0].onclick = function() {
   addLocationElement("", "", "", "");
+  deleteLocation();
 }
+
 /*== END OF CODE BLOCK BY MARIEL URBANO ==*/
 
 // If user clicks "edit" on an itinerary, we load it into itinerary creation page
@@ -33,9 +35,11 @@ if (hasItinerary == "True")
   displayItineraryInfo(userID, itineraryID);
 }
 
+
 // Default to user clicks on "create itinerary" from homepage or the "+" symbol in itineraries page
 // Action is for saving an itinerary into the DB regardless of whether itinerary was made prior or not
 document.getElementById("save").addEventListener("click", function() {
+
   // Get information of itinerary
   const tripName = document.getElementById("tripName").value;
   const origin = document.getElementById("location").value;
@@ -109,8 +113,10 @@ function displayItineraryInfo(userID, itineraryID)
         // Add location HTML element for each location in itinerary
         addLocationElement(title, address, date, time)
       }
+
+      deleteLocation(); 
     }
-  });  
+  }); 
 }
 
 /** Push itinerary information excluding locations to DB
@@ -152,7 +158,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
     });
 
     // Push in start and end dates
-    get(pushedItinerary).then((snapshot) => {
+    get(pushedItineraryRef).then((snapshot) => {
       const itineraryID = Object.keys(snapshot.val())[0];
       update(ref(db, `Users/${userID}/Itineraries/${itineraryID}`), {
         "duration": {
@@ -178,17 +184,16 @@ function pushLocationOfItinerary(userID, address, name, date, time)
   if (hasItinerary == "True")
   {
     // Reference of list of locations in DB
-    var locationListRef = ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList`);
+    const locationListRef = ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList`);
+    var lastPushedLocationRef = query(ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList`), limitToLast(1));
 
     push(locationListRef, {
       "address": address,  
       "locationName": name,
       "locationCost": 0
     });  
-
-    var lastPushedLocation = query(ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList`), limitToLast(1));
     
-    get(lastPushedLocation).then((snapshot) => {
+    get(lastPushedLocationRef).then((snapshot) => {
       const locationID = Object.keys(snapshot.val())[0];
       update(ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList/${locationID}`), {
         "date": date,
@@ -199,23 +204,23 @@ function pushLocationOfItinerary(userID, address, name, date, time)
   else
   {
     // Get newly created itinerary from DB
-    get(pushedItinerary).then((snapshot) => {
+    get(pushedItineraryRef).then((snapshot) => {
       // Get ID of itinerary from DB
       const itineraryID = Object.keys(snapshot.val())[0];
       
       // Reference to last pushed location in DB
-      var pushedLocation = query(ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`), limitToLast(1));
+      var pushedLocationRef = query(ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`), limitToLast(1));
       
       // Reference to locationList in user's itineraries in DB
-      const locationItineraryRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`);
+      const locationListRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`);
   
-      push(locationItineraryRef, {
+      push(locationListRef, {
         "address": address,  
         "locationName": name,
         "locationCost": 0
       });  
   
-      get(pushedLocation).then((snapshot) => {
+      get(pushedLocationRef).then((snapshot) => {
         const locationID = Object.keys(snapshot.val())[0];
         update(ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList/${locationID}`), {
           "date": date,
@@ -239,10 +244,10 @@ function pushLocationOfItinerary(userID, address, name, date, time)
 function addLocationElement(title, address, date, time) 
 {
   // Depending on whether user clicked "edit" on an itinerary or "create a new itinerary", it will display either an existing location name or default "Location Title #"
-  title = title == "" ? `Location Title ${container[0].length + 1}` : title;
+  title = title == "" ? `Location Title` : title;
   address = address == "" ? "Address" : address;
-  date = date == "" ? "" : date;
-  time = time == "" ? "" : time;
+  date = date == undefined ? undefined : date;
+  time = time == undefined ? undefined : time;
   
   // Create div element
   var locationElement = document.createElement("div");
@@ -274,35 +279,34 @@ function addLocationElement(title, address, date, time)
   
   // Append to container class to display in HTML
   container[0].appendChild(locationElement);
-  
+
   // Assign date and time
-  document.getElementsByClassName(`loc-datetime`)[container[0].length - 1].value = date + "T" + time;
+  document.getElementsByClassName(`loc-datetime`)[container[0].children.length - 1].value = date + "T" + time;
 }
 
-/*== CODE BELOW BY MARIEL URBANO ==*/
-for (var i = 0; i < hamlist.length; i++) 
+function deleteLocation()
 {
-  var but = document.createElement("button");
-  var txt = document.createTextNode("\u00D7");
-  but.className = "close-loc";
-  but.appendChild(txt);
-  hamlist[i].appendChild(but);
-}
+  for (var i = 0; i < hamlist.length; i++) 
+  {
+    var but = document.createElement("button");
+    var txt = document.createTextNode("\u00D7");
+    but.className = "close-loc";
+    but.appendChild(txt);
+    hamlist[i].appendChild(but);
+  }
 
-for (var i = 0; i < closeloc.length; i++) 
-{
-  closeloc[i].onclick = function() {
-    var div = this.parentElement; // hamburger div
-    var sdiv = div.parentElement; // location-item div
-    var cdiv = sdiv.parentElement; // location-contianer div
-    cdiv.removeChild(sdiv);
-
-    console.log(locationList)
+  for (var i = 0; i < closeloc.length; i++) 
+  {
+    closeloc[i].onclick = function() {
+      var div = this.parentElement; // hamburger div
+      var sdiv = div.parentElement; // location-item div
+      var cdiv = sdiv.parentElement; // location-contianer div
+      cdiv.removeChild(sdiv);
+    }
   }
 }
 
-(()=> {enableDragSort('location-container')})();
-
+/*== CODE BELOW BY MARIEL URBANO ==*/
 function enableDragSort(listClass) 
 {
   const sortableLists = document.getElementsByClassName(listClass);
