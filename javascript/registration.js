@@ -1,14 +1,4 @@
-// Firebase Key
-import { firebaseConfig } from "./firebaseKey.js";
-// Firebase Functions
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-const auth = getAuth();
+import  { db, ref, auth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, set } from "./db.js"
 
 // listen for submit event 
 document.getElementById("registrationForm").addEventListener("submit", registrationSubmit);
@@ -86,12 +76,21 @@ async function registrationSubmit(e) {
 
       // add information to authentication and realtime database
       const user = userCredential.user;
-      await set(ref(database, "users/" + user.uid + "/personal-info/"), {
-        fullName: fullName,
-        userName: userName,
-        email: email
+      await set(ref(db, 'Users/' + user.uid), {
+        "AccountInfo": {
+            "fullName": fullName, 
+            "username": userName, 
+            "email": email, 
+            "profilePicture": "images/profile-picture.jpeg"
+          },
+          "CheckList": {
+            "preTrip": "",
+            "postTrip": ""
+          },
+          "Bookmarked": "",
+          "Itineraries": ""
         // dont save password to DB
-      })
+    })
 
       // reset form and redirect page
       document.getElementById('registrationForm').reset();

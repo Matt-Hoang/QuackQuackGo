@@ -1,14 +1,4 @@
-// Firebase Key
-import { firebaseConfig } from "./firebaseKey.js";
-// Firebase Functions
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-const auth = getAuth();
+import  { db, auth, ref, update, signInWithEmailAndPassword, onAuthStateChanged} from "./db.js"
 
 // Sign out user
 auth.signOut();
@@ -95,7 +85,7 @@ function googleAcc() {
             // update last login date
             const dt = new Date();
             document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Login successful</p>"
-            await update(ref(database, "users/" + user.uid + "/personal-info/"), { lastLogin: dt })
+            await update(ref(db, 'Users/' + userID),{lastLogin: dt})
 
             // redirect page
             window.location.href = "home.html";
