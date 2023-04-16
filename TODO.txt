@@ -1,7 +1,9 @@
 ===== READ ME ===== 
 login/registration: 
+- create acc b4 login with google or else no email login
+    - store name, email, etc
 - password show/hide (need JS)
-- "required" for form input (maybe do with js)
+- https://www.youtube.com/watch?v=X_twiDVZ4PY&ab_channel=Stevdza-San
 
 confirmation:
 - ducky border, square boxes and gaps
@@ -9,20 +11,3 @@ confirmation:
 contact:
 - message and input placeholder differnt fonts 
 - give small pop up after contact form is sent 
-- what to do with left over space? fill with background image?
-- add linkedin links and pictures to team div 
-
-about us:
-- add links to each feature 
-- what to do with dead space?
-
-search:
-- search result needs to be numbered correctly 
-- map needs to be implemented 
-- filter button needs to show an option for filter
-- make scroll bar nicer
-
-itineraries:
-- checklist works perfect with one list but breaks with 2+
-    (make 1 big checklist easier, how to delete and add checklist?)
-- need to make it link with database

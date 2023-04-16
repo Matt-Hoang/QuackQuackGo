@@ -9,7 +9,7 @@
     <title>QQG - Itinerary Details</title>
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
-    <script type="module" src="javascript/itineraryDetails.js" defer></script>
+    <script type="module" src="javascript/itineraries.js" defer></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 </head>
@@ -30,6 +30,8 @@
         <div class="itinerary-header">
             <!-- back button -->
             <a href="itineraries.html"><div></div></a>
+            <!-- bookmark button -->
+            
             <!-- itinerary header -->
             <div class="trip-title">
                 <h2 id="trip-name"></h2>
@@ -59,13 +61,7 @@
         <div class="checklists">
             <h5 class="checklist-name">Pre-Trip<hr></h5>
             <ul class="individual-checklist pretrip-checklist">
-                <li>Shampoo</li>
-                <li class="checked">Conditioner</li>
-                <li>Razor</li>
-                <li>Laptop</li>
-                <li>Chargers</li>
-                <li>Book</li>
-                <li>Family's gifts</li>
+                <!-- checklist items filled in from database -->
             </ul>
             <div class="checklist-spacer">
                 <div class="checklist-input-div">
@@ -80,13 +76,7 @@
         <div class="checklists">
             <h5 class="checklist-name">Post-Trip<hr></h5>
             <ul class="individual-checklist posttrip-checklist">
-                <li>Shampoo</li>
-                <li class="checked">Conditioner</li>
-                <li>Laptop</li>
-                <li>Chargers</li>
-                <li>Book</li>
-                <li>Souvenirs</li>
-                <li>Snacks</li>
+                <!-- checklist items filled in from database -->
             </ul>
             <div class="checklist-spacer">
                 <div class="checklist-input-div">
@@ -95,6 +85,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </body>
 </html>

@@ -10,6 +10,8 @@ onAuthStateChanged(auth, (user) => {
   if (user) 
   {
     const userID = user.uid;
+    populateChecklists(user);
+    
     // Reference of user's itineraries in Firebase
     const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
     get(userItinerariesRef).then((snapshot) => {
@@ -18,7 +20,7 @@ onAuthStateChanged(auth, (user) => {
       displayUserItineraries(userItineraries);
       addItineraryTransition(userItineraries, userID);
     });
-
+    
     // Reference of user's bookmarked itineraries in Firebase
     const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
     get(userBMItinerariesRef).then((snapshot) => {
@@ -29,6 +31,10 @@ onAuthStateChanged(auth, (user) => {
     document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
       localStorage.setItem("hasItinerary", "False");
     });
+  }
+  else
+  {
+    window.location.href = "login.html";
   }
 });
 
@@ -150,95 +156,254 @@ function addItineraryTransition(userItineraries, userID)
 
 // === Itineraries Checklist - Coded by Matthew Hoang ===
 
-// Create a "close" button and append it to each list item
-var myNodelist = document.getElementsByTagName("LI");
-for (var i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";  
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
+// populates checklists with thier items from database 
+function populateChecklists(user) {
 
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-for (var i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  }
-}
+  // read and display pretrip item from database 
+  const pretripChecklist = ref(database, 'users/' + user.uid + "/checklists/pretrip/");
+  onValue(pretripChecklist, (snapshot) => {
+    const checklistItems = snapshot.val();
 
-// Add a "checked" symbol when clicking on a list item
-var list = document.querySelectorAll('ul');
-for (let i = 0; i < list.length; i++) {
-  list[i].addEventListener('click', function(ev) {
-    if (ev.target.tagName === 'LI') {
-      ev.target.classList.toggle('checked');
-    }
-  }, false);
-}
+    // parse pretrip checklist 
+    for (var itemName in checklistItems) {
+      // add item to checklist
+      var li = document.createElement("li");
+      var t = document.createTextNode(itemName);
+      li.appendChild(t);
+      li.id = "pretrip";
 
-// Create a new list item when clicking on the "Add" button for pre-trip check list
-function newElementPre() {
-  var inputValue = document.getElementsByClassName("pretrip-checklist-input")
-  for (var i = 0; i < inputValue.length; i++) {
-    var li = document.createElement("li");
-    var t = document.createTextNode(inputValue[i].value);
-    li.appendChild(t);
-    if (inputValue[i].value === '') {
-      alert("You must write something!");
-    } else {
       var ul = document.getElementsByClassName("pretrip-checklist")
       for (var j = 0; j < ul.length; j++) {
         ul[j].appendChild(li);
       }
-    }
-    document.getElementsByClassName("pretrip-checklist-input")[i].value = ""
 
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    li.appendChild(span);
+      // create and add "x" to item
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "close";
+      span.appendChild(txt);
+      li.appendChild(span);
 
-    for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+      var close = document.getElementsByClassName("close");
+      for (var i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+          var div = this.parentElement;
+          div.style.display = "none";
+
+          // remove item from database 
+          if (div.id == "pretrip") {
+            document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+            remove(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + div.textContent.slice(0, -1).trim()));
+          } else {
+            document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+            remove(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + div.textContent.slice(0, -1).trim()));
+          }
+        }
+      }
+
+      // mark item as completed (strikethrough and checkmark)
+      if (Object.values(checklistItems[itemName]) == 1) {
+        li.className = "checked";
       }
     }
-  } 
-}
+  });
 
-// Create a new list item when clicking on the "Add" button for post-trip check list
-function newElementPost() {
-  var inputValue = document.getElementsByClassName("posttrip-checklist-input")
-  for (var i = 0; i < inputValue.length; i++) {
-    var li = document.createElement("li");
-    var t = document.createTextNode(inputValue[i].value);
-    li.appendChild(t);
-    if (inputValue[i].value === '') {
-      alert("You must write something!");
-    } else {
+  // read and display posttrip item from database
+  const posttripChecklist = ref(database, 'users/' + user.uid + "/checklists/posttrip/");
+  onValue(posttripChecklist, (snapshot) => {
+    const checklistItems = snapshot.val();
+
+    // parse posttrip checklist 
+    for (var itemName in checklistItems) {
+      // add item to checklist
+      var li = document.createElement("li");
+      var t = document.createTextNode(itemName);
+      li.appendChild(t);
+      li.id = "posttrip";
+
+
       var ul = document.getElementsByClassName("posttrip-checklist")
       for (var j = 0; j < ul.length; j++) {
         ul[j].appendChild(li);
       }
-    }
-    document.getElementsByClassName("posttrip-checklist-input")[i].value = ""
 
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    li.appendChild(span);
+      // create and add "x" to item
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "close";
+      span.appendChild(txt);
+      li.appendChild(span);
 
-    for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+      var close = document.getElementsByClassName("close");
+      for (var i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+          var div = this.parentElement;
+          div.style.display = "none";
+
+          // remove item from database 
+          if (div.id == "pretrip") {
+            document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+            remove(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + div.textContent.slice(0, -1).trim()));
+          } else {
+            document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+            remove(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + div.textContent.slice(0, -1).trim()));
+          }
+        }
+      }
+
+      // mark item as completed (strikethrough and checkmark)
+      if (Object.values(checklistItems[itemName]) == 1) {
+        li.className = "checked";
       }
     }
-  } 
+  });
+}
+
+
+// strikethrough for pretrip list
+var pretrip = document.querySelectorAll('.pretrip-checklist');
+pretrip[0].addEventListener('click', function (ev) {
+  if (ev.target.tagName === 'LI') {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+
+        // get item name from html
+        var itemName = ev.target.innerText.slice(0, -1).trim();
+
+        // get item once from database 
+        get(child(ref(database), `users/${user.uid}/checklists/pretrip/`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            const checklistItems = snapshot.val();
+
+            // clear current items in HTML 
+            document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+
+            // if strikethrough is 0, mark as 1
+            // else mark as 0
+            if (Object.values(checklistItems[itemName]) == 0) {
+              set(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + itemName), {
+                strikethrough: 1
+              });
+            } else {
+              set(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + itemName), {
+                strikethrough: 0
+              });
+            }
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // User is signed out
+        console.log("not logged in");
+      }
+    });
+  }
+}, false);
+
+// strikethrough for posttrip list
+var posttrip = document.querySelectorAll('.posttrip-checklist');
+posttrip[0].addEventListener('click', function (ev) {
+  if (ev.target.tagName === 'LI') {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+
+        // get item name from html
+        var itemName = ev.target.innerText.slice(0, -1).trim();
+
+        // get item once from database 
+        get(child(ref(database), `users/${user.uid}/checklists/posttrip/`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            const checklistItems = snapshot.val();
+
+            // clear current items in HTML 
+            document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+
+            // if strikethrough is 0, mark as 1
+            // else mark as 0
+            if (Object.values(checklistItems[itemName]) == 0) {
+              set(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + itemName), {
+                strikethrough: 1
+              });
+            } else {
+              set(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + itemName), {
+                strikethrough: 0
+              });
+            }
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // User is signed out
+        console.log("not logged in");
+      }
+    });
+  }
+}, false);
+
+// Create a new list item when clicking on the "Add" button for pre-trip check list
+window.newElementPre = newElementPre;
+function newElementPre() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in
+
+      // add item to database
+      var inputValue = document.getElementsByClassName("pretrip-checklist-input")
+      for (var i = 0; i < inputValue.length; i++) {
+        if (inputValue[i].value.trim() === '') {
+          alert("You must write something!");
+        } else {
+          // clear checklist before adding new item (prevent duplicate items)
+          document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+
+          var itemName = inputValue[i].value;
+          set(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + itemName), {
+            strikethrough: 0
+          });
+        }
+        document.getElementsByClassName("pretrip-checklist-input")[i].value = ""
+      }
+    } else {
+      // User is signed out
+      console.log("not logged in");
+    }
+  });
+}
+
+// Create a new list item when clicking on the "Add" button for post-trip check list
+window.newElementPost = newElementPost;
+function newElementPost() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in
+
+      // add item to database
+      var inputValue = document.getElementsByClassName("posttrip-checklist-input")
+      for (var i = 0; i < inputValue.length; i++) {
+        if (inputValue[i].value.trim() === '') {
+          alert("You must write something!");
+        } else {
+          // clear checklist before adding new item (prevent duplicate items)
+          document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+          
+          var itemName = inputValue[i].value;
+          set(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + itemName), {
+            strikethrough: 0
+          });
+        }
+        document.getElementsByClassName("posttrip-checklist-input")[i].value = ""
+      }
+    } else {
+      // User is signed out
+      console.log("not logged in");
+    }
+  });
 }
