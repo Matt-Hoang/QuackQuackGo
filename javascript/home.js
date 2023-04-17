@@ -22,10 +22,6 @@ onAuthStateChanged(auth, (user) => {
       const userTrips = snapshot.val(); 
       displayTrips(userTrips);
     });
-
-    document.getElementById("edit-button").addEventListener("click", function() {
-      localStorage.setItem("hasItinerary", "False");
-    });
   }
 });
 
@@ -91,13 +87,9 @@ function displayExploreLocations(itineraries)
 
     var itinerary = document.getElementById(newItineraryList[i].id);
     var title = document.getElementById(`new-itineraries-${i + 1}-title`);
-    var rating = document.getElementById(`new-itineraries-${i + 1}-rating`);
 
     // Assign title from itinerary list
     title.innerHTML = itineraries[randomItinerary][1].name;
-
-    // Assign rating from itineraries object
-    rating.innerHTML = Number(itineraries[randomItinerary][1].stats.rating).toPrecision(2);
 
     // Assign location image and CSS styling
     itinerary.style.backgroundImage = `url('${itineraries[randomItinerary][1].image}')`;
