@@ -1,72 +1,93 @@
-import {push, update, ref, query, db, limitToLast, get, remove} from "./db.js";
+import {push, update, ref, query, db, limitToLast, get, remove, onAuthStateChanged, auth} from "./db.js";
 
-// Get user ID of user logged in
-const userID = localStorage.getItem("userID");
-
-// Boolean String of whether the user is editing with an existing itinerary or new itinerary depending on what webpage they came from
-const hasItinerary = localStorage.getItem("hasItinerary");
-
-// Get most recent pushed itinerary from Firebase
-var pushedItineraryRef = query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1));
-
-/*== CODE BELOW BY MARIEL URBANO ==*/
-var add = document.getElementsByClassName("add-loc");
-var container = document.getElementsByClassName("itinerary-locs");
 var closeloc = document.getElementsByClassName("close-loc");
 var hamlist = document.getElementsByClassName("hamburger");
+var add = document.getElementsByClassName("add-loc");
+var container = document.getElementsByClassName("itinerary-locs");
 
-add[0].onclick = function() {
-  addLocationElement("", "", "", "");
-  deleteLocation();
-}
+const hasItinerary = localStorage.getItem("hasItinerary");
+const path = localStorage.getItem("dbPath");
 
-/*== END OF CODE BLOCK BY MARIEL URBANO ==*/
-
-// If user clicks "edit" on an itinerary, we load it into itinerary creation page
-if (hasItinerary == "True")
-{
-  // Get user ID
-  const userID = localStorage.getItem("userIDItinerary");
-
-  // Get itinerary ID from itineraries.js
-  const itineraryID = localStorage.getItem("itineraryID");
-  
-  // Itinerary is already made. User is editing it
-  displayItineraryInfo(userID, itineraryID);
-}
+/*
+Path can be one of two things:
+  - Bookmarked (Users/${userID}/Bookmarked)
+  - its own itinerary (Users/${userID}/Itineraries)
 
 
-// Default to user clicks on "create itinerary" from homepage or the "+" symbol in itineraries page
-// Action is for saving an itinerary into the DB regardless of whether itinerary was made prior or not
-document.getElementById("save").addEventListener("click", function() {
+Bookmarking works like this:
+  - Users are able to bookmark their own itineraries or other itineraries found in the explore/trending page
+  - There has to be a bookmark attribute for each itinerary in the DB
+  - If a user clicks on a bookmarked itinerary from the bookmarked section, itinerary details and edit has to know that its a bookmark
+  - when user clicks on itinerary on homepage, maybe show a non-editable version of the itinerary and make it editable until they bookmark it?
 
-  // Get information of itinerary
-  const tripName = document.getElementById("tripName").value;
-  const origin = document.getElementById("location").value;
-  const startDate = document.getElementById("start-date").value;
-  const endDate = document.getElementById("end-date").value;
-  const locations = document.getElementsByClassName("itinerary-locs")[0].children;
 
-  // Parse information to DB
-  pushUserItinerary(userID, tripName, origin, startDate, endDate);
+*/
 
-  // If the user is editing an itinerary and presses the "save" button, it deletes the old rows in the DB
-  if (hasItinerary == "True")
+console.log(hasItinerary)
+onAuthStateChanged(auth, (user) => {
+  if (user) 
   {
-    remove(ref(db, `Users/${userID}/Itineraries/${localStorage.getItem("itineraryID")}/locationList`));
-  }
+    // Get user ID of user logged in
+    const userID = localStorage.getItem("userID") == null ? localStorage.getItem("userID") : user.uid;
 
-  // Get information of locations from itinerary
-  for(let i = 0; i < locations.length; i++)
-  {
-    const locationName = locations[i].getElementsByClassName(`loc-title`)[0].innerHTML;
-    const locationAddress = locations[i].getElementsByClassName(`location-address`)[0].innerHTML;
-    const dateTime = locations[i].getElementsByClassName(`loc-datetime`)[0].value.split("T");
+    console.log(userID)
+    add[0].onclick = function() {
+      addLocationElement("", "", "", "", container);
+      deleteLocation();
+    }
 
-    // Parse information to DB
-    pushLocationOfItinerary(userID, locationAddress, locationName, dateTime[0], dateTime[1]);
+    /*== END OF CODE BLOCK BY MARIEL URBANO ==*/
+
+    // If user clicks "edit" on an itinerary, we load it into itinerary creation page
+    if (hasItinerary == "True")
+    {
+      // Get user ID
+      const userID = localStorage.getItem("userIDItinerary");
+
+      // Get itinerary ID from itineraries.js
+      const itineraryID = localStorage.getItem("itineraryID");
+    
+      console.log(userID);
+      console.log(itineraryID);
+
+      // Itinerary is already made. User is editing it
+      displayItineraryInfo(userID, itineraryID);
+    }
+
+    // Default to user clicks on "create itinerary" from homepage or the "+" symbol in itineraries page
+    // Action is for saving an itinerary into the DB regardless of whether itinerary was made prior or not
+    document.getElementById("save").addEventListener("click", function() {
+
+      // Get information of itinerary
+      const tripName = document.getElementById("tripName").value;
+      const origin = document.getElementById("location").value;
+      const startDate = document.getElementById("start-date").value;
+      const endDate = document.getElementById("end-date").value;
+      const locations = document.getElementsByClassName("itinerary-locs")[0].children;
+
+      // Parse information to DB
+      pushUserItinerary(userID, tripName, origin, startDate, endDate);
+
+      // If the user is editing an itinerary and presses the "save" button, it deletes the old rows in the DB
+      if (hasItinerary == "True")
+      {
+        remove(ref(db, `Users/${userID}/Itineraries/${localStorage.getItem("itineraryID")}/locationList`));
+      }
+
+      // Get information of locations from itinerary
+      for(let i = 0; i < locations.length; i++)
+      {
+        const locationName = locations[i].getElementsByClassName(`loc-title`)[0].innerHTML;
+        const locationAddress = locations[i].getElementsByClassName(`location-address`)[0].innerHTML;
+        const dateTime = locations[i].getElementsByClassName(`loc-datetime`)[0].value.split("T");
+
+        // Parse information to DB
+        pushLocationOfItinerary(userID, locationAddress, locationName, dateTime[0], dateTime[1]);
+      }
+    });
   }
 });
+
 
 /** Display information of an existing itinerary and its locations
  * 
@@ -111,7 +132,7 @@ function displayItineraryInfo(userID, itineraryID)
         const time = locationList[locationIDs[i]].time;
 
         // Add location HTML element for each location in itinerary
-        addLocationElement(title, address, date, time)
+        addLocationElement(title, address, date, time, container)
       }
 
       deleteLocation(); 
@@ -151,14 +172,14 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
       "origin": origin,
       "locationList": "",
       "stats": {
-        "rating": 0.0,
         "clicks": 0,
-        "totalCost": 0.0
+        "totalCost": 0.0,
+        "bookmarked": False
       }
     });
 
     // Push in start and end dates
-    get(pushedItineraryRef).then((snapshot) => {
+    get(query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1))).then((snapshot) => {
       const itineraryID = Object.keys(snapshot.val())[0];
       update(ref(db, `Users/${userID}/Itineraries/${itineraryID}`), {
         "duration": {
@@ -204,7 +225,7 @@ function pushLocationOfItinerary(userID, address, name, date, time)
   else
   {
     // Get newly created itinerary from DB
-    get(pushedItineraryRef).then((snapshot) => {
+    get(query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1))).then((snapshot) => {
       // Get ID of itinerary from DB
       const itineraryID = Object.keys(snapshot.val())[0];
       
@@ -241,7 +262,7 @@ function pushLocationOfItinerary(userID, address, name, date, time)
  * @param {*} locationID - ID of location in DB
  * @param {*} itineraryID - ID of itinerary in DB
  */
-function addLocationElement(title, address, date, time) 
+function addLocationElement(title, address, date, time, container) 
 {
   // Depending on whether user clicked "edit" on an itinerary or "create a new itinerary", it will display either an existing location name or default "Location Title #"
   title = title == "" ? `Location Title` : title;

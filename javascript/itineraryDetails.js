@@ -6,9 +6,20 @@ const locationClass = document.getElementsByClassName("location-container")[0];
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {
-    // Get user ID (only if user clicked on it from home.js)
     const userIDItinerary = localStorage.getItem("userIDItinerary");
     const itineraryID = localStorage.getItem("itineraryID");
+    const isBookmarked = localStorage.getItem("isBookmarked");
+
+    if (isBookmarked == "True")
+    {
+      // Show bookmarked button
+    }
+    else
+    {
+      // Show default buttton not yet bookmarked
+    }
+
+    
     
     // reference of itinerary that user clicked on in itineraries.js in Firebase
     const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
@@ -18,15 +29,25 @@ onAuthStateChanged(auth, (user) => {
       displayInfo(itineraryInfo);
       displayLocations(itineraryInfo.locationList);
 
-      /* Add itinerary to bookmark of user
-    
-      // Get user's bookmarked section
-      document.getElementByID("insert some bookmarked button id").addEventListener("click", function() {
-        const bookmarkedRef = ref(db, `Users/${user.uid}/Bookmarked);
-        
-      });
+      // When user bookmarks or unbookmarks an itinerary
+      /*
+      document.getElementByID("Some bookmark button").addEventListener("click", function() {
+        if (isBookmarked == "True")
+        {
+          // un-bookmark it
+
+          // Remove from user's bookmark section in DB
+        }
+        else
+        {
+          // bookmark it
+
+          // Add to user's bookmark section in DB
+        }
+      })
       */
     });
+
 
     
   }
@@ -46,7 +67,8 @@ function displayInfo(itineraryInfo)
   // Set date and name with information from ID in database
   title.innerText = itineraryInfo.name;
   date.innerText = itineraryInfo.duration.start + " - " + itineraryInfo.duration.end;
-
+  origin.innerText = itineraryInfo.origin;
+  
   // set background image and delete css for it in css
 }
 
@@ -96,5 +118,6 @@ function displayLocations(locationList)
 
 document.getElementsByClassName("itin-button")[1].addEventListener("click", function() {
   localStorage.setItem("hasItinerary", "True");
+  localStorage.setItem("userID", String(localStorage.getItem("userIDItinerary")))
   window.location.href = "itineraryEdit.html";  
 });

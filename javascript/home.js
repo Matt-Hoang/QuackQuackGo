@@ -180,6 +180,7 @@ function displayTrips(accountTrips)
     
           localStorage.setItem("itineraryID", String(accountTrips[i][0]));
           localStorage.setItem("userIDItinerary", String(userIDItinerary));
+          localStorage.setItem("isBookmarked", "False");
 
           window.location.href = "itineraryDetails.html";
         },

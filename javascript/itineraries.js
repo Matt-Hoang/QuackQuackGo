@@ -27,6 +27,7 @@ onAuthStateChanged(auth, (user) => {
     get(userBMItinerariesRef).then((snapshot) => {
       const userBMItineraries = snapshot.val();
       displayUserBMItineraries(userBMItineraries);
+      addItineraryTransition(userBMItineraries, userID);
     });
 
     document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
@@ -117,12 +118,6 @@ function displayUserBMItineraries(userBMItineraries)
 
     aElement.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%), 
       url('${userBMItineraries[userBMItinerariesIDs[i]].image}')`;
-
-    /*
-    aElement.addEventListener("click", function() {
-      localStorage.setItem("itineraryID", String(userBMItinerariesIDs[i]));
-    });
-    */
 
     carouselElement.appendChild(aElement);
   }
