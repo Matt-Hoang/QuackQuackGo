@@ -1,4 +1,4 @@
-import {db, ref, get, onAuthStateChanged, auth, onValue} from "./db.js";
+import {db, ref, get, onAuthStateChanged, auth, onValue, set, remove} from "./db.js";
 
 // Container element of itineraries
 var itineraryContainerList = document.getElementsByClassName("itineraries-container")[0];
@@ -156,7 +156,7 @@ function addItineraryTransition(userItineraries, userID)
 function populateChecklists(user) {
 
   // read and display pretrip item from database 
-  const pretripChecklist = ref(db, 'users/' + user.uid + "/Checklists/pretrip/");
+  const pretripChecklist = ref(db, 'Users/' + user.uid + "/Checklist/preTrip/");
   onValue(pretripChecklist, (snapshot) => {
     const checklistItems = snapshot.val();
 
@@ -189,10 +189,10 @@ function populateChecklists(user) {
           // remove item from database 
           if (div.id == "pretrip") {
             document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
-            remove(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + div.textContent.slice(0, -1).trim()));
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + div.textContent.slice(0, -1).trim()));
           } else {
             document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
-            remove(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + div.textContent.slice(0, -1).trim()));
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + div.textContent.slice(0, -1).trim()));
           }
         }
       }
@@ -205,7 +205,7 @@ function populateChecklists(user) {
   });
 
   // read and display posttrip item from database
-  const posttripChecklist = ref(db, 'users/' + user.uid + "/checklists/posttrip/");
+  const posttripChecklist = ref(db, 'Users/' + user.uid + "/Checklist/postTrip/");
   onValue(posttripChecklist, (snapshot) => {
     const checklistItems = snapshot.val();
 
@@ -239,10 +239,10 @@ function populateChecklists(user) {
           // remove item from database 
           if (div.id == "pretrip") {
             document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
-            remove(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + div.textContent.slice(0, -1).trim()));
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + div.textContent.slice(0, -1).trim()));
           } else {
             document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
-            remove(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + div.textContent.slice(0, -1).trim()));
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + div.textContent.slice(0, -1).trim()));
           }
         }
       }
@@ -268,7 +268,7 @@ pretrip[0].addEventListener('click', function (ev) {
         var itemName = ev.target.innerText.slice(0, -1).trim();
 
         // get item once from database 
-        get(child(ref(db), `users/${user.uid}/checklists/pretrip/`)).then((snapshot) => {
+        get(child(ref(db), `Users/${user.uid}/Checklist/preTrip/`)).then((snapshot) => {
           if (snapshot.exists()) {
             const checklistItems = snapshot.val();
 
@@ -278,11 +278,11 @@ pretrip[0].addEventListener('click', function (ev) {
             // if strikethrough is 0, mark as 1
             // else mark as 0
             if (Object.values(checklistItems[itemName]) == 0) {
-              set(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + itemName), {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + itemName), {
                 strikethrough: 1
               });
             } else {
-              set(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + itemName), {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + itemName), {
                 strikethrough: 0
               });
             }
@@ -312,7 +312,7 @@ posttrip[0].addEventListener('click', function (ev) {
         var itemName = ev.target.innerText.slice(0, -1).trim();
 
         // get item once from database 
-        get(child(ref(database), `users/${user.uid}/checklists/posttrip/`)).then((snapshot) => {
+        get(child(ref(db), `Users/${user.uid}/Checklist/postTrip/`)).then((snapshot) => {
           if (snapshot.exists()) {
             const checklistItems = snapshot.val();
 
@@ -322,11 +322,11 @@ posttrip[0].addEventListener('click', function (ev) {
             // if strikethrough is 0, mark as 1
             // else mark as 0
             if (Object.values(checklistItems[itemName]) == 0) {
-              set(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + itemName), {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + itemName), {
                 strikethrough: 1
               });
             } else {
-              set(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + itemName), {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + itemName), {
                 strikethrough: 0
               });
             }
@@ -361,7 +361,7 @@ function newElementPre() {
           document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
 
           var itemName = inputValue[i].value;
-          set(ref(database, 'users/' + user.uid + "/checklists/pretrip/" + itemName), {
+          set(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + itemName), {
             strikethrough: 0
           });
         }
@@ -391,7 +391,7 @@ function newElementPost() {
           document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
           
           var itemName = inputValue[i].value;
-          set(ref(database, 'users/' + user.uid + "/checklists/posttrip/" + itemName), {
+          set(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + itemName), {
             strikethrough: 0
           });
         }
