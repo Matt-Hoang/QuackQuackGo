@@ -9,8 +9,8 @@
     <title>QQG - Itinerary Edit</title>
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
-    <script src="javascript/itineraries.js" defer></script>
-    <script src="javascript/edit-itinerary.js" defer></script>
+    <script type="module" src="javascript/itineraries.js" defer></script>
+    <script type="module" src="javascript/itineraryEdit.js" defer></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 </head>
@@ -35,21 +35,20 @@
             <div class="trip-title">
                 <form action="">
                     <div class="trip-name">
-                        <input class="text" value=""  placeholder="Name of Trip">
+                        <input type="text" id="tripName" value=""  placeholder="Name of Trip" required>
                     </div>
                     <div class="origin-input">
                         <label for="Origin">Origin:</label>
-                        <input type="text" value="" placeholder="ex. Los Angeles, California">
+                        <input type="text" id="location" value="" placeholder="ex. Los Angeles, California" required>
                     </div>
                     <div class="date-input">
-                        <label for="Date">Start Date:</label>
-                        <input type="date" value="" >
-                    </div>
+                        <label for="Date">Date:</label>
+                        <input type="date" id="start-date" value="" required>
+                    </div>   
                     <div class="date-input">
                         <label for="Date">End Date:</label>
-                        <input type="date" value="" >
-                    </div>
-                    
+                        <input type="date" id="end-date" value="" required>
+                    </div>   
                 </form>
             </div>
         </div>
@@ -57,34 +56,13 @@
         <div class="button-container">
             <!-- <a href=""><div class="view-map">+</div></a> -->
             <button class="add-loc" onclick="window.location.href = 'search.html'"><div class="view-map">+</div></button>
-            <button type="submit"><div class="view-map">Save</div></button>
+            <button type="submit" id="save"><div class="view-map">Save</div></button>
         </div>
         
         <!-- details container -->
         <div class="location-container">
-            <form class="itinterary-locs" action="">
-                <div class="location-item" draggable="true">
-                    <div class="decoration">
-                        <img src="images/pin-logo.png" alt="">
-                    </div>
-                    <div class="details">
-                        <h4 class="loc-title">Location Title 1</h4>
-                        <div>
-                        <img src="images/pin-logo.png" alt="">
-                            <h5> Location Address</h5> 
-                        </div>
-                        <div>
-                            <img src="images/calendar-logo.png" alt="">
-                            <!-- <h5> Date and Time</h5> -->
-                            <input type="datetime-local" class="loc-datetime">
-                        </div>
-                    </div>
-                    <div class="hamburger">
-                        <img src="images/hamburger.png" alt="">
-                    </div>
-                </div>
+            <form class="itinerary-locs" action=""> 
             </form>
-            
         </div>
     </div>
 
