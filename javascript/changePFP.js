@@ -24,6 +24,15 @@ displayAccount(userID);
 
 document.getElementById("userProfileDetails").addEventListener("submit", profileUpdate);
 
+// const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+// onValue(itineraryIDRef, (snapshot) => {
+//   const itineraryInfo = snapshot.val();
+
+//   displayInfo(itineraryInfo);
+//   displayLocations(itineraryInfo.locationList);
+//   exportLocations(itineraryInfo.locationList);
+// })
+
 // displays the user's information & profile pic
 function displayAccount(accountID)
 {
@@ -61,6 +70,7 @@ function displayAccount(accountID)
     uloc.innerText = data.location;
 
     // Display user's full name next to profile picture
+    image.insertAdjacentText("afterend", '')
     image.insertAdjacentText("afterend", data.fullName)
   })
 }
