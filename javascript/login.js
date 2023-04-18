@@ -1,4 +1,4 @@
-import  { db, auth, ref, update, signInWithEmailAndPassword, onAuthStateChanged} from "./db.js"
+import  { db, auth, ref, update, signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, firebaseApp, signInWithPopup} from "./db.js"
 
 // Sign out user
 auth.signOut();
@@ -46,7 +46,7 @@ async function formSubmit(e) {
 
         // check if user email is verified, deny access if not
         onAuthStateChanged(auth, async (user) => {
-            if (user.emailVerified == false) {
+            if (user.email == false) {
                 document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Please verify your email!</p>"
             }
             else {
@@ -54,7 +54,7 @@ async function formSubmit(e) {
                 const user = userCredential.user;
                 const dt = new Date();
                 document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Login successful</p>"
-                await update(ref(database, "users/" + user.uid + "/personal-info/"), { lastLogin: dt })
+                await update(ref(db, "Users/" + user.uid + "/personal-info/"), { lastLogin: dt })
 
                 // clear form and redirect page
                 document.getElementById('loginForm').reset();
@@ -71,7 +71,7 @@ async function formSubmit(e) {
 // google login
 document.getElementById("googleLogin").addEventListener("click", googleAcc);
 function googleAcc() {
-    const provider = new GoogleAuthProvider(app);
+    const provider = new GoogleAuthProvider(firebaseApp);
 
     signInWithPopup(auth, provider)
         .then(async (result) => {
@@ -85,7 +85,7 @@ function googleAcc() {
             // update last login date
             const dt = new Date();
             document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Login successful</p>"
-            await update(ref(db, 'Users/' + userID),{lastLogin: dt})
+            await update(ref(db, 'Users/' + user.uid),{lastLogin: dt})
 
             // redirect page
             window.location.href = "home.html";
