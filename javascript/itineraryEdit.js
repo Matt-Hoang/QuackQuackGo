@@ -173,8 +173,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
       "locationList": "",
       "stats": {
         "clicks": 0,
-        "totalCost": 0.0,
-        "bookmarked": False
+        "totalCost": 0.0      
       }
     });
 
