@@ -1,4 +1,4 @@
-import {db, ref, onValue, onAuthStateChanged, auth} from "./db.js";
+import {db, ref, onValue, onAuthStateChanged, auth, push, get, query, update, limitToLast} from "./db.js";
 
 // Get location container element
 const locationClass = document.getElementsByClassName("location-container")[0];
@@ -19,8 +19,6 @@ onAuthStateChanged(auth, (user) => {
       // Show default buttton not yet bookmarked
     }
 
-    
-    
     // reference of itinerary that user clicked on in itineraries.js in Firebase
     const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
     onValue(itineraryIDRef, (snapshot) => {
@@ -28,28 +26,32 @@ onAuthStateChanged(auth, (user) => {
 
       displayInfo(itineraryInfo);
       displayLocations(itineraryInfo.locationList);
-
-      // When user bookmarks or unbookmarks an itinerary
-      /*
-      document.getElementByID("Some bookmark button").addEventListener("click", function() {
-        if (isBookmarked == "True")
-        {
-          // un-bookmark it
-
-          // Remove from user's bookmark section in DB
-        }
-        else
-        {
-          // bookmark it
-
-          // Add to user's bookmark section in DB
-        }
-      })
-      */
     });
 
-
+    document.getElementsByClassName("itin-button")[1].addEventListener("click", function() {
+      localStorage.setItem("hasItinerary", "True");
+      localStorage.setItem("userID", String(localStorage.getItem("userIDItinerary")))
+      window.location.href = "itineraryEdit.html";  
+    });
     
+    document.getElementsByClassName("itin-bookmark")[0].addEventListener("click", function(e) {
+      e.preventDefault();
+      
+      // Fill in bookmark button
+      const bookmark = document.getElementsByClassName("itin-bookmark")[0];
+    
+      bookmark.style.backgroundImage = `url(images/bookmark-filled.png)`;
+    
+      console.log("Bookmarked!");
+
+      // Get element of each date and name
+      const title = document.getElementById("trip-name");
+      const origin = document.getElementById("origin-location-name");
+      const date = document.getElementById("itinerary-date-interval").innerHTML.split(" ");
+      const totalCost = document.getElementById("itinerary-total-cost");
+      
+      addBookmarkedItinerary(user.uid, title, origin, date[0], date[2], totalCost);
+    })
   }
 });
 
@@ -116,8 +118,28 @@ function displayLocations(locationList)
   }
 }
 
-document.getElementsByClassName("itin-button")[1].addEventListener("click", function() {
-  localStorage.setItem("hasItinerary", "True");
-  localStorage.setItem("userID", String(localStorage.getItem("userIDItinerary")))
-  window.location.href = "itineraryEdit.html";  
-});
+function addBookmarkedItinerary(userID, name, origin, startDate, endDate, totalCost)
+{
+  // If itinerary doesn't exist, we want to add it to DB
+  push(ref(db, `Users/${userID}/Bookmarked`), {
+    "image": "images/defaults/default-itineraries-background.png",
+    "name": name,
+    "origin": origin,
+    "locationList": "",
+    "stats": {
+      "clicks": 0,
+      "totalCost": totalCost    
+    }
+  });
+
+  // Push in start and end dates
+  get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
+    const itineraryID = Object.keys(snapshot.val())[0];
+    update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}`), {
+      "duration": {
+        "start": startDate,
+        "end": endDate
+      }
+    });
+  });
+}
