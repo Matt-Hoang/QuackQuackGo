@@ -41,8 +41,6 @@ onAuthStateChanged(auth, (user) => {
       const bookmark = document.getElementsByClassName("itin-bookmark")[0];
     
       bookmark.style.backgroundImage = `url(images/bookmark-filled.png)`;
-    
-      console.log("Bookmarked!");
 
       // Get element of each date and name
       const title = document.getElementById("trip-name");
@@ -51,6 +49,20 @@ onAuthStateChanged(auth, (user) => {
       const totalCost = document.getElementById("itinerary-total-cost");
       
       addBookmarkedItinerary(user.uid, title, origin, date[0], date[2], totalCost);
+
+      console.log(locationClass.childElementCount);
+      // Add in locations of bookmarked itinerary
+      for(let i = 0; i < locationClass.childElementCount; i++)
+      {
+        const locationName = document.getElementById("location-name").innerHTML;
+        const locationAddress = document.getElementById("location-address").innerHTML;
+        const locationDate = document.getElementById("location-date").innerHTML;
+        const locationCost = document.getElementById("location-cost").innerHTML;
+
+        addLocationBookmarked(user.uid, locationName, locationAddress, locationDate, locationCost);
+      }
+
+      console.log("Bookmarked!");
     })
   }
 });
@@ -98,18 +110,18 @@ function displayLocations(locationList)
                             <div></div>
                         </div>
                         <div class="details">
-                            <h4>${locationList[locationIDs[i]].locationName}</h4>
+                            <h4 id="location-name">${locationList[locationIDs[i]].locationName}</h4>
                             <div>
                                 <img src="images/pin-logo.png" alt="">
-                                <h5>${locationList[locationIDs[i]].address}</h5> 
+                                <h5 id="location-address">${locationList[locationIDs[i]].address}</h5> 
                             </div>
                             <div>
                                 <img src="images/calendar-logo.png" alt="">
-                                <h5>${locationList[locationIDs[i]].date}</h5>
+                                <h5 id="location-date">${locationList[locationIDs[i]].date}</h5>
                             </div>
                         </div>
                         <div class="location-cost">
-                            <input type="number" placeholder="$0"></h4>
+                            <input type="number" placeholder="$0" id="location-cost"></h4>
                         </div>`;
     
     console.log(element)
@@ -142,4 +154,21 @@ function addBookmarkedItinerary(userID, name, origin, startDate, endDate, totalC
       }
     });
   });
+}
+
+function addLocationBookmarked(userID, locationName, address, date, cost)
+{
+  // Push in start and end dates
+  get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
+    const itineraryID = Object.keys(snapshot.val())[0];
+    console.log(itineraryID);
+    update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}/locationList`), {
+      "address": address,
+      "date": date,
+      "locationCost": cost,
+      "locationName": locationName
+    });
+  });
+
+  // how to get time??? maybe just display it in itindetails
 }
