@@ -19,15 +19,31 @@ onAuthStateChanged(auth, (user) => {
       const userItineraries = snapshot.val();
 
       displayUserItineraries(userItineraries);
-      addItineraryTransition(userItineraries, userID);
+      addItineraryTransition(userItineraries, "itinerary", userID, "Itineraries");
     });
 
     // Reference of user's bookmarked itineraries in Firebase
     const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
     get(userBMItinerariesRef).then((snapshot) => {
-      const userBMItineraries = snapshot.val();
-      displayUserBMItineraries(userBMItineraries);
-      addItineraryTransition(userBMItineraries, userID);
+      var userBMItineraries = userBMItineraries == "" ? snapshot.val() : {};
+
+      // find all itineraries that are bookmarked true in user's itineraries
+      get(ref(db, `Users/${userID}/Itineraries`)).then((snapshot) => {
+        const itineraries = snapshot.val();
+        const itinerariesKeys = Object.keys(itineraries);
+        
+        for(let i = 0; i < itinerariesKeys.length; i++)
+        {
+          if (itineraries[itinerariesKeys[i]].bookmarked == "true")
+          {
+            userBMItineraries[itinerariesKeys[i]] = itineraries[itinerariesKeys[i]];
+          }
+        }
+
+        // combine two lists together to form one list
+        displayUserBMItineraries(userBMItineraries);
+        addItineraryTransition(userBMItineraries, "bookmarked", userID, "Bookmarked");
+      })
     });
 
     document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
@@ -94,7 +110,6 @@ function displayUserItineraries(userItineraries)
     slidesToShow: 3,
     slidesToScroll: 3
   });
-
 }
 
 function displayUserBMItineraries(userBMItineraries)
@@ -138,19 +153,20 @@ function displayUserBMItineraries(userBMItineraries)
   });
 }
 
-function addItineraryTransition(userItineraries, userID)
+function addItineraryTransition(userItineraries, htmlID, userID, section)
 {
   const userItinerariesIDs = Object.keys(userItineraries);
 
   for(let i = 0; i < userItinerariesIDs.length; i++)
   {
-    document.getElementById(`itinerary-${i + 1}`).addEventListener("click", function() {
-      localStorage.setItem("itineraryID", String(userItinerariesIDs[i]));
-      localStorage.setItem("userIDItinerary", String(userID));
+    document.getElementById(`${htmlID}-${i + 1}`).addEventListener("click", function() {
+
+      localStorage.setItem("itineraryPath", `Users/${userID}/${section}/${userItinerariesIDs[i]}`);
       window.location.href = "itineraryDetails.html";
     })
   }
 }
+
 
 // populates checklists with thier items from database 
 function populateChecklists(user) {

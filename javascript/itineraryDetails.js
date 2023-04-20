@@ -1,4 +1,4 @@
-import {db, ref, onValue, onAuthStateChanged, auth, push, get, query, update, limitToLast} from "./db.js";
+import {db, ref, onValue, onAuthStateChanged, auth, push, get, query, remove, limitToLast, update} from "./db.js";
 
 // Get location container element
 const locationClass = document.getElementsByClassName("location-container")[0];
@@ -6,21 +6,13 @@ const locationClass = document.getElementsByClassName("location-container")[0];
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {
-    const userIDItinerary = localStorage.getItem("userIDItinerary");
-    const itineraryID = localStorage.getItem("itineraryID");
-    const isBookmarked = localStorage.getItem("isBookmarked");
+    const itineraryPath = localStorage.getItem("itineraryPath");
+    const bookmark = document.getElementsByClassName("itin-bookmark")[0];
 
-    if (isBookmarked == "True")
-    {
-      // Show bookmarked button
-    }
-    else
-    {
-      // Show default buttton not yet bookmarked
-    }
+    console.log(itineraryPath);
 
     // reference of itinerary that user clicked on in itineraries.js in Firebase
-    const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+    const itineraryIDRef = ref(db, itineraryPath);
     onValue(itineraryIDRef, (snapshot) => {
       const itineraryInfo = snapshot.val();
 
@@ -36,33 +28,45 @@ onAuthStateChanged(auth, (user) => {
     
     document.getElementsByClassName("itin-bookmark")[0].addEventListener("click", function(e) {
       e.preventDefault();
-      
-      // Fill in bookmark button
-      const bookmark = document.getElementsByClassName("itin-bookmark")[0];
-    
-      bookmark.style.backgroundImage = `url(images/bookmark-filled.png)`;
 
       // Get element of each date and name
-      const title = document.getElementById("trip-name");
-      const origin = document.getElementById("origin-location-name");
+      const title = document.getElementById("trip-name").innerHTML;
+      const origin = document.getElementById("origin-location-name").innerHTML;
       const date = document.getElementById("itinerary-date-interval").innerHTML.split(" ");
-      const totalCost = document.getElementById("itinerary-total-cost");
-      
-      addBookmarkedItinerary(user.uid, title, origin, date[0], date[2], totalCost);
+      const totalCost = document.getElementById("itinerary-total-cost").innerHTML.split("$");
 
-      console.log(locationClass.childElementCount);
-      // Add in locations of bookmarked itinerary
-      for(let i = 0; i < locationClass.childElementCount; i++)
+      // If bookmark is not filled out when you press the bookmark button, we add in itinerary
+      if (bookmark.style.backgroundImage != `url(images/bookmark-filled.png)`)
       {
-        const locationName = document.getElementById("location-name").innerHTML;
-        const locationAddress = document.getElementById("location-address").innerHTML;
-        const locationDate = document.getElementById("location-date").innerHTML;
-        const locationCost = document.getElementById("location-cost").innerHTML;
+        // Fill in bookmark button
+        bookmark.style.backgroundImage = `url(images/bookmark-filled.png)`;
+        
+        addBookmarkedItinerary(user.uid, title, origin, date[0], date[2], totalCost[1], itineraryPath);
+        
+        if (user.uid != itineraryPath.split("/")[1])
+        {
+          // Add in locations of bookmarked itinerary
+          for(let i = 0; i < locationClass.childElementCount; i++)
+          {
+            const locationName = document.getElementById(`location-name-${i + 1}`).innerHTML;
+            const locationAddress = document.getElementById(`location-address-${i + 1}`).innerHTML;
+            const locationDate = document.getElementById(`location-date-${i + 1}`).innerHTML;
+            const locationCost = document.getElementById(`location-cost-${i + 1}`).innerHTML;
 
-        addLocationBookmarked(user.uid, locationName, locationAddress, locationDate, locationCost);
+            addLocationBookmarked(user.uid, locationName, locationAddress, locationDate, locationCost, itineraryPath);
+          }
+        }
+      
+        alert("Bookmarked Successfully!")
       }
+      else
+      {
+        // Unfill bookmark button
+        bookmark.style.backgroundImage = `url(images/bookmark-empty.png)`;
 
-      console.log("Bookmarked!");
+        // Remove bookmarked itinerary from DB
+        //remove(ref(db, `Users/${user.uid}/Bookmarked/${bookmarkedID}`));
+      }
     })
   }
 });
@@ -110,65 +114,70 @@ function displayLocations(locationList)
                             <div></div>
                         </div>
                         <div class="details">
-                            <h4 id="location-name">${locationList[locationIDs[i]].locationName}</h4>
+                            <h4 id="location-name-${i + 1}">${locationList[locationIDs[i]].locationName}</h4>
                             <div>
                                 <img src="images/pin-logo.png" alt="">
-                                <h5 id="location-address">${locationList[locationIDs[i]].address}</h5> 
+                                <h5 id="location-address-${i + 1}">${locationList[locationIDs[i]].address}</h5> 
                             </div>
                             <div>
                                 <img src="images/calendar-logo.png" alt="">
-                                <h5 id="location-date">${locationList[locationIDs[i]].date}</h5>
+                                <h5 id="location-date-${i + 1}">${locationList[locationIDs[i]].date}</h5>
                             </div>
                         </div>
                         <div class="location-cost">
-                            <input type="number" placeholder="$0" id="location-cost"></h4>
+                            <input type="number" placeholder="$0" id="location-cost-${i + 1}"></h4>
                         </div>`;
     
-    console.log(element)
     // Append div element class to container
     locationClass.appendChild(element);
   }
 }
 
-function addBookmarkedItinerary(userID, name, origin, startDate, endDate, totalCost)
+function addBookmarkedItinerary(userID, name, origin, startDate, endDate, totalCost, itineraryPath)
 {
-  // If itinerary doesn't exist, we want to add it to DB
-  push(ref(db, `Users/${userID}/Bookmarked`), {
-    "image": "images/defaults/default-itineraries-background.png",
-    "name": name,
-    "origin": origin,
-    "locationList": "",
-    "stats": {
-      "clicks": 0,
-      "totalCost": totalCost    
-    }
-  });
+  const pathList = itineraryPath.split("/");
 
-  // Push in start and end dates
-  get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
-    const itineraryID = Object.keys(snapshot.val())[0];
-    update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}`), {
-      "duration": {
-        "start": startDate,
-        "end": endDate
+  if (userID == pathList[1])
+  {
+    update(ref(db, itineraryPath), {
+      "bookmarked": "true"
+    });
+  }
+  else
+  {
+    push(ref(db, `Users/${userID}/Bookmarked`), {
+      "image": "images/defaults/default-itineraries-background.png",
+      "name": name,
+      "origin": origin,
+      "locationList": "",
+      "stats": {
+        "clicks": 0,
+        "totalCost": totalCost    
       }
     });
-  });
+    
+    get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
+      const itineraryID = Object.keys(snapshot.val())[0];
+      update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}`), {
+        duration: {
+          "start": startDate,
+          "end": endDate
+        }
+      });
+    })
+  }
 }
 
 function addLocationBookmarked(userID, locationName, address, date, cost)
 {
-  // Push in start and end dates
   get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
     const itineraryID = Object.keys(snapshot.val())[0];
-    console.log(itineraryID);
-    update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}/locationList`), {
+    push(ref(db, `Users/${userID}/Bookmarked/${itineraryID}/locationList`), {
       "address": address,
       "date": date,
       "locationCost": cost,
       "locationName": locationName
     });
   });
-
   // how to get time??? maybe just display it in itindetails
 }
