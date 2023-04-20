@@ -119,8 +119,7 @@ function addClicks(itineraryID, htmlID)
 
         update(ref(db), updates);
         
-        localStorage.setItem("itineraryID", String(itineraryID));
-        localStorage.setItem("userIDItinerary", String(userIDItinerary));
+        localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
 
         window.location.href = "itineraryDetails.html";
       },
@@ -180,7 +179,6 @@ function displayTrips(accountTrips)
     
           localStorage.setItem("itineraryID", String(accountTrips[i][0]));
           localStorage.setItem("userIDItinerary", String(userIDItinerary));
-          localStorage.setItem("isBookmarked", "False");
 
           window.location.href = "itineraryDetails.html";
         },
