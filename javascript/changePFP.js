@@ -5,6 +5,19 @@ import {set, ref, db, onValue, auth, updatePassword, reauthenticateWithCredentia
 // Retrieve ID of user that just logged in
 const userID = localStorage.getItem("userID");
 
+const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
+onValue(tripDisplayRef, (snapshot) => {
+  const userTrips = snapshot.val(); 
+  displayTrips(userTrips);
+  displayItinTracker(userTrips);
+});
+
+const bookDisplayRef = ref(db, "Users/" + userID + "/Bookmarked");
+onValue(bookDisplayRef, (snapshot) => {
+  const userBooks = snapshot.val(); 
+  displayBookmark(userBooks);
+});
+
 document.getElementById('file').onchange = function (evt) {
   var tgt = evt.target || window.event.srcElement,
       files = tgt.files;
@@ -24,14 +37,6 @@ displayAccount(userID);
 
 document.getElementById("userProfileDetails").addEventListener("submit", profileUpdate);
 
-// const itineraryIDRef = ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
-// onValue(itineraryIDRef, (snapshot) => {
-//   const itineraryInfo = snapshot.val();
-
-//   displayInfo(itineraryInfo);
-//   displayLocations(itineraryInfo.locationList);
-//   exportLocations(itineraryInfo.locationList);
-// })
 
 // displays the user's information & profile pic
 function displayAccount(accountID)
@@ -66,8 +71,11 @@ function displayAccount(accountID)
     mail.value = data.email;
     uname.value = data.username;
     // pass.value = data.password;
-    loc.value = data.location;
-    uloc.innerText = data.location;
+    if (data.location != null){
+      loc.value = data.location;
+      uloc.innerText = data.location;
+    }
+    
 
     // Display user's full name next to profile picture
     image.insertAdjacentText("afterend", '')
@@ -75,6 +83,7 @@ function displayAccount(accountID)
   })
 }
 
+// updated the profile on the DB
 async function profileUpdate(e)
 {
   e.preventDefault();
@@ -119,3 +128,70 @@ async function profileUpdate(e)
   document.getElementById("new-password").value = "";
 }
 
+/** Display all upcoming trips of that user
+ * 
+ * @param {*} accountTrips - An object of upcoming trips from the user 
+ */
+function displayTrips(accountTrips)
+{
+  const itineraryIDs = Object.keys(accountTrips);
+
+  var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
+  var upcomingTripElement = rightColumnHome[2];
+
+  for (let i = 0; i < itineraryIDs.length; i++)
+  {
+    var aElement = document.createElement("a");
+    aElement.href = "";
+    aElement.id = `trip-${i + 1}`;
+    aElement.innerHTML = `<img src="" id="trip-picture-${i + 1}" alt="">
+                          <div>
+                              <h4 id="trip-${i + 1}-title"></h4>
+                              <h5 id="duration-trip-${i + 1}"></h5>
+                          </div>`;
+    
+    upcomingTripElement.appendChild(aElement);
+
+    // Image element 
+    var image = document.getElementById(`trip-picture-${i + 1}`);
+    
+    // Format date
+    const date = accountTrips[itineraryIDs[i]].duration.start + " - " + accountTrips[itineraryIDs[i]].duration.end;
+    
+    // Set image
+    image.src = accountTrips[itineraryIDs[i]].image;
+
+    // Set name of trip and duration
+    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[itineraryIDs[i]].name;
+    document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
+  }
+}
+
+// displays the number of itineraries the user has
+function displayItinTracker(accountTrips)
+{
+  const itineraryIDs = Object.keys(accountTrips);
+  var numItins = document.getElementById("itinerary-tracker");
+  if ( itineraryIDs.length != null){
+    numItins.innerText = itineraryIDs.length;
+  }
+  else{
+    numItins.innerText = 0;
+  }
+  
+}
+
+// displays the number of bookmarked itineraries 
+function displayBookmark(accountBook)
+{
+  const booksIDs = Object.keys(accountBook);
+  var numBooks = document.getElementById("bookmark-tracker");
+  
+  if ( booksIDs.length != null){
+    numBooks.innerText = booksIDs.length;
+  }
+  else{
+    numBooks.innerText = 0;
+  }
+ 
+}
