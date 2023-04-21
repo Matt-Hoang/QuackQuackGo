@@ -10,6 +10,8 @@
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
     <script type="module" src="javascript/itineraryDetails.js" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkmNHJOVlb2iYQUtAVpBWsnzRSLrIT_os&callback=myMap"></script>
+    <script type="module" src="javascript/itineraries.js" defer></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 </head>
@@ -29,19 +31,14 @@
     <div class="itinerary-details-center-column">
         <div class="itinerary-header">
             <!-- back button -->
-            <div class="itin-back-bookmark">
-                <a href="itineraries.html" class="itin-back"><div></div></a>
-                <a href="" class="itin-bookmark"><div></div></a>
-            </div>
-
+            <a href="itineraries.html"><div></div></a>
             <!-- itinerary header -->
             <div class="trip-title">
                 <h2 id="trip-name"></h2>
                 <h3>Origin: </h3><h3 id="origin-location-name">Insert Location</h3>
                 <br>
                 <h3>Dates: </h3><h3 id="itinerary-date-interval">Insert Date</h3>
-                <br>
-                <h3>Total Cost: </h3><h3 id="itinerary-total-cost">$0</h3>
+                <h3>Total Cost: </h3><h3>$0</h3>
             </div>
         </div>
         <!-- view map button -->
@@ -67,7 +64,13 @@
         <div class="checklists">
             <h5 class="checklist-name">Pre-Trip<hr></h5>
             <ul class="individual-checklist pretrip-checklist">
-                <!-- checklist items filled in from database -->
+                <li>Shampoo</li>
+                <li class="checked">Conditioner</li>
+                <li>Razor</li>
+                <li>Laptop</li>
+                <li>Chargers</li>
+                <li>Book</li>
+                <li>Family's gifts</li>
             </ul>
             <div class="checklist-spacer">
                 <div class="checklist-input-div">
@@ -82,7 +85,13 @@
         <div class="checklists">
             <h5 class="checklist-name">Post-Trip<hr></h5>
             <ul class="individual-checklist posttrip-checklist">
-                <!-- checklist items filled in from database -->
+                <li>Shampoo</li>
+                <li class="checked">Conditioner</li>
+                <li>Laptop</li>
+                <li>Chargers</li>
+                <li>Book</li>
+                <li>Souvenirs</li>
+                <li>Snacks</li>
             </ul>
             <div class="checklist-spacer">
                 <div class="checklist-input-div">
@@ -91,7 +100,6 @@
                 </div>
             </div>
         </div>
-        
     </div>
 </body>
 </html>
