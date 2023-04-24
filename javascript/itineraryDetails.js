@@ -2,15 +2,48 @@ import {db, ref, onValue, onAuthStateChanged, auth, push, get, query, remove, li
 
 // Get location container element
 const locationClass = document.getElementsByClassName("location-container")[0];
+const itineraryPath = localStorage.getItem("itineraryPath");
+const bookmark = document.getElementsByClassName("itin-bookmark")[0];
 
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {
-    const itineraryPath = localStorage.getItem("itineraryPath");
-    const bookmark = document.getElementsByClassName("itin-bookmark")[0];
+    /*
+    Display whether an itinerary is bookmarked or not by the user. We check if user's ID is the same as the user ID shown in itineraryPath. 
+    We do this for one of two reasons:
+      - User accesses itinerary from itineraries page and those itineraries are the user's own itineraries bookmarked or not
+      - User accesses itinerary from homepage that may or may not be their itinerary
+    */
+    if (user.uid == itineraryPath.split("/")[1])
+    {
+      // If the DB path is from the bookmarked section, display it as bookmarked by default
+      if (itineraryPath.split("/")[2] == "Bookmarked")
+      {
+        // Make bookmark filled
+        bookmark.style.backgroundImage = `url("images/bookmark-filled.png")`;
+      }
+      else
+      {
+        // If the DB path is not from the bookmarked section, we check the itineraries section of the DB of the user
+        get(ref(db, itineraryPath)).then((snapshot) => {
+          const itinerary = snapshot.val();
+  
+          bookmark.style.backgroundImage = itinerary["bookmarked"] == "true" ? `url("images/bookmark-filled.png")`: `url("images/bookmark-empty.png")`;
+        })
+      }
+    }
 
-    console.log(itineraryPath);
+    // Only show edit button for user's own itineraries, whether its bookmarked or not
+    get(ref(db, `Users/${user.uid}/Itineraries`)).then((snapshot) => {
+      const itinerariesKeys = Object.keys(snapshot.val());
 
+      // Check if ID of itinerary ID matches up with user's own itinerary IDs
+      if (itinerariesKeys.find(id => id == itineraryPath.split("/")[3]) != undefined)
+      {
+        displayEditButton(user.uid);
+      }
+    })
+    
     // reference of itinerary that user clicked on in itineraries.js in Firebase
     const itineraryIDRef = ref(db, itineraryPath);
     onValue(itineraryIDRef, (snapshot) => {
@@ -20,56 +53,110 @@ onAuthStateChanged(auth, (user) => {
       displayLocations(itineraryInfo.locationList);
     });
 
-    document.getElementsByClassName("itin-button")[1].addEventListener("click", function() {
-      localStorage.setItem("hasItinerary", "True");
-      localStorage.setItem("userID", String(localStorage.getItem("userIDItinerary")))
-      window.location.href = "itineraryEdit.html";  
-    });
-    
+    // Bookmark click event listener
     document.getElementsByClassName("itin-bookmark")[0].addEventListener("click", function(e) {
       e.preventDefault();
 
-      // Get element of each date and name
-      const title = document.getElementById("trip-name").innerHTML;
-      const origin = document.getElementById("origin-location-name").innerHTML;
-      const date = document.getElementById("itinerary-date-interval").innerHTML.split(" ");
-      const totalCost = document.getElementById("itinerary-total-cost").innerHTML.split("$");
-
-      // If bookmark is not filled out when you press the bookmark button, we add in itinerary
-      if (bookmark.style.backgroundImage != `url(images/bookmark-filled.png)`)
+      // If bookmark is not filled out, we bookmark the itinerary
+      if (bookmark.style.backgroundImage != `url("images/bookmark-filled.png")`)
       {
-        // Fill in bookmark button
-        bookmark.style.backgroundImage = `url(images/bookmark-filled.png)`;
-        
-        addBookmarkedItinerary(user.uid, title, origin, date[0], date[2], totalCost[1], itineraryPath);
-        
-        if (user.uid != itineraryPath.split("/")[1])
-        {
-          // Add in locations of bookmarked itinerary
-          for(let i = 0; i < locationClass.childElementCount; i++)
-          {
-            const locationName = document.getElementById(`location-name-${i + 1}`).innerHTML;
-            const locationAddress = document.getElementById(`location-address-${i + 1}`).innerHTML;
-            const locationDate = document.getElementById(`location-date-${i + 1}`).innerHTML;
-            const locationCost = document.getElementById(`location-cost-${i + 1}`).innerHTML;
+        // Fill in  bookmark
+        bookmark.style.backgroundImage = `url("images/bookmark-filled.png")`;
 
-            addLocationBookmarked(user.uid, locationName, locationAddress, locationDate, locationCost, itineraryPath);
+        // Get path to information of itinerary
+        get(ref(db, itineraryPath)).then((snapshot) => {
+          const itineraryInfo = snapshot.val();
+
+          // Add itinerary to bookmarked column or itineraries column depending on if it's the user's own itineraries or not.
+          addBookmarkedItinerary(user.uid, itineraryInfo, itineraryPath);
+
+          // If the ID of the user is not the same as the user ID in itineraryPath, we add in locations
+          if (user.uid != itineraryPath.split("/")[1])
+          {
+            const locationKeys = Object.keys(itineraryInfo["locationList"]);
+
+            for(let i = 0; i < locationKeys.length; i++)
+            {
+              addLocationBookmarked(user.uid, itineraryInfo["locationList"][locationKeys[i]]);
+            }
+            
+            window.location.href = "itineraries.html";
           }
-        }
-      
-        alert("Bookmarked Successfully!")
+          
+          // Direct back to itineraries page
+          window.location.href = "itineraries.html";
+
+          // Alert message to show task is successfully done
+          alert("Bookmarked Successfully!"); 
+        });
       }
       else
       {
-        // Unfill bookmark button
-        bookmark.style.backgroundImage = `url(images/bookmark-empty.png)`;
+        // If the itinerary is bookmarked when we load in the itinerary details page and we want to unbookmark it, we have to remove it from the DB
+        if (itineraryPath.split("/")[2] == "Bookmarked")
+        {
+          // Remove itineraries from bookmarked column in DB
+          remove(ref(db, itineraryPath));
+        }
+        else
+        {
+          // If a user's itinerary is bookmarked and its unbookmarked, we change its bookmarked variable to "false"
+          update(ref(db, itineraryPath), {
+            "bookmarked": "false"
+          });
+        }
 
-        // Remove bookmarked itinerary from DB
-        //remove(ref(db, `Users/${user.uid}/Bookmarked/${bookmarkedID}`));
+        // Unfill bookmark button
+        bookmark.style.backgroundImage = `url("images/bookmark-empty.png")`;
+
+        window.location.href = "itineraries.html";
+
+        alert("Bookmarked successfully removed!");
       }
     })
   }
 });
+
+/** Function that displays the edit button for users to edit their itinerary. It's only displayed for the user's own itineraries that are bookmarked or not
+ * 
+ * @param {*} userID - ID of user
+ */
+function displayEditButton(userID)
+{
+  // Button container class
+  const buttonContainer = document.getElementsByClassName("button-container")[0];
+
+  // <a> element in HTML
+  const aElement = document.createElement("a");
+
+  // When clicked on, it goes to itineraryEdit.html
+  aElement.href = "itineraryEdit.html";
+  
+  // <div> element in HTML
+  const divElement = document.createElement("div");
+
+  // Assign div element properties
+  divElement.className = "itin-button";
+  divElement.innerHTML = "Edit";
+
+  // Append to <a> element
+  aElement.appendChild(divElement);
+
+  // Append to button class
+  buttonContainer.appendChild(aElement);
+
+  // edit-button click event listener
+  document.getElementsByClassName("itin-button")[1].addEventListener("click", function() {
+    // Lets the itinerary edit page know that the user is editing an existing itinerary
+    localStorage.setItem("hasItinerary", "True");
+
+    // Send path of itinerary to itinerary edit page
+    localStorage.setItem("itineraryPath", String(itineraryPath))
+
+    // Redirect page to itinerayEdit.html
+    window.location.href = "itineraryEdit.html";  
+  });
+}
 
 /** Display main information of itinerary like name of trip, duration of trip, etc
  * 
@@ -133,10 +220,24 @@ function displayLocations(locationList)
   }
 }
 
-function addBookmarkedItinerary(userID, name, origin, startDate, endDate, totalCost, itineraryPath)
+/** Bookmarks the main information of an itinerary.
+ * 
+ * @param {*} userID - ID of user
+ * @param {*} itineraryInfo - information of itinerary
+ * @param {*} itineraryPath - path of itinerary in DB
+ */
+function addBookmarkedItinerary(userID, itineraryInfo, itineraryPath)
 {
+  // Split path by "/" to access certain DB locations
   const pathList = itineraryPath.split("/");
 
+  /*
+  We bookmark an itinerary differently based on two different scenarios:
+    - if the user ID is the same user ID in itineraryPath, we want to update the "bookmarked" variable since the itinerary does not exist in the "Bookmarked" column in the DB of a user.
+      This is done to avoid updating two different paths of the same itineraries in itineraryEdit.js
+      
+    - if the user ID is not the same user ID in itineraryPath, we add its information to the "Bookmarked" section of the DB of a user
+  */
   if (userID == pathList[1])
   {
     update(ref(db, itineraryPath), {
@@ -146,38 +247,46 @@ function addBookmarkedItinerary(userID, name, origin, startDate, endDate, totalC
   else
   {
     push(ref(db, `Users/${userID}/Bookmarked`), {
-      "image": "images/defaults/default-itineraries-background.png",
-      "name": name,
-      "origin": origin,
+      "image": itineraryInfo["image"],
+      "name": itineraryInfo["name"],
+      "origin": itineraryInfo["origin"],
       "locationList": "",
       "stats": {
-        "clicks": 0,
-        "totalCost": totalCost    
-      }
+        "clicks": itineraryInfo["stats"].clicks,
+        "totalCost": itineraryInfo["stats"].totalCost  
+      },
+      "userID": itineraryPath.split("/")[1]  
     });
-    
+
     get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
       const itineraryID = Object.keys(snapshot.val())[0];
       update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}`), {
         duration: {
-          "start": startDate,
-          "end": endDate
+          "start": itineraryInfo["duration"]["start"],
+          "end": itineraryInfo["duration"]["end"]
         }
       });
     })
   }
 }
 
-function addLocationBookmarked(userID, locationName, address, date, cost)
+/** Function that adds in the locations of an itinerary that is going to be bookmarked
+ * 
+ * @param {*} userID - ID of user
+ * @param {*} locationInfo - information of the location
+ */
+function addLocationBookmarked(userID, locationInfo)
 {
   get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
     const itineraryID = Object.keys(snapshot.val())[0];
+    
+    console.log(itineraryID);
     push(ref(db, `Users/${userID}/Bookmarked/${itineraryID}/locationList`), {
-      "address": address,
-      "date": date,
-      "locationCost": cost,
-      "locationName": locationName
+      "address": locationInfo["address"],
+      "date": locationInfo["date"],
+      "locationCost": locationInfo["locationCost"],
+      "locationName": locationInfo["locationName"],
+      "time": locationInfo["time"]
     });
   });
-  // how to get time??? maybe just display it in itindetails
 }

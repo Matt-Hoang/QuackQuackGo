@@ -13,8 +13,8 @@ onAuthStateChanged(auth, (user) => {
       const users = snapshot.val();
       var itinerariesList = getAllItineraries(users);
 
-      displayTrendingLocations(itinerariesList);
-      displayExploreLocations(itinerariesList);
+      displayTrendingLocations(itinerariesList, userID);
+      displayExploreLocations(itinerariesList, userID);
     })
 
     const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
@@ -22,6 +22,10 @@ onAuthStateChanged(auth, (user) => {
       const userTrips = snapshot.val(); 
       displayTrips(userTrips);
     });
+  }
+  else
+  {
+    window.location.href = "login.html";
   }
 });
 
@@ -49,13 +53,13 @@ function displayAccount(accountID)
  * 
  * @param {*} locations - a JSON-formatted object of locations in the database
  */
-function displayTrendingLocations(itinerariesList) 
+function displayTrendingLocations(itinerariesList, userID) 
 {   
   itinerariesList = sortClicks(itinerariesList);
-  
-  const top3Itineraries = itinerariesList.splice(0, 3);
+  const top3Itineraries = itinerariesList.toSpliced(3);
 
-  for (let i = 0; i < top3Itineraries.length; i++)
+  console.log(top3Itineraries)
+  for (let i = 0; i < 3; i++)
   {
     // Get each element's ID 
     var location = document.getElementById(`trending-locations-${i + 1}`);
@@ -66,7 +70,7 @@ function displayTrendingLocations(itinerariesList)
     // Assign location image and CSS styling
     location.style.backgroundImage = `url('${top3Itineraries[i][1].image}')`;
 
-    addClicks(top3Itineraries[i][0], `trending-locations-${i + 1}`)
+    addClicks(top3Itineraries[i][0], `trending-locations-${i + 1}`, userID)
   }
 }
 
@@ -74,14 +78,14 @@ function displayTrendingLocations(itinerariesList)
  * 
  * @param {*} itineraries - a JSON-formatted object of popular itineraries in the database
  */
-function displayExploreLocations(itineraries)
+function displayExploreLocations(itineraries, userID)
 {
   // List of all elements inside the new-itineraries class div
   const newItineraryList = document.getElementsByClassName("new-itineraries")[0].children;
   
   for (let i = 0; i < newItineraryList.length; i++)
   {
-    const randomItinerary = Math.floor(Math.random() * newItineraryList.length);
+    const randomItinerary = Math.floor(Math.random() * itineraries.length);
 
     newItineraryList[i].id = itineraries[randomItinerary][0];
 
@@ -96,16 +100,14 @@ function displayExploreLocations(itineraries)
     
     itineraries.splice(randomItinerary, 1);
 
-    addClicks(newItineraryList[i].id, newItineraryList[i].id)
+    addClicks(newItineraryList[i].id, newItineraryList[i].id, userID)
   }
 }
 
-function addClicks(itineraryID, htmlID)
+function addClicks(itineraryID, htmlID, user)
 {
   document.getElementById(htmlID).addEventListener("click", function(e) {
     e.preventDefault();
-
-    console.log("Clicked!");
 
     retrieveUserID(itineraryID).then(
       function(value)
@@ -113,15 +115,40 @@ function addClicks(itineraryID, htmlID)
         var userIDItinerary = value;
         var updates = {};
 
-        console.log(userIDItinerary);
-
         updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
 
         update(ref(db), updates);
         
-        localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+        // Check if itinerary already exists in user's bookmarked or itinerary section for bookmarking
+        get(ref(db, `Users/${user}/Bookmarked`)).then((snapshot) => {
+          const bookmarks = snapshot.val() == null ? {}: snapshot.val();
+          const bookmarkIDs = Object.keys(bookmarks);
 
-        window.location.href = "itineraryDetails.html";
+          for(let i = 0; i < bookmarkIDs.length; i++)
+          {
+            // Compare IDs of both itineraries
+            if (bookmarks[bookmarkIDs[i]].userID == userIDItinerary)
+            {
+              console.log(`${bookmarks[bookmarkIDs[i]].userID} and ${userIDItinerary} are equal!`)
+
+              get(ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`)).then((snapshot2) => {
+                const itinerary = snapshot2.val();
+                
+                // Compare the name of both itineraries
+                if (itinerary["name"] == bookmarks[bookmarkIDs[i]].name)
+                {
+                  localStorage.setItem("itineraryPath", `Users/${user}/Bookmarked/${bookmarkIDs[i]}`);
+                  window.location.href = "itineraryDetails.html";
+                }
+              })
+            }
+          }
+
+          localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+          window.location.href = "itineraryDetails.html";
+        })
+
+        
       },
       function(error)
       {
@@ -177,8 +204,8 @@ function displayTrips(accountTrips)
         {
           var userIDItinerary = value;
     
-          localStorage.setItem("itineraryID", String(accountTrips[i][0]));
-          localStorage.setItem("userIDItinerary", String(userIDItinerary));
+          localStorage.setItem("itineraryID", `Users/${userIDItinerary}/Itineraries/${accountTrips[i][0]}`);
+          localStorage.setItem("userID", String(userIDItinerary));
 
           window.location.href = "itineraryDetails.html";
         },

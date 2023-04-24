@@ -8,49 +8,58 @@ var bookmarkedContainerList = document.getElementsByClassName("bookmarked-contai
 
 // populate page if user is logged in, if logged out reroute to login page
 onAuthStateChanged(auth, (user) => {
+  // User is signed in
   if (user) {
-    // User is signed in
+    
+    // Populate checklist from DB of user
     populateChecklists(user);
 
-    const userID = user.uid;
     // Reference of user's itineraries in Firebase
-    const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
+    const userItinerariesRef = ref(db, `Users/${user.uid}/Itineraries`);
     get(userItinerariesRef).then((snapshot) => {
       const userItineraries = snapshot.val();
 
+      // Display user itineraries
       displayUserItineraries(userItineraries);
-      addItineraryTransition(userItineraries, "itinerary", userID, "Itineraries");
+
+      // click event listener function
+      addItineraryTransition(userItineraries, "Itineraries", user.uid);
     });
 
     // Reference of user's bookmarked itineraries in Firebase
-    const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
+    const userBMItinerariesRef = ref(db, `Users/${user.uid}/Bookmarked`);
     get(userBMItinerariesRef).then((snapshot) => {
-      var userBMItineraries = userBMItineraries == "" ? snapshot.val() : {};
+      // if no bookmarks exist, its an empty object. Else, populate it from DB
+      var userBMItineraries = snapshot.val() == null ? {}: snapshot.val();
 
       // find all itineraries that are bookmarked true in user's itineraries
-      get(ref(db, `Users/${userID}/Itineraries`)).then((snapshot) => {
+      get(ref(db, `Users/${user.uid}/Itineraries`)).then((snapshot) => {
         const itineraries = snapshot.val();
         const itinerariesKeys = Object.keys(itineraries);
         
         for(let i = 0; i < itinerariesKeys.length; i++)
         {
+          // If key exists in DB and the bookmark attribute is true, we add it to object of bookmarked itineraries
           if (itineraries[itinerariesKeys[i]].bookmarked == "true")
           {
             userBMItineraries[itinerariesKeys[i]] = itineraries[itinerariesKeys[i]];
           }
         }
 
-        // combine two lists together to form one list
+        // Display user's bookmarked itineraries
         displayUserBMItineraries(userBMItineraries);
-        addItineraryTransition(userBMItineraries, "bookmarked", userID, "Bookmarked");
-      })
-    });
 
-    document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
-      localStorage.setItem("hasItinerary", "False");
+        // click event listener function
+        addItineraryTransition(userBMItineraries, "Bookmarked", user.uid);
+      });
+      
+      // direct user to itinerary edit page
+      document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
+        // user is going to itinerary edit page with no itinerary to edit. it'll be a blank template.
+        localStorage.setItem("hasItinerary", "False");
+      });
     });
-
-  } 
+  }
   else 
   {
     // User is signed out
@@ -58,6 +67,10 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+/** Display user's itineraries in itineraries section of itineraries page
+ * 
+ * @param {*} userItineraries - Object of user's itineraries retrieved from DB
+ */
 function displayUserItineraries(userItineraries)
 {
   // Get array of user itinerary IDs from Firebase
@@ -83,7 +96,7 @@ function displayUserItineraries(userItineraries)
 
     // assign itinerary information in element
     aElement.href = "itineraryDetails.html";
-    aElement.id = `itinerary-${i + 1}`;
+    aElement.id = `Itineraries-${i + 1}`;
     aElement.className = "itinerary-item";
     aElement.innerHTML = userItineraries[userItinerariesIDs[i]].name;
 
@@ -112,6 +125,10 @@ function displayUserItineraries(userItineraries)
   });
 }
 
+/** Display user's bookmarked itineraries in bookmarked section of itineraries page
+ * 
+ * @param {*} userBMItineraries - Object of user's bookmarked itineraries retrieved from DB
+ */
 function displayUserBMItineraries(userBMItineraries)
 {
   var userBMItinerariesIDs = Object.keys(userBMItineraries);
@@ -127,7 +144,7 @@ function displayUserBMItineraries(userBMItineraries)
     var aElement = document.createElement("a");
 
     aElement.href = "itineraryDetails.html";
-    aElement.id = `bookmarked-${i + 1}`;
+    aElement.id = `Bookmarked-${i + 1}`;
     aElement.className = "bookmarked-item";
     aElement.innerHTML = userBMItineraries[userBMItinerariesIDs[i]].name;
 
@@ -153,20 +170,47 @@ function displayUserBMItineraries(userBMItineraries)
   });
 }
 
-function addItineraryTransition(userItineraries, htmlID, userID, section)
+/** Function that handles transition from itineraries page to itinerary details page
+ * 
+ * @param {*} userItineraries - Object of user's itineraries
+ * @param {*} htmlID - ID of the HTML element clicked on. Labeled as either "Bookmarked-#" or "Itineraries-#"
+ * @param {*} userID - ID of user loggined in currently
+ */
+function addItineraryTransition(userItineraries, htmlID, userID)
 {
   const userItinerariesIDs = Object.keys(userItineraries);
 
   for(let i = 0; i < userItinerariesIDs.length; i++)
   {
-    document.getElementById(`${htmlID}-${i + 1}`).addEventListener("click", function() {
+    document.getElementById(`${htmlID}-${i + 1}`).addEventListener("click", function(e) {
+      e.preventDefault();
 
-      localStorage.setItem("itineraryPath", `Users/${userID}/${section}/${userItinerariesIDs[i]}`);
-      window.location.href = "itineraryDetails.html";
-    })
+      // Loop through all bookmarked itineraries to see if the itinerary clicked on is in the bookmarked section
+      get(ref(db, `Users/${userID}/Bookmarked`)).then((snapshot) => {
+        const IDKeys = Object.keys(snapshot.val());
+
+        if (IDKeys.find(key => key == userItinerariesIDs[i]) != undefined)
+        {
+          // Set path to  bookmarked itinerary from DB
+          localStorage.setItem("itineraryPath", `Users/${userID}/Bookmarked/${userItinerariesIDs[i]}`)
+          window.location.href = "itineraryDetails.html";
+        }
+      })
+
+      // Loop through all user's itineraries to see if the itinerary clicked on is in the itineraries section
+      get(ref(db, `Users/${userID}/Itineraries`)).then((snapshot) => {
+        const IDKeys = Object.keys(snapshot.val());
+
+        if (IDKeys.find(key => key == userItinerariesIDs[i]) != undefined)
+        {
+          // Set path to itinerary from DB
+          localStorage.setItem("itineraryPath", `Users/${userID}/Itineraries/${userItinerariesIDs[i]}`)
+          window.location.href = "itineraryDetails.html";
+        }
+      })
+    });
   }
 }
-
 
 // populates checklists with thier items from database 
 function populateChecklists(user) {

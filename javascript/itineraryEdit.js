@@ -5,32 +5,20 @@ var hamlist = document.getElementsByClassName("hamburger");
 var add = document.getElementsByClassName("add-loc");
 var container = document.getElementsByClassName("itinerary-locs");
 
+// true/false variable that determines whether to load in a blank template or existing itinerary to be displayed
 const hasItinerary = localStorage.getItem("hasItinerary");
-const path = localStorage.getItem("dbPath");
 
-/*
-Path can be one of two things:
-  - Bookmarked (Users/${userID}/Bookmarked)
-  - its own itinerary (Users/${userID}/Itineraries)
+// path of itinerary from DB
+const itineraryPath = localStorage.getItem("itineraryPath");
 
-
-Bookmarking works like this:
-  - Users are able to bookmark their own itineraries or other itineraries found in the explore/trending page
-  - There has to be a bookmark attribute for each itinerary in the DB
-  - If a user clicks on a bookmarked itinerary from the bookmarked section, itinerary details and edit has to know that its a bookmark
-  - when user clicks on itinerary on homepage, maybe show a non-editable version of the itinerary and make it editable until they bookmark it?
-
-
-*/
-
-console.log(hasItinerary)
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {
     // Get user ID of user logged in
-    const userID = localStorage.getItem("userID") == null ? localStorage.getItem("userID") : user.uid;
+    const userID = user.uid;
 
-    console.log(userID)
+    /*== CODE BLOCK BY MARIEL URBANO ==*/
+    // Adds in blank templates for locations
     add[0].onclick = function() {
       addLocationElement("", "", "", "", container);
       deleteLocation();
@@ -41,17 +29,8 @@ onAuthStateChanged(auth, (user) => {
     // If user clicks "edit" on an itinerary, we load it into itinerary creation page
     if (hasItinerary == "True")
     {
-      // Get user ID
-      const userID = localStorage.getItem("userIDItinerary");
-
-      // Get itinerary ID from itineraries.js
-      const itineraryID = localStorage.getItem("itineraryID");
-    
-      console.log(userID);
-      console.log(itineraryID);
-
       // Itinerary is already made. User is editing it
-      displayItineraryInfo(userID, itineraryID);
+      displayItineraryInfo(itineraryPath);
     }
 
     // Default to user clicks on "create itinerary" from homepage or the "+" symbol in itineraries page
@@ -71,7 +50,7 @@ onAuthStateChanged(auth, (user) => {
       // If the user is editing an itinerary and presses the "save" button, it deletes the old rows in the DB
       if (hasItinerary == "True")
       {
-        remove(ref(db, `Users/${userID}/Itineraries/${localStorage.getItem("itineraryID")}/locationList`));
+        remove(ref(db, `${itineraryPath}/locationList`));
       }
 
       // Get information of locations from itinerary
@@ -90,19 +69,15 @@ onAuthStateChanged(auth, (user) => {
 
 
 /** Display information of an existing itinerary and its locations
- * 
- * @param {*} userID - User ID of user from DB
- * @param {*} itineraryID - ID of itinerary from DB
+ *  FUNCTION BY TOMMY LONG
+ * @param {*} itineraryPath - path of itinerary from DB
  */
-function displayItineraryInfo(userID, itineraryID)
+function displayItineraryInfo(itineraryPath)
 {
-  // Reference to itinerary in DB
-  const itineraryInfoRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}`);
-
   // Reference to locations of itinerary in DB
-  const locationListRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`);
+  const locationListRef = ref(db, `${itineraryPath}/locationList`);
 
-  get(itineraryInfoRef).then((snapshot) => {
+  get(ref(db, itineraryPath)).then((snapshot) => {
     // Get object-formatted information of itinerary
     const itineraryInfo = snapshot.val();
 
@@ -141,7 +116,7 @@ function displayItineraryInfo(userID, itineraryID)
 }
 
 /** Push itinerary information excluding locations to DB
- * 
+ *  FUNCTION BY TOMMY LONG
  * @param {*} userID - ID of user
  * @param {*} name - Name of itinerary
  * @param {*} origin - Starting location
@@ -153,7 +128,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   // If itinerary exists, we want to update existing information with new information
   if (hasItinerary == "True")
   {
-    update(ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}`), {
+    update(ref(db, itineraryPath), {
       "image": "images/defaults/default-itineraries-background.png",
       "name": name,
       "origin": origin,
@@ -174,8 +149,9 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
       "stats": {
         "clicks": 0,
         "totalCost": 0.0,
-        "bookmarked": "false"      
-      }
+        
+      },
+      "bookmarked": "false"
     });
 
     // Push in start and end dates
@@ -192,7 +168,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
 }
 
 /** Inserts locations of an itinerary into the DB
- * 
+ *  FUNCTION BY TOMMY LONG
  * @param {*} userID - ID of user
  * @param {*} address - address of location
  * @param {*} name - name of location
@@ -205,9 +181,9 @@ function pushLocationOfItinerary(userID, address, name, date, time)
   if (hasItinerary == "True")
   {
     // Reference of list of locations in DB
-    const locationListRef = ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList`);
-    var lastPushedLocationRef = query(ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList`), limitToLast(1));
-
+    const locationListRef = ref(db, `${itineraryPath}/locationList`);
+    var lastPushedLocationRef = query(ref(db, `${itineraryPath}/locationList`), limitToLast(1));
+    
     push(locationListRef, {
       "address": address,  
       "locationName": name,
@@ -216,7 +192,7 @@ function pushLocationOfItinerary(userID, address, name, date, time)
     
     get(lastPushedLocationRef).then((snapshot) => {
       const locationID = Object.keys(snapshot.val())[0];
-      update(ref(db, `Users/${userID}/Itineraries/${String(localStorage.getItem("itineraryID"))}/locationList/${locationID}`), {
+      update(ref(db, `${itineraryPath}/locationList/${locationID}`), {
         "date": date,
         "time": time
       })
