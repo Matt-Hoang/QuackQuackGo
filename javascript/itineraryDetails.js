@@ -111,7 +111,7 @@ function exportLocations(locationList)
   kml.setMap(map);
   var lat = 0;
   var lon = 0;
-  
+  console.log(locationIDs.length);
   // Get array of locations in itinerary  
   for (let i = 0; i < locationIDs.length; i++)
   {
