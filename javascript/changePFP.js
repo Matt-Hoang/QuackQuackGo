@@ -78,8 +78,9 @@ function displayAccount(accountID)
     
 
     // Display user's full name next to profile picture
-    image.insertAdjacentText("afterend", '')
-    image.insertAdjacentText("afterend", data.fullName)
+    //image.insertAdjacentText("afterend", '')
+    //image.insertAdjacentText("afterend", data.fullName)
+    document.getElementById("full-name").textContent = data.fullName;
   })
 }
 
@@ -100,7 +101,8 @@ async function profileUpdate(e)
 
   const accountID = localStorage.getItem("userID");
   const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
-
+  if ( (pass != "") && (npass != ""))
+    {
   onValue(accountRef, (snapshot) => {
     // Retrieve user's account information as object
     const data = snapshot.val();   
@@ -117,6 +119,7 @@ async function profileUpdate(e)
     });
     });
   });
+  }
   await set(ref(db, `Users/${userID}/AccountInfo`), {
     fullName: firstName + " " + lastName,
     email: email,
