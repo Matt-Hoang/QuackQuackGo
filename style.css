@@ -130,6 +130,15 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 25px;
 }
 
+.login-signup-info > .login-signup-form > input.password {
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid black;
+}
+
+.login-signup-info > .login-signup-form > input:focus{
+    outline: none;
+}
+
 .login-signup-info > .login-signup-form > a {
     font-family: 'Cantarell';
     float: right;
