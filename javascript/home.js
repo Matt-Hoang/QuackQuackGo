@@ -1,42 +1,32 @@
-import {db, ref, onValue, update, increment, get} from "./db.js";
+import {db, ref, onValue, update, increment, get, onAuthStateChanged, auth} from "./db.js";
 
-// Retrieve ID of user that just logged in
-const userID = localStorage.getItem("userID");
+onAuthStateChanged(auth, (user) => {
+  if (user) 
+  {
+    const userID = user.uid;
 
-// display user account information
-displayAccount(userID);
+    // display user account information
+    displayAccount(userID);
 
-// List of all elements inside the trending-locations class div
-const trendingLocationList = document.getElementsByClassName("trending-locations")[0].children;
+    const userRef = ref(db, "Users");
+    get(userRef).then((snapshot) => {
+      const users = snapshot.val();
+      var itinerariesList = getAllItineraries(users);
 
-// List of all elements inside the new-itineraries class div
-const newItineraryList = document.getElementsByClassName("new-itineraries")[0].children;
+      displayTrendingLocations(itinerariesList, userID);
+      displayExploreLocations(itinerariesList, userID);
+    })
 
-// Retrieve a reference from database of all locations in the database.
-const locationRef = ref(db, "Locations");
-onValue(locationRef, (snapshot) => {
-  // Sort locations by number of clicks from greatest to least (returns a JSON formatted object)
-  const locations = sortClicks(snapshot.val());
-  displayTrendingLocations(locations);
-})
-
-const userRef = ref(db, "Users");
-get(userRef).then((snapshot) => {
-  const users = snapshot.val();
-  var itinerariesList = getAllItineraries(users);
-  displayExploreLocations(itinerariesList);
-
-})
-
-const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
-onValue(tripDisplayRef, (snapshot) => {
-  const userTrips = snapshot.val(); 
-  displayTrips(userTrips);
-});
-
-
-document.getElementById("edit-button").addEventListener("click", function() {
-  localStorage.setItem("hasItinerary", "False");
+    const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
+    get(tripDisplayRef).then((snapshot) => {
+      const userTrips = snapshot.val(); 
+      displayTrips(userTrips);
+    });
+  }
+  else
+  {
+    window.location.href = "login.html";
+  }
 });
 
 function displayAccount(accountID)
@@ -44,7 +34,7 @@ function displayAccount(accountID)
   // Reference of a user's account information from the database
   const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
 
-  onValue(accountRef, (snapshot) => {
+  get(accountRef).then((snapshot) => {
     // Retrieve user's account information as object
     const data = snapshot.val();    
 
