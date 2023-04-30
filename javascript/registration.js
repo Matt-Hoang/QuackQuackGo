@@ -152,3 +152,4 @@ document.querySelector(".pw-meter #password1").addEventListener("keyup", functio
     passwordStrengthSpans[1].style.background = "#238823";
   }
 });
+
