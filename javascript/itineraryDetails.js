@@ -51,6 +51,7 @@ onAuthStateChanged(auth, (user) => {
 
       displayInfo(itineraryInfo);
       displayLocations(itineraryInfo.locationList);
+      exportLocations(itineraryInfo.locationList);
     });
 
     // Bookmark click event listener
@@ -290,3 +291,65 @@ function addLocationBookmarked(userID, locationInfo)
     });
   });
 }
+
+var kmlData = '<?xml version="1.0" encoding="UTF-8"?>' +
+        '<kml xmlns="http://www.opengis.net/kml/2.2">' +
+        '<Document>'
+/*=== Export to Google Maps ===*/
+function exportLocations(locationList)
+{
+  // Array of all location IDs from itinerary
+  const locationIDs = Object.keys(locationList);
+  var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15 
+      });
+  
+  // This is the map bounds so that it can fit all the locations into view
+  var bounds = new google.maps.LatLngBounds();
+
+  // This is used to calculate the center b/w all locations
+  var geocoder = new google.maps.Geocoder();
+  
+  // This is used to create a KML file
+  
+  var kml = new google.maps.KmlLayer();
+  kml.setMap(map);
+  var lat = 0;
+  var lon = 0;
+  console.log(locationIDs.length);
+  // Get array of locations in itinerary  
+  for (let i = 0; i < locationIDs.length; i++)
+  {
+    geocoder.geocode({ 'address': locationList[locationIDs[i]].address }).then(({results},k) => {
+      var location = results[0].geometry.location;
+      bounds.extend(location);
+      var marker = new google.maps.Marker({
+                  map: map,
+                  position: location,
+                  title: locationList[locationIDs[i]].locationName
+                });
+                marker.setMap(map);
+      lat = lat + marker.getPosition().lat();
+      lon = lon + marker.getPosition().lng();
+      kmlData += '<Placemark>' +
+      '<name>'+ locationList[locationIDs[i]].locationName+'</name>'+
+      '<Point>' +
+      '<coordinates>' + marker.getPosition().lng() + ',' + marker.getPosition().lat() +'</coordinates>' +
+      '</Point>' +
+      '</Placemark>';
+      
+      if (i == (locationIDs.length - 1)){
+        kmlData += '</Document>' +'</kml>';
+        var blob = new Blob([kmlData], {type: 'application/vnd.google-earth.kml+xml'});
+         //console.log(kmlData);
+        var url = URL.createObjectURL(blob);
+        map.fitBounds(bounds);
+        var link = document.getElementById('export-button');
+        link.setAttribute('href', url);
+        link.setAttribute('download', "itinerary.kml");
+      }
+    }); 
+  
+  }
+}
+
