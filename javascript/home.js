@@ -53,11 +53,12 @@ function displayAccount(accountID)
  * 
  * @param {*} locations - a JSON-formatted object of locations in the database
  */
-function displayTrendingLocations(locations) 
-{  
-  // Get list of location names from locations dictionary
-  const locationNames = Object.keys(locations);
+function displayTrendingLocations(itinerariesList, userID) 
+{   
+  itinerariesList = sortClicks(itinerariesList);
+  const top3Itineraries = itinerariesList.toSpliced(3);
 
+  console.log(top3Itineraries)
   for (let i = 0; i < 3; i++)
   {
     // Get each element's ID 
