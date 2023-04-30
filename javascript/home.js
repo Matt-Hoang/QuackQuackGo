@@ -78,58 +78,84 @@ function displayTrendingLocations(itinerariesList, userID)
  * 
  * @param {*} itineraries - a JSON-formatted object of popular itineraries in the database
  */
-function displayExploreLocations(itineraries)
+function displayExploreLocations(itineraries, userID)
 {
+  // List of all elements inside the new-itineraries class div
+  const newItineraryList = document.getElementsByClassName("new-itineraries")[0].children;
+  
   for (let i = 0; i < newItineraryList.length; i++)
   {
-    const randomItinerary = Math.floor(Math.random() * newItineraryList.length);
+    const randomItinerary = Math.floor(Math.random() * itineraries.length);
 
     newItineraryList[i].id = itineraries[randomItinerary][0];
 
     var itinerary = document.getElementById(newItineraryList[i].id);
     var title = document.getElementById(`new-itineraries-${i + 1}-title`);
-    var rating = document.getElementById(`new-itineraries-${i + 1}-rating`);
 
     // Assign title from itinerary list
     title.innerHTML = itineraries[randomItinerary][1].name;
 
-    // Assign rating from itineraries object
-    rating.innerHTML = Number(itineraries[randomItinerary][1].stats.rating).toPrecision(2);
-
     // Assign location image and CSS styling
     itinerary.style.backgroundImage = `url('${itineraries[randomItinerary][1].image}')`;
-
+    
     itineraries.splice(randomItinerary, 1);
 
-    document.getElementById(newItineraryList[i].id).addEventListener("click", function(e) {
-      e.preventDefault();
-
-      console.log("Clicked!");
-
-      retrieveUserID(newItineraryList[i].id).then(
-        function(value)
-        {
-          var userIDItinerary = value;
-          var updates = {};
-
-          console.log(userIDItinerary);
-
-          updates[`Users/${userIDItinerary}/Itineraries/${newItineraryList[i].id}/stats/clicks`] = increment(1);
-
-          update(ref(db), updates);
-          
-          localStorage.setItem("itineraryID", String(newItineraryList[i].id));
-          localStorage.setItem("userIDItinerary", String(userIDItinerary));
-
-          window.location.href = "itineraryDetails.html";
-        },
-        function(error)
-        {
-          console.error(error);
-        }
-      )
-    });
+    addClicks(newItineraryList[i].id, newItineraryList[i].id, userID)
   }
+}
+
+function addClicks(itineraryID, htmlID, user)
+{
+  document.getElementById(htmlID).addEventListener("click", function(e) {
+    e.preventDefault();
+
+    retrieveUserID(itineraryID).then(
+      function(value)
+      {
+        var userIDItinerary = value;
+        var updates = {};
+
+        updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
+
+        update(ref(db), updates);
+        
+        // Check if itinerary already exists in user's bookmarked or itinerary section for bookmarking
+        get(ref(db, `Users/${user}/Bookmarked`)).then((snapshot) => {
+          const bookmarks = snapshot.val() == null ? {}: snapshot.val();
+          const bookmarkIDs = Object.keys(bookmarks);
+
+          for(let i = 0; i < bookmarkIDs.length; i++)
+          {
+            // Compare IDs of both itineraries
+            if (bookmarks[bookmarkIDs[i]].userID == userIDItinerary)
+            {
+              console.log(`${bookmarks[bookmarkIDs[i]].userID} and ${userIDItinerary} are equal!`)
+
+              get(ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`)).then((snapshot2) => {
+                const itinerary = snapshot2.val();
+                
+                // Compare the name of both itineraries
+                if (itinerary["name"] == bookmarks[bookmarkIDs[i]].name)
+                {
+                  localStorage.setItem("itineraryPath", `Users/${user}/Bookmarked/${bookmarkIDs[i]}`);
+                  window.location.href = "itineraryDetails.html";
+                }
+              })
+            }
+          }
+
+          localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+          window.location.href = "itineraryDetails.html";
+        })
+
+        
+      },
+      function(error)
+      {
+        console.error(error);
+      }
+    )
+  });
 }
 
 /** Display all upcoming trips of that user
@@ -137,13 +163,13 @@ function displayExploreLocations(itineraries)
  * @param {*} accountTrips - An object of upcoming trips from the user 
  */
 function displayTrips(accountTrips)
-{
-  const itineraryIDs = Object.keys(accountTrips);
+{ 
+  accountTrips = sortDates(accountTrips);
 
   var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
   var upcomingTripElement = rightColumnHome[2];
 
-  for (let i = 0; i < itineraryIDs.length; i++)
+  for (let i = 0; i < accountTrips.length; i++)
   {
     var aElement = document.createElement("a");
     aElement.href = "";
@@ -160,14 +186,35 @@ function displayTrips(accountTrips)
     var image = document.getElementById(`trip-picture-${i + 1}`);
     
     // Format date
-    const date = accountTrips[itineraryIDs[i]].duration.start + " - " + accountTrips[itineraryIDs[i]].duration.end;
+    const date = accountTrips[i][1].duration.start;
     
     // Set image
-    image.src = accountTrips[itineraryIDs[i]].image;
+    image.src = accountTrips[i][1].image;
 
     // Set name of trip and duration
-    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[itineraryIDs[i]].name;
+    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[i][1].name;
     document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
+
+    document.getElementById(`trip-${i + 1}`).addEventListener("click", function(e) {
+      e.preventDefault();
+      console.log("Clicked!");
+
+      retrieveUserID(accountTrips[i][0]).then(
+        function(value)
+        {
+          var userIDItinerary = value;
+    
+          localStorage.setItem("itineraryID", `Users/${userIDItinerary}/Itineraries/${accountTrips[i][0]}`);
+          localStorage.setItem("userID", String(userIDItinerary));
+
+          window.location.href = "itineraryDetails.html";
+        },
+        function(error)
+        {
+          console.error(error);
+        }
+      )
+    })
   }
 }
 
@@ -194,16 +241,31 @@ function getAllItineraries(users)
  * @param {*} userTrips - a JSON-formatted object of itineraries a given user has 
  * @returns a JSON-formatted object sorted in order by number of clicks
  */
-function sortClicks(userTrips)
+function sortClicks(itinerariesList)
 {
-  var sortedTrips = {};
-  var userTripKeys = Object.keys(userTrips);
+  const sortedArray = function(a, b) {
+    const click1 = a[1].stats.clicks;
+    const click2 = b[1].stats.clicks;
 
-  // Sort keys based on click function
-  userTripKeys = userTripKeys.sort(function(a, b){return userTrips[b].stats.clicks - userTrips[a].stats.clicks;});
-  userTripKeys.forEach(function(key) {sortedTrips[key] = userTrips[key];});
+    return click2 - click1;
+  }
 
-  return sortedTrips;
+  itinerariesList.sort(sortedArray);
+  return itinerariesList;
+}
+
+function sortDates(tripList)
+{
+  tripList = Object.entries(tripList);
+  
+  const sortedDates = function(a, b) {
+    const date1 = Math.abs(new Date(a[1].duration.start) - new Date());
+    const date2 = Math.abs(new Date(b[1].duration.start) - new Date());
+
+    return date1 - date2;
+  }
+
+  return tripList.sort(sortedDates);
 }
 
 /** When a user clicks on a location, this function's event listener is called that handles a click event. 
