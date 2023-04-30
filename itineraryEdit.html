@@ -31,7 +31,7 @@
             <a href="itineraryDetails.html"><div></div></a>
             <!-- itinerary header -->
             <div class="trip-title">
-                <form action="">
+                <form id="itineraryForm" action="">
                     <div class="trip-name">
                         <input type="text" id="tripName" value=""  placeholder="Name of Trip" required>
                     </div>
@@ -46,20 +46,20 @@
                     <div class="date-input">
                         <label for="Date">End Date:</label>
                         <input type="date" id="end-date" value="" required>
-                    </div>   
-                    <!-- view map button -->
-                    <div class="button-container">
-                        <!-- <a href=""><div class="view-map">+</div></a> -->
-                        <button class="add-loc" onclick="window.location.href = 'search.html'"><div class="view-map">+</div></button>
-                        <button type="submit" id="save"><div class="view-map">Save</div></button>
-                    </div>
-                    
-                    <!-- details container -->
-                    <div class="location-container">
-                        <div class="itinerary-locs" action=""> 
-                        </div>
                     </div>
                 </form>
+            </div>
+        </div>
+        <!-- view map button -->
+        <div class="button-container">
+            <!-- <a href=""><div class="view-map">+</div></a> -->
+            <button class="add-loc" onclick="window.location.href = 'search.html'"><div class="view-map">+</div></button>
+            <button type="submit" id="save"><div class="view-map">Save</div></button>
+        </div>
+        
+        <!-- details container -->
+        <div class="location-container">
+            <div class="itinerary-locs" action=""> 
             </div>
         </div>
     </div>
