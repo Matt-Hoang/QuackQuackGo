@@ -101,7 +101,7 @@ h1, h2, h3, h4, h5, h6 {
     overflow-x: hidden;
 }
 
-.login-signup-info > .login-signup-form {
+.login-signup-info > form.login-signup-form {
     width: 40%;
     margin: 10vh auto;
 }
