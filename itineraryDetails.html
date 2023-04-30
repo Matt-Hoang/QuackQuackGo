@@ -10,7 +10,6 @@
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
     <script type="module" src="javascript/itineraryDetails.js" defer></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDByp8eaogO54rrKLlGEPxrTjCta2Kv5EM&callback=myMap"></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 </head>
@@ -30,7 +29,11 @@
     <div class="itinerary-details-center-column">
         <div class="itinerary-header">
             <!-- back button -->
-            <a href="itineraries.html"><div></div></a>
+            <div class="itin-back-bookmark">
+                <a href="itineraries.html" class="itin-back"><div></div></a>
+                <a href="" class="itin-bookmark"><div></div></a>
+            </div>
+
             <!-- itinerary header -->
             <div class="trip-title">
                 <h2 id="trip-name"></h2>
@@ -43,20 +46,15 @@
         </div>
         <!-- view map button -->
         <div class="button-container">
-            <a id="export-button" class="export-button" href=""><div id="itin-button" class="itin-button">Export  
-                <span class="tooltiptext">Download KML Layer for Google My Maps</span>
-            </div></a>
-            <a href="itineraryEdit.html"><div class="itin-button">Edit</div></a>
+            <a href="">
+                <div class="itin-button">Export</div>
+            </a>
+            
         </div>
         
         <!-- details container -->
         <div class="location-container"></div>
-       
-        <div class= "map" id="map"></div>
-      
-        
     </div>
-
     <!-- check list column -->
     <div class="itineraries-right-column">
         <div>
