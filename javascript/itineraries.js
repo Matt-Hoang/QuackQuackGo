@@ -1,4 +1,4 @@
-import {db, ref, get} from "./db.js";
+import {db, ref, get, onAuthStateChanged, auth, onValue, set, remove} from "./db.js";
 
 // Container element of itineraries
 var itineraryContainerList = document.getElementsByClassName("itineraries-container")[0];
@@ -6,23 +6,71 @@ var itineraryContainerList = document.getElementsByClassName("itineraries-contai
 // Container element of bookmarked itineraries
 var bookmarkedContainerList = document.getElementsByClassName("bookmarked-container")[0];
 
-// get ID of user currently logged in
-const userID = localStorage.getItem("userID");
+// populate page if user is logged in, if logged out reroute to login page
+onAuthStateChanged(auth, (user) => {
+  // User is signed in
+  if (user) {
+    
+    // Populate checklist from DB of user
+    populateChecklists(user);
 
-// Reference of user's itineraries in Firebase
-const userItinerariesRef = ref(db, `Users/${userID}/Itineraries`);
-get(userItinerariesRef).then((snapshot) => {
-  const userItineraries = snapshot.val();
-  displayUserItineraries(userItineraries);
+    // Reference of user's itineraries in Firebase
+    const userItinerariesRef = ref(db, `Users/${user.uid}/Itineraries`);
+    get(userItinerariesRef).then((snapshot) => {
+      const userItineraries = snapshot.val();
+
+      // Display user itineraries
+      displayUserItineraries(userItineraries);
+
+      // click event listener function
+      addItineraryTransition(userItineraries, "Itineraries", user.uid);
+    });
+
+    // Reference of user's bookmarked itineraries in Firebase
+    const userBMItinerariesRef = ref(db, `Users/${user.uid}/Bookmarked`);
+    get(userBMItinerariesRef).then((snapshot) => {
+      // if no bookmarks exist, its an empty object. Else, populate it from DB
+      var userBMItineraries = snapshot.val() == null ? {}: snapshot.val();
+
+      // find all itineraries that are bookmarked true in user's itineraries
+      get(ref(db, `Users/${user.uid}/Itineraries`)).then((snapshot) => {
+        const itineraries = snapshot.val();
+        const itinerariesKeys = Object.keys(itineraries);
+        
+        for(let i = 0; i < itinerariesKeys.length; i++)
+        {
+          // If key exists in DB and the bookmark attribute is true, we add it to object of bookmarked itineraries
+          if (itineraries[itinerariesKeys[i]].bookmarked == "true")
+          {
+            userBMItineraries[itinerariesKeys[i]] = itineraries[itinerariesKeys[i]];
+          }
+        }
+
+        // Display user's bookmarked itineraries
+        displayUserBMItineraries(userBMItineraries);
+
+        // click event listener function
+        addItineraryTransition(userBMItineraries, "Bookmarked", user.uid);
+      });
+      
+      // direct user to itinerary edit page
+      document.getElementsByClassName("add-button")[0].addEventListener("click", function() {
+        // user is going to itinerary edit page with no itinerary to edit. it'll be a blank template.
+        localStorage.setItem("hasItinerary", "False");
+      });
+    });
+  }
+  else 
+  {
+    // User is signed out
+    window.location.href = "login.html";
+  }
 });
 
-// Reference of user's bookmarked itineraries in Firebase
-const userBMItinerariesRef = ref(db, `Users/${userID}/Bookmarked`);
-get(userBMItinerariesRef).then((snapshot) => {
-  const userBMItineraries = snapshot.val();
-  displayUserBMItineraries(userBMItineraries);
-});
-
+/** Display user's itineraries in itineraries section of itineraries page
+ * 
+ * @param {*} userItineraries - Object of user's itineraries retrieved from DB
+ */
 function displayUserItineraries(userItineraries)
 {
   // Get array of user itinerary IDs from Firebase
@@ -48,18 +96,12 @@ function displayUserItineraries(userItineraries)
 
     // assign itinerary information in element
     aElement.href = "itineraryDetails.html";
-    aElement.id = `itinerary-${i + 1}`;
+    aElement.id = `Itineraries-${i + 1}`;
     aElement.className = "itinerary-item";
     aElement.innerHTML = userItineraries[userItinerariesIDs[i]].name;
 
     aElement.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%), 
       url('${userItineraries[userItinerariesIDs[i]].image}')`;
-
-    // Click listener to store itinerary ID if itinerary is clicked on in itinerary page 
-    aElement.addEventListener("click", function() {
-      localStorage.setItem("itineraryID", String(userItinerariesIDs[i]));
-      localStorage.setItem("userIDItinerary", String(userID));
-    });
 
     // Add element to carousel to be displayed 
     carouselElement.appendChild(aElement);
@@ -83,6 +125,10 @@ function displayUserItineraries(userItineraries)
   });
 }
 
+/** Display user's bookmarked itineraries in bookmarked section of itineraries page
+ * 
+ * @param {*} userBMItineraries - Object of user's bookmarked itineraries retrieved from DB
+ */
 function displayUserBMItineraries(userBMItineraries)
 {
   var userBMItinerariesIDs = Object.keys(userBMItineraries);
@@ -98,16 +144,12 @@ function displayUserBMItineraries(userBMItineraries)
     var aElement = document.createElement("a");
 
     aElement.href = "itineraryDetails.html";
-    aElement.id = `bookmarked-${i + 1}`;
+    aElement.id = `Bookmarked-${i + 1}`;
     aElement.className = "bookmarked-item";
     aElement.innerHTML = userBMItineraries[userBMItinerariesIDs[i]].name;
 
     aElement.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%), 
       url('${userBMItineraries[userBMItinerariesIDs[i]].image}')`;
-
-    aElement.addEventListener("click", function() {
-      localStorage.setItem("itineraryID", String(userBMItinerariesIDs[i]));
-    });
 
     carouselElement.appendChild(aElement);
   }
@@ -128,97 +170,320 @@ function displayUserBMItineraries(userBMItineraries)
   });
 }
 
-// === Itineraries Checklist - Coded by Matthew Hoang ===
+/** Function that handles transition from itineraries page to itinerary details page
+ * 
+ * @param {*} userItineraries - Object of user's itineraries
+ * @param {*} htmlID - ID of the HTML element clicked on. Labeled as either "Bookmarked-#" or "Itineraries-#"
+ * @param {*} userID - ID of user loggined in currently
+ */
+function addItineraryTransition(userItineraries, htmlID, userID)
+{
+  const userItinerariesIDs = Object.keys(userItineraries);
 
-// Create a "close" button and append it to each list item
-var myNodelist = document.getElementsByTagName("LI");
-for (var i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";  
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
+  for(let i = 0; i < userItinerariesIDs.length; i++)
+  {
+    document.getElementById(`${htmlID}-${i + 1}`).addEventListener("click", function(e) {
+      e.preventDefault();
 
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-for (var i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
+      // Loop through all bookmarked itineraries to see if the itinerary clicked on is in the bookmarked section
+      get(ref(db, `Users/${userID}/Bookmarked`)).then((snapshot) => {
+        const IDKeys = Object.keys(snapshot.val());
+
+        if (IDKeys.find(key => key == userItinerariesIDs[i]) != undefined)
+        {
+          // Set path to  bookmarked itinerary from DB
+          localStorage.setItem("itineraryPath", `Users/${userID}/Bookmarked/${userItinerariesIDs[i]}`)
+          window.location.href = "itineraryDetails.html";
+        }
+      })
+
+      // Loop through all user's itineraries to see if the itinerary clicked on is in the itineraries section
+      get(ref(db, `Users/${userID}/Itineraries`)).then((snapshot) => {
+        const IDKeys = Object.keys(snapshot.val());
+
+        if (IDKeys.find(key => key == userItinerariesIDs[i]) != undefined)
+        {
+          // Set path to itinerary from DB
+          localStorage.setItem("itineraryPath", `Users/${userID}/Itineraries/${userItinerariesIDs[i]}`)
+          window.location.href = "itineraryDetails.html";
+        }
+      })
+    });
   }
 }
 
-// Add a "checked" symbol when clicking on a list item
-var list = document.querySelectorAll('ul');
-for (let i = 0; i < list.length; i++) {
-  list[i].addEventListener('click', function(ev) {
-    if (ev.target.tagName === 'LI') {
-      ev.target.classList.toggle('checked');
-    }
-  }, false);
-}
+// populates checklists with thier items from database 
+function populateChecklists(user) {
 
-// Create a new list item when clicking on the "Add" button for pre-trip check list
-function newElementPre() {
-  var inputValue = document.getElementsByClassName("pretrip-checklist-input")
-  for (var i = 0; i < inputValue.length; i++) {
-    var li = document.createElement("li");
-    var t = document.createTextNode(inputValue[i].value);
-    li.appendChild(t);
-    if (inputValue[i].value === '') {
-      alert("You must write something!");
-    } else {
+  // read and display pretrip item from database 
+  const pretripChecklist = ref(db, 'Users/' + user.uid + "/Checklist/preTrip/");
+  onValue(pretripChecklist, (snapshot) => {
+    const checklistItems = snapshot.val();
+
+    // parse pretrip checklist 
+    for (var itemName in checklistItems) {
+      // add item to checklist
+      var li = document.createElement("li");
+      var t = document.createTextNode(itemName);
+      li.appendChild(t);
+      li.id = "pretrip";
+
       var ul = document.getElementsByClassName("pretrip-checklist")
       for (var j = 0; j < ul.length; j++) {
         ul[j].appendChild(li);
       }
-    }
-    document.getElementsByClassName("pretrip-checklist-input")[i].value = ""
 
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    li.appendChild(span);
+      // create and add "x" to item
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "close";
+      span.appendChild(txt);
+      li.appendChild(span);
 
-    for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+      var close = document.getElementsByClassName("close");
+      for (var i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+          var div = this.parentElement;
+          div.style.display = "none";
+
+          // remove item from database 
+          if (div.id == "pretrip") {
+            document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + div.textContent.slice(0, -1).trim()));
+          } else {
+            document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + div.textContent.slice(0, -1).trim()));
+          }
+        }
+      }
+
+      // mark item as completed (strikethrough and checkmark)
+      if (Object.values(checklistItems[itemName]) == 1) {
+        li.className = "checked";
       }
     }
-  } 
-}
+  });
 
-// Create a new list item when clicking on the "Add" button for post-trip check list
-function newElementPost() {
-  var inputValue = document.getElementsByClassName("posttrip-checklist-input")
-  for (var i = 0; i < inputValue.length; i++) {
-    var li = document.createElement("li");
-    var t = document.createTextNode(inputValue[i].value);
-    li.appendChild(t);
-    if (inputValue[i].value === '') {
-      alert("You must write something!");
-    } else {
+  // read and display posttrip item from database
+  const posttripChecklist = ref(db, 'Users/' + user.uid + "/Checklist/postTrip/");
+  onValue(posttripChecklist, (snapshot) => {
+    const checklistItems = snapshot.val();
+
+    // parse posttrip checklist 
+    for (var itemName in checklistItems) {
+      // add item to checklist
+      var li = document.createElement("li");
+      var t = document.createTextNode(itemName);
+      li.appendChild(t);
+      li.id = "posttrip";
+
+
       var ul = document.getElementsByClassName("posttrip-checklist")
       for (var j = 0; j < ul.length; j++) {
         ul[j].appendChild(li);
       }
-    }
-    document.getElementsByClassName("posttrip-checklist-input")[i].value = ""
 
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    li.appendChild(span);
+      // create and add "x" to item
+      var span = document.createElement("SPAN");
+      var txt = document.createTextNode("\u00D7");
+      span.className = "close";
+      span.appendChild(txt);
+      li.appendChild(span);
 
-    for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+      var close = document.getElementsByClassName("close");
+      for (var i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+          var div = this.parentElement;
+          div.style.display = "none";
+
+          // remove item from database 
+          if (div.id == "pretrip") {
+            document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + div.textContent.slice(0, -1).trim()));
+          } else {
+            document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+            remove(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + div.textContent.slice(0, -1).trim()));
+          }
+        }
+      }
+
+      // mark item as completed (strikethrough and checkmark)
+      if (Object.values(checklistItems[itemName]) == 1) {
+        li.className = "checked";
       }
     }
-  } 
+  });
 }
+
+
+// strikethrough for pretrip list
+var pretrip = document.querySelectorAll('.pretrip-checklist');
+pretrip[0].addEventListener('click', function (ev) {
+  if (ev.target.tagName === 'LI') {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+
+        // get item name from html
+        var itemName = ev.target.innerText.slice(0, -1).trim();
+
+        // get item once from database 
+        get(child(ref(db), `Users/${user.uid}/Checklist/preTrip/`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            const checklistItems = snapshot.val();
+
+            // clear current items in HTML 
+            document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+
+            // if strikethrough is 0, mark as 1
+            // else mark as 0
+            if (Object.values(checklistItems[itemName]) == 0) {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + itemName), {
+                strikethrough: 1
+              });
+            } else {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + itemName), {
+                strikethrough: 0
+              });
+            }
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // User is signed out
+        console.log("not logged in");
+      }
+    });
+  }
+}, false);
+
+// strikethrough for posttrip list
+var posttrip = document.querySelectorAll('.posttrip-checklist');
+posttrip[0].addEventListener('click', function (ev) {
+  if (ev.target.tagName === 'LI') {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+
+        // get item name from html
+        var itemName = ev.target.innerText.slice(0, -1).trim();
+
+        // get item once from database 
+        get(child(ref(db), `Users/${user.uid}/Checklist/postTrip/`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            const checklistItems = snapshot.val();
+
+            // clear current items in HTML 
+            document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+
+            // if strikethrough is 0, mark as 1
+            // else mark as 0
+            if (Object.values(checklistItems[itemName]) == 0) {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + itemName), {
+                strikethrough: 1
+              });
+            } else {
+              set(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + itemName), {
+                strikethrough: 0
+              });
+            }
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // User is signed out
+        console.log("not logged in");
+      }
+    });
+  }
+}, false);
+
+// Create a new list item when clicking on the "Add" button for pre-trip check list
+window.newElementPre = newElementPre;
+function newElementPre() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in
+
+      // add item to database
+      var inputValue = document.getElementsByClassName("pretrip-checklist-input")
+      for (var i = 0; i < inputValue.length; i++) {
+        if (inputValue[i].value.trim() === '') {
+          alert("You must write something!");
+        } else {
+          // clear checklist before adding new item (prevent duplicate items)
+          document.getElementsByClassName("pretrip-checklist")[0].innerHTML = "";
+
+          var itemName = inputValue[i].value;
+          set(ref(db, 'Users/' + user.uid + "/Checklist/preTrip/" + itemName), {
+            strikethrough: 0
+          });
+        }
+        document.getElementsByClassName("pretrip-checklist-input")[i].value = ""
+      }
+    } else {
+      // User is signed out
+      console.log("not logged in");
+    }
+  });
+}
+
+// Create a new list item when clicking on the "Add" button for post-trip check list
+window.newElementPost = newElementPost;
+function newElementPost() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in
+
+      // add item to database
+      var inputValue = document.getElementsByClassName("posttrip-checklist-input")
+      for (var i = 0; i < inputValue.length; i++) {
+        if (inputValue[i].value.trim() === '') {
+          alert("You must write something!");
+        } else {
+          // clear checklist before adding new item (prevent duplicate items)
+          document.getElementsByClassName("posttrip-checklist")[0].innerHTML = "";
+          
+          var itemName = inputValue[i].value;
+          set(ref(db, 'Users/' + user.uid + "/Checklist/postTrip/" + itemName), {
+            strikethrough: 0
+          });
+        }
+        document.getElementsByClassName("posttrip-checklist-input")[i].value = ""
+      }
+    } else {
+      // User is signed out
+      console.log("not logged in");
+    }
+  });
+}
+
+/* === Itineraries Main Center === */
+
+// Settings for itineraries carousel 
+$('#slick-carousel-1').slick({
+  rows: 2,
+  dots: false,
+  arrows: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 3,
+  slidesToScroll: 3
+});
+
+// Settings for bookmarked carousel 
+$('#slick-carousel-2 ').slick({
+  rows: 2,
+  dots: false,
+  arrows: true,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 4,
+  slidesToScroll: 3
+});
