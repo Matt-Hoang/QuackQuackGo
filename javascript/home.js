@@ -65,10 +65,12 @@ function displayTrendingLocations(itinerariesList, userID)
     var location = document.getElementById(`trending-locations-${i + 1}`);
     
     // Assign location name to element
-    location.innerHTML = locations[locationNames[i]].name;
+    location.innerHTML = top3Itineraries[i][1].name;
 
     // Assign location image and CSS styling
-    location.style.backgroundImage = `url('${locations[locationNames[i]].image}')`;
+    location.style.backgroundImage = `url('${top3Itineraries[i][1].image}')`;
+
+    addClicks(top3Itineraries[i][0], `trending-locations-${i + 1}`, userID)
   }
 }
 
