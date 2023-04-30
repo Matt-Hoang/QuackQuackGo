@@ -464,7 +464,7 @@ a:visited {
     transition: 0.3s;
 }
 
-.nav-column > .active, .nav-column > a:hover, .home-right-column > a:hover {
+.nav-column > .active, .nav-column > a:hover, .home-right-column > a:hover, .home-right-column > .active {
     background-color: #FFB039;
 }
 
