@@ -1578,6 +1578,7 @@ a:visited {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    margin-top: 100px;
 }
 
 .itinerary-details-center-column > div > a {
@@ -1596,6 +1597,42 @@ a:visited {
     margin-bottom: 15px;
     transition: 0.3s;
     box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25);
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color:#58A4B0;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    margin-bottom: -10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #58A4B0 transparent transparent transparent;
+  }
+
+.export-button:hover .tooltiptext {
+    visibility: visible;
+}
+
+.export-button{
+    position: relative;
+    display: inline-block;
 }
 
 .itinerary-details-center-column > div > a > .itin-button:hover, 
@@ -2440,6 +2477,7 @@ a:visited {
     justify-content: space-between;
     width: 100%;
     padding-top: 30px;
+    
 }
 
 .itinerary-edit-center-column > div > a {
