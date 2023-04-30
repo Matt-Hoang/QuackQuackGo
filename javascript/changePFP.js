@@ -102,7 +102,7 @@ async function profileUpdate(e)
   const accountID = localStorage.getItem("userID");
   const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
   if ( (pass != "") && (npass != ""))
-    {
+  {
   onValue(accountRef, (snapshot) => {
     // Retrieve user's account information as object
     const data = snapshot.val();   

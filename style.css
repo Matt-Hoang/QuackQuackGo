@@ -2085,11 +2085,12 @@ a:visited {
 .profile-edit-body > div > .name-location > h5{
     font-size: 15px;
     margin-bottom: -10px;
-    
+    margin-top: 8px;
 }
-.profile-edit-body > div > .name-location > h5 > img{
-    padding: 1px;
+.profile-edit-body > div > .name-location > img{
+    margin-top: 10px;
     width: 15px;
+    float: left;
 }
 
 .info-title{
@@ -2147,12 +2148,14 @@ a:visited {
 }
 
 .user-details > .form-names > div,
-.user-details > .form-username-pass > div{
+.user-details > .form-username-loc > div,
+.user-details > .form-passes > div {
     width: 100%;
 }
 
-.user-details > .form-names > div > input , 
-.user-details > .form-username-pass > div > input{
+.user-details > .form-names > div > input ,
+.user-details > .form-passes > div > input, 
+.user-details > .form-username-loc > div > input{
     height: 30px;
     border-radius: 10px;
     width: 100%;
@@ -2180,13 +2183,15 @@ a:visited {
 
 .form-email > input:focus , 
 .form-location > input:focus ,
-.user-details > .form-names > div > input:focus  , 
-.user-details > .form-username-pass > div > input:focus {
+.user-details > .form-names > div > input:focus  ,
+.user-details > .form-passes > div > input:focus, 
+.user-details > .form-username-loc > div > input:focus {
     border-color: #58A4B0;
     outline: none;
 } 
 
-.user-details > .form-username-pass{
+.user-details > .form-username-loc,
+.user-details > .form-passes{
     width: 100%;
     justify-content: center;
     display: flex;
@@ -2209,9 +2214,9 @@ a:visited {
 }
 
 .user-details > .form-names > div > h6 ,
-.user-details > .form-username-pass > div > h6,
+.user-details > .form-username-loc > div > h6,
 .user-details > .form-email > h6, 
-.user-details > .form-location > h6{
+.user-details > .form-passes > div > h6{
     font-size: 12px;
 }
 
