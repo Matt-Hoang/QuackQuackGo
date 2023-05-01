@@ -129,7 +129,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   if (hasItinerary == "True")
   {
     update(ref(db, itineraryPath), {
-      "image": "images/defaults/default-itineraries-background.png",
+      "image": "images/defaults/default-itineraries-background.jpg",
       "name": name,
       "origin": origin,
       "duration": {
@@ -142,7 +142,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   {
     // If itinerary doesn't exist, we want to add it to DB
     push(ref(db, `Users/${userID}/Itineraries`), {
-      "image": "images/defaults/default-itineraries-background.png",
+      "image": "images/defaults/default-itineraries-background.jpg",
       "name": name,
       "origin": origin,
       "locationList": "",

@@ -68,7 +68,8 @@ function displayTrendingLocations(itinerariesList, userID)
     location.innerHTML = top3Itineraries[i][1].name;
 
     // Assign location image and CSS styling
-    location.style.backgroundImage = `url('${top3Itineraries[i][1].image}')`;
+    location.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+    url('${top3Itineraries[i][1].image}')`;
 
     addClicks(top3Itineraries[i][0], `trending-locations-${i + 1}`, userID)
   }
@@ -96,7 +97,8 @@ function displayExploreLocations(itineraries, userID)
     title.innerHTML = itineraries[randomItinerary][1].name;
 
     // Assign location image and CSS styling
-    itinerary.style.backgroundImage = `url('${itineraries[randomItinerary][1].image}')`;
+    itinerary.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+    url('${itineraries[randomItinerary][1].image}')`;
     
     itineraries.splice(randomItinerary, 1);
 
