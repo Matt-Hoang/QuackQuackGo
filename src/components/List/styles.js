@@ -40,7 +40,7 @@ export default makeStyles((theme) => ({
   },
   list: {
     margin: theme.spacing(0), 
-    height: '80vh', 
+    height: '70vh', 
     overflow: 'auto', 
     padding:'10px' ,
     borderTop: 'solid',

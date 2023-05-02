@@ -52,7 +52,7 @@ async function main() {
     var position = await getPosition();  // wait for getPosition to complete
     console.log(position);
     const location = await fetch(
-        "http://api.openweathermap.org/geo/1.0/reverse?lat="
+        "https://api.openweathermap.org/geo/1.0/reverse?lat="
         + position.coords.latitude 
         + "&lon=" 
         + position.coords.longitude 

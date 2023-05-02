@@ -9,7 +9,9 @@ import { getPlacesData } from './api';
 import List from './components/List/List';
 import Map from './components/Map/Map';
 import './style.css'
-//import { useEffect } from 'react';
+
+// for starting at login
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // create functional app component
 // Grid size of the list should be 12 on big devices and the md=4 means that it will be of size 4 on your phone or medium devices whereas the map is bigger and will be of size 8
@@ -29,9 +31,16 @@ const App = () => {
     // rating filter
     const [filteredPlaces, setPlacesFiltered] = useState([]);
 
-    // moved types from list to here
-    // const [type, setType] = useState('restaurants');
-    // const [rating, setRating] = useState('');
+    // rerouting to login page
+    const auth = getAuth(); // get user authentication
+    onAuthStateChanged(auth, (user) => {
+        if (user) { // user is signed in
+        }
+        else { // if user is not logged in, reroute to login page
+            var href = "login.html";
+            window.location=href;
+        }
+    })
 
     // only gonna happen at start
     // obtain user's current location in order to determine the starting point
@@ -77,7 +86,7 @@ const App = () => {
                     <a href="itineraries.html"><img src="./images/nav/itineraries-icon.png" alt=""/>itineraries</a>
                     <a href="about.html"><img src="./images/nav/about-icon.png" alt=""/>About</a>
                     <a href="support.html"><img src="./images/nav/support-icon.png" alt=""/>Support</a>
-                    <img src="./images/searchduck.png" alt=""/>
+                    {/* <img src="./images/searchduck.png" alt=""/> */}
                     <a href="login.html" class="logout-button"><img src="./images/nav/log-out-icon.png" alt=""/>Log Out</a>
                 </div>
                 

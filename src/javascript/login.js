@@ -54,7 +54,7 @@ async function formSubmit(e) {
                 const user = userCredential.user;
                 const dt = new Date();
                 document.getElementById("bubble-container").innerHTML = "<p class='bubble'>Login successful</p>"
-                await update(ref(db, "Users/" + user.uid + "/personal-info/"), { lastLogin: dt })
+                await update(ref(db, "Users/" + user.uid), { lastLogin: dt })
 
                 // clear form and redirect page
                 document.getElementById('loginForm').reset();

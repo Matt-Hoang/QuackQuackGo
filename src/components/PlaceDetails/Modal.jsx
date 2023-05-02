@@ -1,38 +1,70 @@
 import React, { useState, useEffect } from "react";
 import searchduck from "./searchduck.png";
 import useStyles from "./styles";
-import { db, ref, get } from "./db.js";
+import { db, ref, get, onAuthStateChanged, auth } from "./db.js";
 
-const Modal = ({ open, onClose, placeName, placeAddy }) => {
+const Modal = ({ open, onClose, placeName, placeAddy}) => {
   const classes = useStyles();
   
   const [itineraries, setItineraries] = useState([]);
+  const [userID, mySetUserID] = useState(null);
+
+  const [test1, setTest1] = useState([]);
+  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user)
+      {
+        // get user ID the typical way
+        
+        const itinerariesRef = ref(db, `Users/${user.uid}/Itineraries`);
+
+        get(itinerariesRef).then((snapshot) => {
+            const itineraries = snapshot.val();
+
+            // console.log(itineraries)
+            const itineraryIDs = Object.keys(itineraries);
+            const itinerariesList = [];
+
+            for(let i = 0; i < itineraryIDs.length; i++)
+            {
+                itinerariesList.push(<button className={classes.buttonItin}
+                                      onClick={() => handleItinerarySelect(itineraryIDs[i], user.uid)}>  
+                                        {itineraries[itineraryIDs[i]].name}
+                                    </button>);
+            }
+            
+            setItineraries(itinerariesList);
+
+            const handleItinerarySelect = (itinerary, userID) => {
+              setTest1(itinerary, userID);
+            }
+        }); 
+      }
+    });
+
+    
+  }, []);
 
   useEffect(() => {
-    // get user ID the typical way
-    const userID = "5P1tWJRUipSv248dfuAdiLQlkpO2";
-    const itinerariesRef = ref(db, `Users/${userID}/Itineraries`);
-
-    get(itinerariesRef).then((snapshot) => {
-        const itineraries = snapshot.val();
-        const itineraryIDs = Object.keys(itineraries);
-        const itinerariesList = [];
-
-        for(let i = 0; i < itineraryIDs.length; i++)
-        {
-            itinerariesList.push(<button className={classes.buttonItin}
-                                  onClick={() => {
-                                    const itineraryID = itineraryIDs[i];
-                                  }}>
-                                    {itineraries[itineraryIDs[i]].name}
-                                 </button>);
-        }
-        
-        setItineraries(itinerariesList);
-
-
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userID = user.uid;
+        mySetUserID(userID);
+      } else {
+        mySetUserID(null);
+      }
     });
   }, []);
+
+  const handleAddToItinerary = (itinerary, userID) => {
+    localStorage.setItem("itineraryPath", `Users/${userID}/Itineraries/${itinerary}`);
+    localStorage.setItem("title", placeName);
+    localStorage.setItem("address", placeAddy);
+    localStorage.setItem("hasItinerary", "True");
+    window.location.href = "itineraryEdit.html";
+    alert("Address added successfully!");
+  }
 
   if (!open) return null;
 
@@ -59,9 +91,8 @@ const Modal = ({ open, onClose, placeName, placeAddy }) => {
           </div>
           <div className={classes.buttonContainer}>
             <button className={classes.buttonPrimary}
-             onClick={() => {
-              
-             }}>
+            onClick={() => handleAddToItinerary(test1, userID)}
+             >
               <span className={classes.bold}>YES</span>, add to itinerary
             </button>
             <button onClick={onClose} className={classes.buttonOutline}>
