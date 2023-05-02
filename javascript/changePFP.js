@@ -1,46 +1,60 @@
-import {set, ref, db, onValue, auth, updatePassword, reauthenticateWithCredential,EmailAuthProvider} from "./db.js";
+import {set, ref, db, onValue,onAuthStateChanged, auth, updatePassword, reauthenticateWithCredential,EmailAuthProvider} from "./db.js";
 //This is a function to change the user profile picture
 //Need to update this so that it can upload to database
 
 // Retrieve ID of user that just logged in
 const userID = localStorage.getItem("userID");
 
-const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
-onValue(tripDisplayRef, (snapshot) => {
-  const userTrips = snapshot.val(); 
-  displayTrips(userTrips);
-  displayItinTracker(userTrips);
-});
+// const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // display user account information
+    displayAccount(uid);
 
-const bookDisplayRef = ref(db, "Users/" + userID + "/Bookmarked");
-onValue(bookDisplayRef, (snapshot) => {
-  const userBooks = snapshot.val(); 
-  displayBookmark(userBooks);
-});
+    const tripDisplayRef = ref(db, "Users/" + uid + "/Itineraries");
+    onValue(tripDisplayRef, (snapshot) => {
+    const userTrips = snapshot.val(); 
+    displayTrips(userTrips);
+    displayItinTracker(userTrips);
+    });
 
-document.getElementById('file').onchange = function (evt) {
-  var tgt = evt.target || window.event.srcElement,
-      files = tgt.files;
-  
-  // FileReader support
-  if (FileReader && files && files.length) {
-      var fr = new FileReader();
-      fr.onload = function () {
-          document.getElementById("pfp").src = fr.result;
+    const bookDisplayRef = ref(db, "Users/" + uid + "/Bookmarked");
+    onValue(bookDisplayRef, (snapshot) => {
+    const userBooks = snapshot.val(); 
+    displayBookmark(userBooks, uid);
+    });
+
+    document.getElementById('file').onchange = function (evt) {
+      var tgt = evt.target || window.event.srcElement,
+          files = tgt.files;
+      
+      // FileReader support
+      if (FileReader && files && files.length) {
+          var fr = new FileReader();
+          fr.onload = function () {
+              console.log("pics changing");
+              document.getElementById("pfp").src = fr.result;
+          }
+          fr.readAsDataURL(files[0]);
       }
-      fr.readAsDataURL(files[0]);
+    }
+
+    document.getElementById("userProfileDetails").addEventListener("submit", profileUpdate);
+    // ...
+  } else {
+    // User is signed out
+    // ...
   }
-}
-
-// display user account information
-displayAccount(userID);
-
-document.getElementById("userProfileDetails").addEventListener("submit", profileUpdate);
+});
 
 
 // displays the user's information & profile pic
 function displayAccount(accountID)
 {
+  console.log(accountID);
   // Reference of a user's account information from the database
   const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
 
@@ -64,6 +78,7 @@ function displayAccount(accountID)
     image.src = data.profilePicture;
     image2.src = data.profilePicture;
     var fullname = data.fullName;
+    console.log(fullname);
     fullN.innerText = fullname;
     var firstlastname = fullname.split(" ");
     fname.value = firstlastname[0];
@@ -88,6 +103,7 @@ function displayAccount(accountID)
 async function profileUpdate(e)
 {
   e.preventDefault();
+  console.log("profile changing");
   
   const firstName = document.getElementById("firstName").value;
   const lastName = document.getElementById("lastName").value;
@@ -98,9 +114,11 @@ async function profileUpdate(e)
   const pass = document.getElementById("password").value;
   const npass = document.getElementById("new-password").value;
   const user = auth.currentUser;
+  console.log(user);
 
-  const accountID = localStorage.getItem("userID");
-  const accountRef = ref(db, `Users/${accountID}/AccountInfo`);
+  // const accountID = localStorage.getItem("userID");
+  console.log("inside profile updae: " + user.uid);
+  const accountRef = ref(db, `Users/${user.uid}/AccountInfo`);
   if ( (pass != "") && (npass != ""))
   {
   onValue(accountRef, (snapshot) => {
@@ -120,7 +138,7 @@ async function profileUpdate(e)
     });
   });
   }
-  await set(ref(db, `Users/${userID}/AccountInfo`), {
+  await set(ref(db, `Users/${user.uid}/AccountInfo`), {
     fullName: firstName + " " + lastName,
     email: email,
     username: userName,
@@ -185,9 +203,8 @@ function displayItinTracker(accountTrips)
 }
 var bookTrips = 0;
 // displays the number of bookmarked itineraries 
-function displayBookmark(accountBook)
+function displayBookmark(accountBook, accountID)
 {
-  const accountID = localStorage.getItem("userID");
   const booksIDs = Object.keys(accountBook);
   var numBooks = document.getElementById("bookmark-tracker");
   const tripRef = ref(db, "Users/" + accountID + "/Itineraries");
