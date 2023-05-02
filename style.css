@@ -2137,6 +2137,7 @@ a:visited {
     width: 130px;
     height: 130px;
     z-index: 0;
+    object-fit: cover;
 }
 
 .profile-pic > input{
