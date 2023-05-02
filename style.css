@@ -1465,7 +1465,7 @@ a:visited {
     border: 8px solid white;
 }
 
-.checklists::-webkit-scrollbar-thumb:hover {
+.checklists::-ebkit-scrollbar-thumb:hover {
     background-color: rgba(255, 176, 57, 1);
 }
 
@@ -1491,28 +1491,86 @@ a:visited {
 }
 
 .itinerary-details-center-column > .itinerary-header {
-    background-color: lightgray; 
+    /* background-color: lightgray;  */
     width: 97%;
     height: 250px;
     border-radius: 20px;
     padding: 10px;
     margin: auto;
     margin-bottom: 85px;
-    background-image: url("images/defaults/default-itineraries-background.jpg");
+    /* background-image: url("images/defaults/default-itineraries-background.jpg"); */
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
+    /* box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25); */
 }
+
+.itinerary-header > .edit-bg > input{
+    display: none;
+}
+
+.itinerary-header >.bg-pic{
+    position: relative;
+    margin-top: -60px;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+}
+
+.edit-bg{
+    position: relative;
+    top: -400px;
+    height: 185px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    border-radius: 30px;
+    color: transparent;
+    margin-bottom: 0;
+}
+
+.itinerary-header > .edit-bg > .change-bg{
+    position: inline;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    margin: auto;
+    display: inline-block;
+    border-radius: 20px;
+}
+
+.change-bg:hover{
+    background-color: #2b2b2b93;
+    box-shadow: 0 0 5px 5px #2b2b2b93;
+    color: rgb(255, 247, 232);
+    display: block;
+    text-align: center;
+    font-style: bold;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background-color .2s ease-in-out;
+    z-index: 1000;
+    padding-top: 60px;
+    visibility: visible;
+}
+
 
 .itinerary-details-center-column > .itinerary-header > .itin-back-bookmark { 
     display: flex;
     justify-content: space-between;
+    
+   
 }
 
 .itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a {
     display: block;
-    width: 50px;
+    width: 50px; 
+    z-index: 2;
 }
 
 .itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back {
@@ -1558,10 +1616,11 @@ a:visited {
     width: 80%;
     margin: auto;
     background-color: #FFFDF7;
-    top: 150px;
+    top: -80px;
     border-radius: 25px;
     padding: 15px 30px;
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
+    z-index: 2;
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title > h2 {
@@ -1578,7 +1637,6 @@ a:visited {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-top: 100px;
 }
 
 .itinerary-details-center-column > div > a {
@@ -1609,7 +1667,7 @@ a:visited {
     padding: 5px 0;
     margin-bottom: -10px;
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     bottom: 150%;
     left: 50%;
     margin-left: -60px;
@@ -1652,6 +1710,9 @@ a:visited {
 
 .itinerary-details-center-column > .location-container > .location-item {
     display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-sizing: border-box;
 }
 
 .itinerary-details-center-column > .location-container > .location-item > .decoration {
