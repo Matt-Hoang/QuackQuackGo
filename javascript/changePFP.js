@@ -183,18 +183,31 @@ function displayItinTracker(accountTrips)
   }
   
 }
-
+var bookTrips = 0;
 // displays the number of bookmarked itineraries 
 function displayBookmark(accountBook)
 {
+  const accountID = localStorage.getItem("userID");
   const booksIDs = Object.keys(accountBook);
   var numBooks = document.getElementById("bookmark-tracker");
-  
-  if ( booksIDs.length != null){
-    numBooks.innerText = booksIDs.length;
-  }
-  else{
-    numBooks.innerText = 0;
-  }
- 
+  const tripRef = ref(db, "Users/" + accountID + "/Itineraries");
+
+  onValue(tripRef, (snapshot) => {
+    const Trips = snapshot.val();
+    const itinerariesKeys = Object.keys(Trips);
+    for (let i = 0; i < itinerariesKeys.length; i++){
+      if(Trips[itinerariesKeys[i]].bookmarked == "true"){
+        bookTrips++;
+      }
+    }
+    
+    if ( booksIDs.length != null){
+    numBooks.innerText = booksIDs.length + bookTrips;
+    console.log(bookTrips);
+    }
+    else{
+      numBooks.innerText = 0 + bookTrips;
+    }
+    
+  });
 }
