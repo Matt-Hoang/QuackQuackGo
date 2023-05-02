@@ -59,6 +59,7 @@ onAuthStateChanged(auth, (user) => {
       
     });
 
+    // Change Background Image of Itinerary
     document.getElementById('bg-file').onchange = function (evt) {
       var tgt = evt.target || window.event.srcElement,
           files = tgt.files;
