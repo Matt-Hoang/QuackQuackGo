@@ -36,9 +36,22 @@ onAuthStateChanged(auth, (user) => {
       // find all itineraries that are bookmarked true in user's itineraries
       get(ref(db, `Users/${user.uid}/Itineraries`)).then((snapshot) => {
         const itineraries = snapshot.val();
-        const itinerariesKeys = Object.keys(itineraries);
+
+        var itinerariesKeys;
+        var itinCount;
+      
+        if (itineraries == null) {
+          itinCount = 0;
+        } 
+        else {  
+          // Get array of user itinerary IDs from Firebase
+          itinerariesKeys = Object.keys(itineraries);
+      
+          // Get number of itins
+          itinCount = itinerariesKeys.length;
+        }
         
-        for(let i = 0; i < itinerariesKeys.length; i++)
+        for(let i = 0; i < itinCount; i++)
         {
           // If key exists in DB and the bookmark attribute is true, we add it to object of bookmarked itineraries
           if (itineraries[itinerariesKeys[i]].bookmarked == "true")
@@ -74,8 +87,20 @@ onAuthStateChanged(auth, (user) => {
  */
 function displayUserItineraries(userItineraries)
 {
-  // Get array of user itinerary IDs from Firebase
-  var userItinerariesIDs = Object.keys(userItineraries);
+
+  var userItinerariesIDs;
+  var itinCount;
+
+  if (userItineraries == null) {
+    itinCount = 0;
+  } 
+  else {  
+    // Get array of user itinerary IDs from Firebase
+    userItinerariesIDs = Object.keys(userItineraries);
+
+    // Get number of itins
+    itinCount = userItinerariesIDs.length;
+  }
 
   // Wrapper element to store "a" HTML elements as child nodes
   var wrapperElement = document.createElement("div");
@@ -90,7 +115,7 @@ function displayUserItineraries(userItineraries)
   carouselElement.id = "slick-carousel-1";
 
   // Loop through all itineraries of users
-  for (let i = 0; i < userItinerariesIDs.length; i++) 
+  for (let i = 0; i < itinCount; i++) 
   {
     // "a" HTML element
     var aElement = document.createElement("a");
@@ -117,7 +142,34 @@ function displayUserItineraries(userItineraries)
 
 
   // change display style depending on number of itins
-  const itinCount = userItinerariesIDs.length;
+  if (itinCount == 0) {
+    const wrapperElement = document.createElement("div");
+    const carouselElement = document.createElement("div");
+
+    wrapperElement.className = "itinerary-wrapper";
+    carouselElement.id = "slick-carousel-1";
+
+    const pElement = document.createElement("p");
+    pElement.id = `Itineraries-0`;
+    pElement.className = "itinerary-item";
+    pElement.innerText = "Itineraries are empty!"
+    
+    carouselElement.appendChild(pElement);
+    wrapperElement.appendChild(carouselElement);
+    itineraryContainerList.appendChild(wrapperElement);
+
+    carouselElement.style.display = "flex";
+    carouselElement.style.flexDirection = "row";
+    document.getElementById(`Itineraries-0`).style.flexGrow = "1";
+    document.getElementById(`Itineraries-0`).style.height = "30vh";
+    document.getElementById(`Itineraries-0`).style.background = "none";
+    document.getElementById(`Itineraries-0`).style.backgroundColor = "#bcf0d9";
+    document.getElementById(`Itineraries-0`).style.color = "black";
+    document.getElementById(`Itineraries-0`).style.fontSize = "25px";
+    document.getElementById(`Itineraries-0`).style.display = "flex";
+    document.getElementById(`Itineraries-0`).style.alignItems = "center";
+    document.getElementById(`Itineraries-0`).style.pointerEvents = "none";
+  }
   if (itinCount == 1) {
     carouselElement.style.display = "flex";
     carouselElement.style.flexDirection = "row";
@@ -155,18 +207,13 @@ function displayUserItineraries(userItineraries)
     document.getElementById(`Itineraries-2`).style.marginRight = "10px";
     document.getElementById(`Itineraries-3`).style.marginLeft = "10px";
     document.getElementById(`Itineraries-3`).style.marginRight = "20px";
-
-    // $('#slick-carousel-1').slick({
-    //   rows: 2,
-    //   dots: false,
-    //   arrows: true,
-    //   infinite: true,
-    //   speed: 300,
-    //   slidesToShow: 2,
-    //   slidesToScroll: 2
-    // });
   } 
   else if (itinCount > 4) {
+    // change height of itins displayed
+    for (let i = 0; i < itinCount; i++) {
+      document.getElementById(`Itineraries-${i + 1}`).style.height = "15vh";
+    }
+
     // Settings for itineraries carousel 
     $('#slick-carousel-1').slick({
       rows: 2,
@@ -212,6 +259,8 @@ function displayUserBMItineraries(userBMItineraries)
   }
 
   wrapperElement.appendChild(carouselElement);
+  wrapperElement.style.margin = "auto"
+
 
   bookmarkedContainerList.appendChild(wrapperElement);
 
@@ -219,27 +268,35 @@ function displayUserBMItineraries(userBMItineraries)
 
   // change display style depending on number of itins
   const BMCount = userBMItinerariesIDs.length;
-  // if (BMCount == 0) {
-  //   var wrapperElement = document.createElement("div");
-  //   var carouselElement = document.createElement("div");
+  if (BMCount == 0) {
+    const wrapperElement = document.createElement("div");
+    const carouselElement = document.createElement("div");
 
-  //   wrapperElement.className = "bookmarked-wrapper";
-  //   carouselElement.id = "slick-carousel-2";
+    wrapperElement.className = "bookmarked-wrapper";
+    carouselElement.id = "slick-carousel-2";
 
-  //   var aElement = document.createElement("a");
-  //   aElement.href = "itineraryDetails.html";
-  //   aElement.id = `Bookmarked-0`;
-  //   aElement.className = "bookmarked-item";
+    const pElement = document.createElement("p");
+    pElement.id = `Bookmarked-0`;
+    pElement.className = "bookmarked-item";
+    pElement.innerText = "Bookmarks are empty!"
     
-  //   carouselElement.appendChild(aElement);
+    carouselElement.appendChild(pElement);
+    wrapperElement.appendChild(carouselElement);
+    bookmarkedContainerList.appendChild(wrapperElement);
 
-
-  //   carouselElement.style.display = "flex";
-  //   carouselElement.style.flexDirection = "row";
-  //   document.getElementById(`Bookmarked-0`).style.flexGrow = "1";
-  //   document.getElementById(`Bookmarked-0`).style.height = "30vh";
-  // }
-  if (BMCount == 1) {
+    carouselElement.style.display = "flex";
+    carouselElement.style.flexDirection = "row";
+    document.getElementById(`Bookmarked-0`).style.flexGrow = "1";
+    document.getElementById(`Bookmarked-0`).style.height = "30vh";
+    document.getElementById(`Bookmarked-0`).style.background = "none";
+    document.getElementById(`Bookmarked-0`).style.backgroundColor = "#bcf0d9";
+    document.getElementById(`Bookmarked-0`).style.color = "black";
+    document.getElementById(`Bookmarked-0`).style.fontSize = "25px";
+    document.getElementById(`Bookmarked-0`).style.display = "flex";
+    document.getElementById(`Bookmarked-0`).style.alignItems = "center";
+    document.getElementById(`Bookmarked-0`).style.pointerEvents = "none";
+  }
+  else if (BMCount == 1) {
     carouselElement.style.display = "flex";
     carouselElement.style.flexDirection = "row";
     document.getElementById(`Bookmarked-1`).style.flexGrow = "1";
@@ -266,17 +323,23 @@ function displayUserBMItineraries(userBMItineraries)
     document.getElementById(`Bookmarked-2`).style.marginRight = "20px";
   }
   else if (BMCount == 4) {
-    $('#slick-carousel-2').slick({
-      rows: 2,
-      dots: false,
-      arrows: true,
-      infinite: true,
-      speed: 300,
-      slidesToShow: 2,
-      slidesToScroll: 2
-    });
+    carouselElement.style.display = "flex";
+    carouselElement.style.flexDirection = "row";
+    for (let i = 0; i < BMCount; i++) {
+      document.getElementById(`Bookmarked-${i + 1}`).style.width = "100%";
+      document.getElementById(`Bookmarked-${i + 1}`).style.height = "30vh";
+    }
+    document.getElementById(`Bookmarked-2`).style.marginLeft = "20px";
+    document.getElementById(`Bookmarked-2`).style.marginRight = "10px";
+    document.getElementById(`Bookmarked-3`).style.marginLeft = "10px";
+    document.getElementById(`Bookmarked-3`).style.marginRight = "20px";
   } 
   else if (BMCount == 5 || BMCount == 6) {
+    // change height of itins displayed
+    for (let i = 0; i < BMCount; i++) {
+      document.getElementById(`Bookmarked-${i + 1}`).style.height = "15vh";
+    }
+
     $('#slick-carousel-2').slick({
       rows: 2,
       dots: false,
@@ -288,6 +351,11 @@ function displayUserBMItineraries(userBMItineraries)
     });
   } 
   else if (BMCount > 6) {
+    // change height of itins displayed
+    for (let i = 0; i < BMCount; i++) {
+      document.getElementById(`Bookmarked-${i + 1}`).style.height = "15vh";
+    }
+
     // Settings for itineraries carousel 
     $('#slick-carousel-2 ').slick({
       rows: 2,
@@ -309,9 +377,21 @@ function displayUserBMItineraries(userBMItineraries)
  */
 function addItineraryTransition(userItineraries, htmlID, userID)
 {
-  const userItinerariesIDs = Object.keys(userItineraries);
+  var userItinerariesIDs;
+  var itinCount;
 
-  for(let i = 0; i < userItinerariesIDs.length; i++)
+  if (userItineraries == null) {
+    itinCount = 0;
+  } 
+  else {  
+    // Get array of user itinerary IDs from Firebase
+    userItinerariesIDs = Object.keys(userItineraries);
+
+    // Get number of itins
+    itinCount = userItinerariesIDs.length;
+  }
+
+  for(let i = 0; i < itinCount; i++)
   {
     document.getElementById(`${htmlID}-${i + 1}`).addEventListener("click", function(e) {
       e.preventDefault();
