@@ -6,6 +6,6 @@ function SendMail() {
       message : document.getElementById('text').value
   }
   emailjs.send("service_ys1pr86","template_phkkx18", params).then(function(res){
-    alert("success!" + res.status);
+    alert("Email has been sent! We will get back to you shortly.");
   })
 }
