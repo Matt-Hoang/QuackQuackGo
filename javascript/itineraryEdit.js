@@ -6,67 +6,207 @@ var add = document.getElementsByClassName("add-loc");
 var container = document.getElementsByClassName("itinerary-locs");
 
 // true/false variable that determines whether to load in a blank template or existing itinerary to be displayed
-const hasItinerary = localStorage.getItem("hasItinerary");
+var hasItinerary = localStorage.getItem("hasItinerary");
 
 // path of itinerary from DB
-const itineraryPath = localStorage.getItem("itineraryPath");
+var itineraryPath = localStorage.getItem("itineraryPath");
+
+//localStorage.clear("itineraryPath");
+console.log(itineraryPath);
+console.log(hasItinerary)
 
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {
-    // Get user ID of user logged in
-    const userID = user.uid;
-
-    /*== CODE BLOCK BY MARIEL URBANO ==*/
     // Adds in blank templates for locations
     add[0].onclick = function() {
-      addLocationElement("", "", "", "", container);
-      deleteLocation();
+      window.location.href = "search.html";
     }
 
-    /*== END OF CODE BLOCK BY MARIEL URBANO ==*/
-
-    // If user clicks "edit" on an itinerary, we load it into itinerary creation page
+    // If user loads in pre-existing itinerary, we display it
     if (hasItinerary == "True")
     {
+      document.getElementById("delete").addEventListener("click", function(e) {
+        e.preventDefault();
+  
+        remove(ref(db, itineraryPath));
+  
+        alert("Itinerary deleted successfully!");
+  
+        window.location.href = "itineraries.html";
+      });
+
       // Itinerary is already made. User is editing it
       displayItineraryInfo(itineraryPath);
+      saveItinerary(user.uid)
     }
+    else
+    {
+      add[0].style.visibility = "hidden";
 
-    // Default to user clicks on "create itinerary" from homepage or the "+" symbol in itineraries page
-    // Action is for saving an itinerary into the DB regardless of whether itinerary was made prior or not
-    document.getElementById("save").addEventListener("click", function() {
-
-      // Get information of itinerary
-      const tripName = document.getElementById("tripName").value;
-      const origin = document.getElementById("location").value;
-      const startDate = document.getElementById("start-date").value;
-      const endDate = document.getElementById("end-date").value;
-      const locations = document.getElementsByClassName("itinerary-locs")[0].children;
-
-      // Parse information to DB
-      pushUserItinerary(userID, tripName, origin, startDate, endDate);
-
-      // If the user is editing an itinerary and presses the "save" button, it deletes the old rows in the DB
-      if (hasItinerary == "True")
-      {
-        remove(ref(db, `${itineraryPath}/locationList`));
-      }
-
-      // Get information of locations from itinerary
-      for(let i = 0; i < locations.length; i++)
-      {
-        const locationName = locations[i].getElementsByClassName(`loc-title`)[0].innerHTML;
-        const locationAddress = locations[i].getElementsByClassName(`location-address`)[0].innerHTML;
-        const dateTime = locations[i].getElementsByClassName(`loc-datetime`)[0].value.split("T");
-
-        // Parse information to DB
-        pushLocationOfItinerary(userID, locationAddress, locationName, dateTime[0], dateTime[1]);
-      }
-    });
+      document.getElementById("delete").addEventListener("click", function(e) {
+        e.preventDefault();
+  
+        alert("Itinerary can't be deleted because it isn't made!");
+      });
+      
+      saveItinerary(user.uid)
+    }
   }
 });
 
+
+function saveItinerary(userID)
+{
+  document.getElementById("itineraryForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const tripName = document.getElementById("tripName").value;
+    const origin = document.getElementById("location").value;
+    const startDate = document.getElementById("start-date").value;
+    const endDate = document.getElementById("end-date").value;
+
+    // Check for name validation: Unique names only
+    get(ref(db, `Users/${userID}/Itineraries`)).then((snapshot) => {
+      const itineraries = snapshot.val();
+      const itineraryKeys = Object.keys(itineraries)
+      var isUnique = true;
+      var isValid = true;
+
+      for(let i = 0; i < itineraryKeys.length; i++)
+      {
+        // Check for same name in DB. Each itinerary should be a unique name for the user
+        if (tripName == itineraries[itineraryKeys[i]].name && itineraryPath.split("/")[3] != itineraryKeys[i])
+        {
+          isUnique = false;
+          alert("Trip name already in use! Please choose a different name.")
+        }
+      }
+
+      if (isUnique)
+      {
+        // Test for date validation
+        if (new Date(startDate) > new Date(endDate))
+        {
+          isValid = false;
+          alert("Start date can't be later than end date!");
+        }
+        
+        if (isValid)
+        {
+          if (hasItinerary == "False")
+          {
+            // Parse information to DB
+            pushUserItinerary(userID, tripName, origin, startDate, endDate);
+
+            // Get location of recently pushed itinerary
+            const lastPushedItin = query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1));
+
+            get(lastPushedItin).then((snapshot) => {
+              // get itinerary ID
+              const itinID = Object.keys(snapshot.val())[0];
+              
+              // We want to refresh the page when its saved correctly, so we change the localStorage IDs to the appropiate values
+              hasItinerary = localStorage.setItem("hasItinerary", "True");
+              itineraryPath = localStorage.setItem("itineraryPath", `Users/${userID}/Itineraries/${itinID}`);
+
+              // Refresh the page
+              window.location.href = "itineraryEdit.html";
+
+              // Send alert of successful add
+              alert("Itinerary saved successfully!")
+            });  
+          }
+          else
+          {
+            // If the itinerary information is accurate and meets all the requirements, we now check it for each location in the list
+            const duration = [new Date(startDate), new Date(endDate)];
+            var locationDates = [];
+            var isNotItineraryConflict = true;
+            var isNotLocationConflict = true;
+            var isNotBlank = true;
+
+            const dates = document.getElementsByClassName(`loc-datetime`);
+
+            const locationElements = container[0].children;
+
+            for(let i = 0; i < locationElements.length; i++)
+            {
+              // ADDRESS, NAME, DATE, TIME
+              const dateTime = locationElements[i].getElementsByClassName("loc-datetime")[0].value;
+              
+              if (dateTime.length == 0)
+              {
+                isNotBlank = false;
+                alert("Date field is not filled all the way! Please fill them all")
+              }
+            }
+
+            for(let i = 0; i < dates.length; i++)
+            {
+              const dateTime = dates[i].value.split("T");
+              const date = new Date(dateTime);
+
+              locationDates.push(date)
+            }
+            
+            // Check if any location date is out the scope of the duration date
+            for(let i = 0; i < locationDates.length; i++)
+            {
+              if (locationDates[i] < duration[0] || locationDates[i] > duration[1])
+              {
+                isNotItineraryConflict = false;
+                alert(`Location dates is in conflict with start or end date of itinerary!`);
+                break;
+              }
+            }
+
+            // Check if any location date conflicts with each other
+            const sortedLocationDates = locationDates.slice().sort(function(a, b) {
+              const date1 = new Date(a);
+              const date2 = new Date(b);
+              return date1 - date2;
+            });
+            
+            if (!(JSON.stringify(locationDates) === JSON.stringify(sortedLocationDates)))
+            {
+              isNotLocationConflict = false;
+              alert(`Location dates not in order! Please ensure all location dates are in order`)
+            }
+            
+            if (isNotItineraryConflict && isNotLocationConflict && isNotBlank)
+            {
+              pushUserItinerary(userID, tripName, origin, startDate, endDate);
+
+              const locationElements = container[0].children;
+
+              if (hasItinerary == "True")
+              {
+                remove(ref(db, `${itineraryPath}/locationList`));
+              }
+
+              for(let i = 0; i < locationElements.length; i++)
+              {
+                // ADDRESS, NAME, DATE, TIME
+                const locationName = locationElements[i].getElementsByClassName("loc-title")[0].innerHTML;
+                const address = locationElements[i].getElementsByClassName("loc-address")[0].innerHTML;
+
+                const dateTime = locationElements[i].getElementsByClassName("loc-datetime")[0].value;
+                
+                console.log(locationName, address, dateTime)
+
+                pushLocationOfItinerary(address, locationName, dateTime.split("T")[0], dateTime.split("T")[1])
+              }
+              
+              window.location.href = "itineraryEdit.html";
+              alert("Success!");
+            }           
+          }
+        }
+      }
+    });
+  });
+}
 
 /** Display information of an existing itinerary and its locations
  *  FUNCTION BY TOMMY LONG
@@ -89,28 +229,64 @@ function displayItineraryInfo(itineraryPath)
   });
 
   get(locationListRef).then((snapshot) => {
-    // Get object-formatted information of locations in itinerary
-    const locationList = snapshot.val();
+    const locationList = snapshot.val() == null ? {} : snapshot.val();
 
-    // Only displays itinerary when there is locations in the itinerary
-    if (locationList != null)
+    const locationIDs = Object.keys(locationList);
+
+    for (let i = 0; i < locationIDs.length; i++)
     {
-      // Array of location IDs
-      const locationIDs = Object.keys(locationList);
+      // Assign location information from DB onto page
+      const title = locationList[locationIDs[i]].locationName;
+      const address = locationList[locationIDs[i]].address;
+      const date = locationList[locationIDs[i]].date;
+      const time = locationList[locationIDs[i]].time;
 
-      for (let i = 0; i < locationIDs.length; i++)
-      {
-        // Assign location information from DB onto page
-        const title = locationList[locationIDs[i]].locationName;
-        const address = locationList[locationIDs[i]].address;
-        const date = locationList[locationIDs[i]].date;
-        const time = locationList[locationIDs[i]].time;
+      addLocationElement(title, address, date, time, container)
+    }
 
-        // Add location HTML element for each location in itinerary
-        addLocationElement(title, address, date, time, container)
+    // Once user is done searching and adds the location to the itinerary, we add it in
+    if (localStorage.getItem("title") != null && localStorage.getItem("address") != null)
+    {
+      // Add in location to itinerary
+      addLocationElement(localStorage.getItem("title"), localStorage.getItem("address"), "", "", container);
+      pushLocationOfItinerary(localStorage.getItem("address"), localStorage.getItem("title"), "", "")
+
+      localStorage.removeItem("title");
+      localStorage.removeItem("address");
+    }
+
+    for (var i = 0; i < hamlist.length; i++) 
+    {
+      var but = document.createElement("button");
+      var txt = document.createTextNode("\u00D7");
+      but.className = "close-loc";
+      but.appendChild(txt);
+      hamlist[i].appendChild(but);
+    }
+
+    for (var i = 0; i < closeloc.length; i++) 
+    {
+      closeloc[i].onclick = function() {
+        var div = this.parentElement; // hamburger div
+        var sdiv = div.parentElement; // location-item div
+        var cdiv = sdiv.parentElement; // location-contianer div
+
+        get(ref(db, itineraryPath + "/locationList")).then((snapshot) => {
+          const locations = snapshot.val();
+          const locationKeys = Object.keys(locations);
+          
+          for(let i = 0; i < locationKeys.length; i++)
+          {
+            if (locations[locationKeys[i]].locationName == sdiv.children[1].children[0].innerHTML)
+            {
+              remove(ref(db, itineraryPath + `/locationList/${locationKeys[i]}`));
+              break;
+            }
+          }
+
+        })
+        cdiv.removeChild(sdiv);
       }
-
-      deleteLocation(); 
     }
   }); 
 }
@@ -129,7 +305,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   if (hasItinerary == "True")
   {
     update(ref(db, itineraryPath), {
-      "image": "images/defaults/default-itineraries-background.jpg",
+      "image": "images/defaults/default-itineraries-background.png",
       "name": name,
       "origin": origin,
       "duration": {
@@ -142,7 +318,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   {
     // If itinerary doesn't exist, we want to add it to DB
     push(ref(db, `Users/${userID}/Itineraries`), {
-      "image": "images/defaults/default-itineraries-background.jpg",
+      "image": "images/defaults/default-itineraries-background.png",
       "name": name,
       "origin": origin,
       "locationList": "",
@@ -175,57 +351,19 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
  * @param {*} date - ETA to location
  * @param {*} time - ETA to location
  */
-function pushLocationOfItinerary(userID, address, name, date, time)
+function pushLocationOfItinerary(address, name, date, time)
 {
-  // Goes to either if statement depending of user is editing an existing itinerary or creating a new itinerary
-  if (hasItinerary == "True")
-  {
-    // Reference of list of locations in DB
-    const locationListRef = ref(db, `${itineraryPath}/locationList`);
-    var lastPushedLocationRef = query(ref(db, `${itineraryPath}/locationList`), limitToLast(1));
-    
-    push(locationListRef, {
-      "address": address,  
-      "locationName": name,
-      "locationCost": 0
-    });  
-    
-    get(lastPushedLocationRef).then((snapshot) => {
-      const locationID = Object.keys(snapshot.val())[0];
-      update(ref(db, `${itineraryPath}/locationList/${locationID}`), {
-        "date": date,
-        "time": time
-      })
-    })
-  }
-  else
-  {
-    // Get newly created itinerary from DB
-    get(query(ref(db, `Users/${userID}/Itineraries`), limitToLast(1))).then((snapshot) => {
-      // Get ID of itinerary from DB
-      const itineraryID = Object.keys(snapshot.val())[0];
-      
-      // Reference to last pushed location in DB
-      var pushedLocationRef = query(ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`), limitToLast(1));
-      
-      // Reference to locationList in user's itineraries in DB
-      const locationListRef = ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList`);
   
-      push(locationListRef, {
-        "address": address,  
-        "locationName": name,
-        "locationCost": 0
-      });  
+  // Reference of list of locations in DB
+  const locationListRef = ref(db, `${itineraryPath}/locationList`);
   
-      get(pushedLocationRef).then((snapshot) => {
-        const locationID = Object.keys(snapshot.val())[0];
-        update(ref(db, `Users/${userID}/Itineraries/${itineraryID}/locationList/${locationID}`), {
-          "date": date,
-          "time": time
-        })
-      })
-    })
-  }
+  push(locationListRef, {
+    "address": address,  
+    "locationName": name,
+    "locationCost": 0,
+    "date": date,
+    "time": time
+  });  
 }
 
 /** Adds blank location elements for user to manually input or existing locations from an existing itinerary
@@ -250,7 +388,7 @@ function addLocationElement(title, address, date, time, container)
   var locationElement = document.createElement("div");
 
   // Assign div adjustments
-  locationElement.className = `location-item`;
+  locationElement.className = `itinerary-edit-location-item`;
   locationElement.draggable = true;
   locationElement.style.display = "flex";
 
@@ -262,7 +400,7 @@ function addLocationElement(title, address, date, time, container)
                                   <h4 class="loc-title">${title}</h4>
                                   <div>
                                     <img src="images/pin-logo.png" alt="">
-                                      <h5 class="location-address">${address}</h5> 
+                                      <h5 class="loc-address">${address}</h5> 
                                   </div>
                                   <div>
                                       <img src="images/calendar-logo.png" alt="">
@@ -274,12 +412,15 @@ function addLocationElement(title, address, date, time, container)
                                   <img src="images/hamburger.png" alt="">
                                 </div>`
   
+  console.log(container)
   // Append to container class to display in HTML
   container[0].appendChild(locationElement);
 
   // Assign date and time
   document.getElementsByClassName(`loc-datetime`)[container[0].children.length - 1].value = date + "T" + time;
 }
+
+
 
 function deleteLocation()
 {
@@ -298,6 +439,7 @@ function deleteLocation()
       var div = this.parentElement; // hamburger div
       var sdiv = div.parentElement; // location-item div
       var cdiv = sdiv.parentElement; // location-contianer div
+
       cdiv.removeChild(sdiv);
     }
   }
