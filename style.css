@@ -800,7 +800,6 @@ a:visited {
     flex-direction: column;
     border-radius: 25px;
     background: rgba(10, 35, 66, 0.95);
-    /* padding: 25px 25px 25px 25px; */
     margin-left: 20px;
     box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.5);
     color: white;
@@ -907,6 +906,12 @@ a:visited {
     width: 200px;
 }
 
+@media (max-width: 1200px) {
+    /* CSS that should be displayed if width is equal to or less than 800px goes here */
+    .home-center-column > .trending-explore-container > .explore-locations > .weather-card {
+        margin: 20px 0 0 0;
+    }
+}
 
 /* home scroll bar */
 .home-center-column::-webkit-scrollbar {
@@ -1928,6 +1933,7 @@ a:visited {
 .support-body {
     box-sizing: border-box;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
     background-color: #FFF8E0;
@@ -2039,6 +2045,13 @@ a:visited {
 
 .support-body > .team > div > a > h5 {
     font-size: 20px;
+}
+
+@media (max-width: 1440px) {
+    /* CSS that should be displayed if width is equal to or less than 800px goes here */
+    .support-body > .contact-form {
+        margin: 0 0 20px 0;
+    }
 }
 
 /* === Profile Info By Mariel Urbano=== */
