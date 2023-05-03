@@ -16,7 +16,7 @@ onAuthStateChanged(auth, (user) => {
       displayTrendingLocations(itinerariesList, userID);
       displayExploreLocations(itinerariesList, userID);
     })
-
+    
     const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
     get(tripDisplayRef).then((snapshot) => {
       const userTrips = snapshot.val(); 
@@ -165,14 +165,19 @@ function addClicks(itineraryID, htmlID, user)
  */
 function displayTrips(accountTrips)
 { 
-  var tripCount;
-  if (accountTrips == null) {
-    tripCount = 0;
-  } 
-  else {
-    tripCount = accountTrips.length;
+  // var tripCount = 0;
+  // if (accountTrips == null) {
+  //   var tripCount = 0;
+  // } 
+  // else {
+  //   var tripCount = accountTrips.length;
+  // }
+  var tripKeys = Object.keys(accountTrips);
+  var tripCount = 0;
+  if (accountTrips != null){
+    tripCount = tripKeys.length;
   }
-
+  console.log(tripCount);
   accountTrips = sortDates(accountTrips);
 
   var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;

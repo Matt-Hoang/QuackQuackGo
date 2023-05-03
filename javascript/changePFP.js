@@ -150,18 +150,47 @@ async function profileUpdate(e)
   document.getElementById("new-password").value = "";
 }
 
+function sortDates(tripList)
+{
+  if (tripList != null) {
+    tripList = Object.entries(tripList);  
+        
+    const sortedDates = function(a, b) {
+      const date1 = Math.abs(new Date(a[1].duration.start) - new Date());
+      const date2 = Math.abs(new Date(b[1].duration.start) - new Date());
+
+      return date1 - date2;
+    }
+
+    return tripList.sort(sortedDates);
+  }
+}
+
 /** Display all upcoming trips of that user
  * 
  * @param {*} accountTrips - An object of upcoming trips from the user 
  */
 function displayTrips(accountTrips)
-{
-  const itineraryIDs = Object.keys(accountTrips);
+{ 
+  // var tripCount = 0;
+  // if (accountTrips == null) {
+  //   var tripCount = 0;
+  // } 
+  // else {
+  //   var tripCount = accountTrips.length;
+  // }
+  var tripKeys = Object.keys(accountTrips);
+  var tripCount = 0;
+  if (accountTrips != null){
+    tripCount = tripKeys.length;
+  }
+  console.log(tripCount);
+  accountTrips = sortDates(accountTrips);
 
   var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
   var upcomingTripElement = rightColumnHome[2];
 
-  for (let i = 0; i < itineraryIDs.length; i++)
+  for (let i = 0; i < tripCount; i++)
   {
     var aElement = document.createElement("a");
     aElement.href = "";
@@ -178,14 +207,35 @@ function displayTrips(accountTrips)
     var image = document.getElementById(`trip-picture-${i + 1}`);
     
     // Format date
-    const date = accountTrips[itineraryIDs[i]].duration.start + " - " + accountTrips[itineraryIDs[i]].duration.end;
+    const date = accountTrips[i][1].duration.start;
     
     // Set image
-    image.src = accountTrips[itineraryIDs[i]].image;
+    image.src = accountTrips[i][1].image;
 
     // Set name of trip and duration
-    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[itineraryIDs[i]].name;
+    document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[i][1].name;
     document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
+
+    document.getElementById(`trip-${i + 1}`).addEventListener("click", function(e) {
+      e.preventDefault();
+      console.log("Clicked!");
+
+      retrieveUserID(accountTrips[i][0]).then(
+        function(value)
+        {
+          var userIDItinerary = value;
+    
+          localStorage.setItem("itineraryID", `Users/${userIDItinerary}/Itineraries/${accountTrips[i][0]}`);
+          localStorage.setItem("userID", String(userIDItinerary));
+
+          window.location.href = "itineraryDetails.html";
+        },
+        function(error)
+        {
+          console.error(error);
+        }
+      )
+    })
   }
 }
 
