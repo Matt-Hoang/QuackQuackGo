@@ -1522,7 +1522,7 @@ a:visited {
     border: 8px solid white;
 }
 
-.checklists::-ebkit-scrollbar-thumb:hover {
+.checklists::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 176, 57, 1);
 }
 
