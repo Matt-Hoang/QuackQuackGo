@@ -86,9 +86,10 @@ function displayAccount(accountID)
     mail.value = data.email;
     uname.value = data.username;
     // pass.value = data.password;
-    if (data.location != null){
+    if (data.location != ""){
       loc.value = data.location;
       uloc.innerText = data.location;
+      document.getElementById("location-icon").style.display = 'block';
     }
     
 
