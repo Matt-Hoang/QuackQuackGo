@@ -29,6 +29,7 @@
         <div class="itinerary-header">
             <!-- back button -->
             <a href="itineraryDetails.html"><div></div></a>
+            <button id="delete"><div class="delete-itin">X</button>
             <!-- itinerary header -->
             <div class="trip-title">
                 <form id="itineraryForm" action="">
@@ -54,7 +55,7 @@
         <div class="button-container">
             <!-- <a href=""><div class="view-map">+</div></a> -->
             <button class="add-loc" onclick="window.location.href = 'search.html'"><div class="view-map">+</div></button>
-            <button type="submit" id="save"><div class="view-map">Save</div></button>
+            <button type="submit" form="itineraryForm" id="save"><div class="view-map">Save</div></button>     
         </div>
         
         <!-- details container -->
