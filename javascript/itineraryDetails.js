@@ -73,8 +73,8 @@ onAuthStateChanged(auth, (user) => {
 
       displayInfo(itineraryInfo);
       displayLocations(itineraryInfo.locationList, user.uid);
+      editCostInput();
       exportLocations(itineraryInfo.locationList);
-      //editCostInput();
       
     });
 
@@ -178,10 +178,10 @@ function editCostInput()
         if (e.key == "Enter")
         {
           e.preventDefault();
-          console.log("pressed enter key!");
 
-          var cost = costElement.value.length == 0 ? costElement.placeholder.replace("$", "") : costElement.value;
+          var cost = costElement.value;
 
+          console.log(cost)
           get(ref(db, itineraryPath + "/locationList")).then((snapshot) => {
             const locations = snapshot.val();
             const locationKey = Object.keys(locations)[i];
@@ -189,13 +189,15 @@ function editCostInput()
             update(ref(db, `${itineraryPath}/locationList/${locationKey}`), {
               "locationCost": cost
             });
+
+            totalCostCalc();
           });
         }
       });
     }
     catch(error)
     {
-
+      
     }
   }
 }
