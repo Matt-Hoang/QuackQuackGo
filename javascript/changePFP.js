@@ -193,6 +193,7 @@ function displayItinTracker(accountTrips)
 {
   const itineraryIDs = Object.keys(accountTrips);
   var numItins = document.getElementById("itinerary-tracker");
+  console.log(itineraryIDs);
   if ( itineraryIDs.length != null){
     numItins.innerText = itineraryIDs.length;
   }

@@ -611,6 +611,7 @@ a:visited {
     height: 75px;
     width: 75px;
     margin-right: 10px;
+    object-fit: cover;
 }
 
 .home-right-column > div > a > div > h4, .right-column > div > a > div > h5 {
@@ -1532,6 +1533,7 @@ a:visited {
     border-radius: 30px;
     color: transparent;
     margin-bottom: 0;
+    display: none;
 }
 
 .itinerary-header > .edit-bg > .change-bg{
@@ -2435,6 +2437,40 @@ a:visited {
     width: 150px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.upcoming-trips{
+    overflow-y: scroll;
+}
+
+/* upcoming trips scroll bar */
+.upcoming-trips::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.upcoming-trips::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.upcoming-trips::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid white;
+}
+
+.upcoming-trips::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.upcoming-trips::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.profile-edit-body::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
 }
 
 /* === Itineraries Edit View === */

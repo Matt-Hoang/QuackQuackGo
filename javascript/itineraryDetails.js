@@ -41,9 +41,28 @@ onAuthStateChanged(auth, (user) => {
       if (itinerariesKeys.find(id => id == itineraryPath.split("/")[3]) != undefined)
       {
         displayEditButton();
-
         // add change background function here
-        
+        // Change Background Image of Itinerary
+        // only shows change bg if user owns the itinerary
+        document.getElementById('edit-bg').style.display = 'block';
+        document.getElementById('bg-file').onchange = function (evt) {
+          var tgt = evt.target || window.event.srcElement,
+              files = tgt.files;
+          
+          // FileReader support
+          if (FileReader && files && files.length) {
+              var fr = new FileReader();
+              fr.onload = function () {
+                  
+                  document.getElementById("bg-pic").src = fr.result;
+                  console.log(fr.result);
+                  update(ref(db, itineraryPath), {
+                    image: fr.result
+                  });
+              }
+              fr.readAsDataURL(files[0]);
+          }
+        }
       }
     })
     
@@ -59,25 +78,6 @@ onAuthStateChanged(auth, (user) => {
       
     });
 
-    // Change Background Image of Itinerary
-    document.getElementById('bg-file').onchange = function (evt) {
-      var tgt = evt.target || window.event.srcElement,
-          files = tgt.files;
-      
-      // FileReader support
-      if (FileReader && files && files.length) {
-          var fr = new FileReader();
-          fr.onload = function () {
-              
-              document.getElementById("bg-pic").src = fr.result;
-              console.log(fr.result);
-              update(ref(db, itineraryPath), {
-                image: fr.result
-              });
-          }
-          fr.readAsDataURL(files[0]);
-      }
-    }
 
     // Bookmark click event listener
     document.getElementsByClassName("itin-bookmark")[0].addEventListener("click", function(e) {
