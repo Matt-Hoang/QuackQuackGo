@@ -456,4 +456,3 @@ function exportLocations(locationList)
   
   }
 }
-

@@ -49,15 +49,35 @@
                 <br>
                 <h3>Total Cost: </h3><h3 id="itinerary-total-cost">$0</h3>
             </div>
-            
         </div>
         <!-- view map button -->
         <div class="button-container">
-            <a id="export-button" class="export-button" href=""><div id="itin-button" class="itin-button">Export  
+            <a id="export-button" class="export-button" href="">
+            <!-- <div id="itin-button" class="itin-button">Export  
                 <span class="tooltiptext">Download KML Layer for Google My Maps</span>
-            </div></a>
-            
+            </div> -->
+            <button type="submit" class="itin-button" onclick="openPopup()">Export</button>
+            </a>
+            <div class="pop-up" id="pop-up">
+                <img src="images/checklist-duck.png">
+                <h2>Downloaded Successfully!</h2>
+                <p>1. Go to https://www.google.com/maps/about/mymaps/ <br>
+                2. Click on the "Get Started" button <br>
+                3. Click on "Create New Map" or "+" to create new map <br>
+                4. Import KML layer by clicking on "Import" under the Untitled layer</p>
+                <button type="button" onclick="closePopup()">Got it!</button>
+            </div>
         </div>
+        <script>
+            let popup = document.getElementById("pop-up");
+            function openPopup(){
+                popup.classList.add("open-popup");
+            }
+
+            function closePopup(){
+                popup.classList.remove("open-popup");
+            }
+        </script>
         
         <!-- details container -->
         <div class="location-container"></div>
