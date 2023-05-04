@@ -48,8 +48,9 @@ onAuthStateChanged(auth, (user) => {
     })
     
     // reference of itinerary that user clicked on in itineraries.js in Firebase
+    console.log(itineraryPath)
     const itineraryIDRef = ref(db, itineraryPath);
-    onValue(itineraryIDRef, (snapshot) => {
+    get(itineraryIDRef).then((snapshot) => {
       const itineraryInfo = snapshot.val();
 
       displayInfo(itineraryInfo);
@@ -131,15 +132,18 @@ function totalCostCalc()
 
   for(let i = 0; i < locations.length; i++)
   {
-    const locationCost = locations[i].getElementsByClassName("location-cost")[0].children[0]
+    const locationCost = locations[i].getElementsByClassName("location-cost")[0].children[0];    
     
-    var cost = locationCost.placeholder == undefined ? locationCost.innerHTML : locationCost.placeholder;
+    console.log(locationCost.innerHTML);
+    console.log(locationCost.placeholder)
+    var cost = locationCost.placeholder == undefined ? locationCost.innerHTML: locationCost.placeholder;
   
     cost = cost.replace("$", "");
 
     totalCost += Number(cost);
   }
 
+  console.log(totalCost)
   document.getElementById("itinerary-total-cost").innerHTML = `$${totalCost}`;
   update(ref(db, itineraryPath + "/stats"), {
     "totalCost": totalCost
@@ -242,6 +246,7 @@ function displayInfo(itineraryInfo)
   
   const startDate = itineraryInfo.duration.start;
   const endDate = itineraryInfo.duration.end;
+  
 
   const startMonth = months[Number(startDate.substring(startDate.indexOf("-") + 1, startDate.lastIndexOf("-")))];
   const startDay = Number(startDate.substring(startDate.lastIndexOf("-") + 1));
@@ -256,7 +261,7 @@ function displayInfo(itineraryInfo)
   date.innerText = startMonth + " " + startDay + ", " +  startYear + " - " + endMonth + " " + endDay + ", " + endYear;
   origin.innerText = itineraryInfo.origin;
   bg.src = itineraryInfo.image;
-  cost.innerHTML = itineraryInfo.totalCost;
+  cost.innerHTML = "$" + itineraryInfo.stats.totalCost;
   
   // set background image and delete css for it in css
 }
@@ -358,22 +363,16 @@ function addBookmarkedItinerary(userID, itineraryInfo, itineraryPath)
       "name": itineraryInfo["name"],
       "origin": itineraryInfo["origin"],
       "locationList": "",
+      "duration": {
+        "start": itineraryInfo["duration"]["start"],
+        "end": itineraryInfo["duration"]["end"]
+      },
       "stats": {
         "clicks": itineraryInfo["stats"].clicks,
         "totalCost": itineraryInfo["stats"].totalCost  
       },
       "userID": itineraryPath.split("/")[1]  
     });
-
-    get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
-      const itineraryID = Object.keys(snapshot.val())[0];
-      update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}`), {
-        duration: {
-          "start": itineraryInfo["duration"]["start"],
-          "end": itineraryInfo["duration"]["end"]
-        }
-      });
-    })
   }
 }
 
