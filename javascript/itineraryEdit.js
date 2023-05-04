@@ -124,11 +124,11 @@ function saveItinerary(userID)
               hasItinerary = localStorage.setItem("hasItinerary", "True");
               itineraryPath = localStorage.setItem("itineraryPath", `Users/${userID}/Itineraries/${itinID}`);
 
-              // Refresh the page
-              window.location.href = "itineraryEdit.html";
-
               // Send alert of successful add
               alert("Itinerary saved successfully!")
+
+              // Reroute to itin page
+              window.location.href = "itineraries.html";
             });  
           }
           else
