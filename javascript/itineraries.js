@@ -43,6 +43,7 @@ onAuthStateChanged(auth, (user) => {
         if (itineraries == null) {
           itinCount = 0;
         }
+
         else {
           // Get array of user itinerary IDs from Firebase
           itinerariesKeys = Object.keys(itineraries);
