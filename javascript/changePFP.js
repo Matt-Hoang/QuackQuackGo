@@ -86,7 +86,7 @@ function displayAccount(accountID)
     mail.value = data.email;
     uname.value = data.username;
     // pass.value = data.password;
-    if (data.location != ""){
+    if ((snapshot.child("location").exists() == true)){
       loc.value = data.location;
       uloc.innerText = data.location;
       document.getElementById("location-icon").style.display = 'block';
@@ -257,26 +257,32 @@ var bookTrips = 0;
 // displays the number of bookmarked itineraries 
 function displayBookmark(accountBook, accountID)
 {
-  const booksIDs = Object.keys(accountBook);
-  var numBooks = document.getElementById("bookmark-tracker");
-  const tripRef = ref(db, "Users/" + accountID + "/Itineraries");
-
-  onValue(tripRef, (snapshot) => {
-    const Trips = snapshot.val();
-    const itinerariesKeys = Object.keys(Trips);
+  var accountRef = ref(db, "Users/" + accountID);
+  onValue(accountRef, (snapshot) => {
+    var data = snapshot.val();
+    var bookNum = 0;
+    var booksIDs;
+    // check if the user has a Bookmarked folder
+    console.log(snapshot.child("Bookmarked").exists() == true);
+    if (( snapshot.child("Bookmarked").exists() == true)){
+      booksIDs = Object.keys(accountBook);
+      bookNum = booksIDs.length;
+      console.log(bookNum);
+    }
+    var numBooks = document.getElementById("bookmark-tracker");
+    const itinerariesKeys = Object.keys(data.Itineraries);
     for (let i = 0; i < itinerariesKeys.length; i++){
-      if(Trips[itinerariesKeys[i]].bookmarked == "true"){
+      if(data.Itineraries[itinerariesKeys[i]].bookmarked == "true"){
         bookTrips++;
       }
     }
-    
-    if ( booksIDs.length != null){
-    numBooks.innerText = booksIDs.length + bookTrips;
-    console.log(bookTrips);
-    }
-    else{
-      numBooks.innerText = 0 + bookTrips;
-    }
-    
+    // check if there isnt anything in Bookmarked folder
+    if ( bookNum != null){
+      numBooks.innerText = bookNum + bookTrips;
+      console.log(bookTrips);
+      }
+      else{
+        numBooks.innerText = 0 + bookTrips;
+      }
   });
 }

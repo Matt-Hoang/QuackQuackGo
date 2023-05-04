@@ -38,6 +38,28 @@ onAuthStateChanged(auth, (user) => {
 
       // Itinerary is already made. User is editing it
       displayItineraryInfo(itineraryPath);
+      // add change background function here
+      // Change Background Image of Itinerary
+      // only shows change bg if user owns the itinerary
+      document.getElementById('edit-bg').style.display = 'block';
+      document.getElementById('bg-file').onchange = function (evt) {
+        var tgt = evt.target || window.event.srcElement,
+            files = tgt.files;
+        
+        // FileReader support
+        if (FileReader && files && files.length) {
+            var fr = new FileReader();
+            fr.onload = function () {
+                
+                document.getElementById("bg-pic").src = fr.result;
+                console.log(fr.result);
+                update(ref(db, itineraryPath), {
+                  image: fr.result
+                });
+            }
+            fr.readAsDataURL(files[0]);
+        }
+      }
       saveItinerary(user.uid)
     }
     else
@@ -240,6 +262,7 @@ function displayItineraryInfo(itineraryPath)
     document.getElementById("location").value = itineraryInfo["origin"];
     document.getElementById("start-date").value = itineraryInfo["duration"].start;
     document.getElementById("end-date").value = itineraryInfo["duration"].end;
+    document.getElementById("bg-pic").src = itineraryInfo["image"];
   });
 
   get(locationListRef).then((snapshot) => {
