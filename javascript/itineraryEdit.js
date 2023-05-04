@@ -342,7 +342,6 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   if (hasItinerary == "True")
   {
     update(ref(db, itineraryPath), {
-      "image": "images/defaults/default-itineraries-background.jpg",
       "name": name,
       "origin": origin,
       "duration": {
