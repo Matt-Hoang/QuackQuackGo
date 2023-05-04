@@ -69,11 +69,25 @@ function saveItinerary(userID)
     // Check for name validation: Unique names only
     get(ref(db, `Users/${userID}/Itineraries`)).then((snapshot) => {
       const itineraries = snapshot.val();
-      const itineraryKeys = Object.keys(itineraries)
+      
+      var itineraryKeys;
+      var itinCount;
+
+      if (itineraries == null) {
+        itinCount = 0;
+      }
+      else {
+        // Get array of user itinerary IDs from Firebase
+        itineraryKeys = Object.keys(itineraries);
+
+        // Get number of itins
+        itinCount = itineraryKeys.length;
+      }
+
       var isUnique = true;
       var isValid = true;
 
-      for(let i = 0; i < itineraryKeys.length; i++)
+      for(let i = 0; i < itinCount; i++)
       {
         // Check for same name in DB. Each itinerary should be a unique name for the user
         if (tripName == itineraries[itineraryKeys[i]].name && itineraryPath.split("/")[3] != itineraryKeys[i])
@@ -305,7 +319,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   if (hasItinerary == "True")
   {
     update(ref(db, itineraryPath), {
-      "image": "images/defaults/default-itineraries-background.png",
+      "image": "images/defaults/default-itineraries-background.jpg",
       "name": name,
       "origin": origin,
       "duration": {
@@ -318,7 +332,7 @@ function pushUserItinerary(userID, name, origin, startDate, endDate)
   {
     // If itinerary doesn't exist, we want to add it to DB
     push(ref(db, `Users/${userID}/Itineraries`), {
-      "image": "images/defaults/default-itineraries-background.png",
+      "image": "images/defaults/default-itineraries-background.jpg",
       "name": name,
       "origin": origin,
       "locationList": "",
