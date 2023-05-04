@@ -16,7 +16,7 @@ onAuthStateChanged(auth, (user) => {
       displayTrendingLocations(itinerariesList, userID);
       displayExploreLocations(itinerariesList, userID);
     })
-
+    
     const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
     get(tripDisplayRef).then((snapshot) => {
       const userTrips = snapshot.val(); 
@@ -58,7 +58,6 @@ function displayTrendingLocations(itinerariesList, userID)
   itinerariesList = sortClicks(itinerariesList);
   const top3Itineraries = itinerariesList.toSpliced(3);
 
-  console.log(top3Itineraries)
   for (let i = 0; i < 3; i++)
   {
     // Get each element's ID 
@@ -68,7 +67,8 @@ function displayTrendingLocations(itinerariesList, userID)
     location.innerHTML = top3Itineraries[i][1].name;
 
     // Assign location image and CSS styling
-    location.style.backgroundImage = `url('${top3Itineraries[i][1].image}')`;
+    location.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+    url('${top3Itineraries[i][1].image}')`;
 
     addClicks(top3Itineraries[i][0], `trending-locations-${i + 1}`, userID)
   }
@@ -96,7 +96,8 @@ function displayExploreLocations(itineraries, userID)
     title.innerHTML = itineraries[randomItinerary][1].name;
 
     // Assign location image and CSS styling
-    itinerary.style.backgroundImage = `url('${itineraries[randomItinerary][1].image}')`;
+    itinerary.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 35%),
+    url('${itineraries[randomItinerary][1].image}')`;
     
     itineraries.splice(randomItinerary, 1);
 
@@ -164,12 +165,25 @@ function addClicks(itineraryID, htmlID, user)
  */
 function displayTrips(accountTrips)
 { 
+  // var tripCount = 0;
+  // if (accountTrips == null) {
+  //   var tripCount = 0;
+  // } 
+  // else {
+  //   var tripCount = accountTrips.length;
+  // }
+  var tripKeys = Object.keys(accountTrips);
+  var tripCount = 0;
+  if (accountTrips != null){
+    tripCount = tripKeys.length;
+  }
+  console.log(tripCount);
   accountTrips = sortDates(accountTrips);
 
   var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
   var upcomingTripElement = rightColumnHome[2];
 
-  for (let i = 0; i < accountTrips.length; i++)
+  for (let i = 0; i < tripCount; i++)
   {
     var aElement = document.createElement("a");
     aElement.href = "";
@@ -187,13 +201,18 @@ function displayTrips(accountTrips)
     
     // Format date
     const date = accountTrips[i][1].duration.start;
+
+    const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+    const startMonth = months[Number(date.substring(date.indexOf("-") + 1, date.lastIndexOf("-")))];
+    const startDay = Number(date.substring(date.lastIndexOf("-") + 1));
+    const startYear = Number(date.substring(0, date.indexOf("-")));
     
     // Set image
     image.src = accountTrips[i][1].image;
 
     // Set name of trip and duration
     document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[i][1].name;
-    document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
+    document.getElementById(`duration-trip-${i + 1}`).innerHTML = startMonth + " " + startDay + ", " +  startYear;
 
     document.getElementById(`trip-${i + 1}`).addEventListener("click", function(e) {
       e.preventDefault();
@@ -225,7 +244,11 @@ function getAllItineraries(users)
 
   for(let i = 0; i < userIDs.length; i++)
   {
-    var itineraries = Object.entries(users[userIDs[i]].Itineraries);
+    var itineraries;
+    // make sure user itin is not undefined (user has no itins)
+    if (users[userIDs[i]].Itineraries != undefined) {
+      itineraries = Object.entries(users[userIDs[i]].Itineraries);
+    }   
 
     for(let i = 0; i < itineraries.length; i++)
     {
@@ -256,16 +279,18 @@ function sortClicks(itinerariesList)
 
 function sortDates(tripList)
 {
-  tripList = Object.entries(tripList);
-  
-  const sortedDates = function(a, b) {
-    const date1 = Math.abs(new Date(a[1].duration.start) - new Date());
-    const date2 = Math.abs(new Date(b[1].duration.start) - new Date());
+  if (tripList != null) {
+    tripList = Object.entries(tripList);  
+        
+    const sortedDates = function(a, b) {
+      const date1 = Math.abs(new Date(a[1].duration.start) - new Date());
+      const date2 = Math.abs(new Date(b[1].duration.start) - new Date());
 
-    return date1 - date2;
+      return date1 - date2;
+    }
+
+    return tripList.sort(sortedDates);
   }
-
-  return tripList.sort(sortedDates);
 }
 
 /** When a user clicks on a location, this function's event listener is called that handles a click event. 
@@ -317,8 +342,11 @@ function retrieveUserID(itineraryID)
 
       for(let i = 0; i < users.length; i++)
       {
-        const userItinerary = Object.entries(users[i][1].Itineraries);
-  
+        var userItinerary;
+        if (users[i][1].Itineraries != undefined) {
+          userItinerary = Object.entries(users[i][1].Itineraries);
+        }
+        
         for(let j = 0; j < userItinerary.length; j++)
         {
           if (itineraryID == String(userItinerary[j][0]))

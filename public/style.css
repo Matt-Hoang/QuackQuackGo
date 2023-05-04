@@ -436,6 +436,7 @@ a:visited {
     -webkit-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
     -moz-box-shadow: -10px 10px 15px 0px rgba(0,0,0,0.4);
     overflow-x: hidden;
+    padding: 0 10px;
 }
 
 .confirmation-info > div { 
@@ -447,7 +448,7 @@ a:visited {
     border-radius: 50%; 
     border: 5px #FFB039 dashed;
     background-color: rgba(255, 255, 255, 0.5);
-    margin: 10vh 0 5vh 0;
+    margin: 5vh 0 5vh 0;
 } 
 
 .confirmation-info > div > img { 
@@ -563,7 +564,6 @@ a:visited {
     margin: auto 0 40px 0;
 }
 
-
 /* right column */
 .home-right-column {
     display: flex;
@@ -577,7 +577,9 @@ a:visited {
 .home-right-column > a > img {
     border-radius: 50%;
     width: 40px;
+    height: 40px;
     margin-right: 10px;
+    object-fit: cover;
 }
 
 .home-right-column > h3 {
@@ -587,6 +589,7 @@ a:visited {
 
 .home-right-column > div {
     width: 80%;
+    overflow-x: hidden;
 }
 
 .home-right-column > div > a {
@@ -599,7 +602,7 @@ a:visited {
     font-size: 22px;
     margin: 25px 0px;
     overflow: hidden;
-    box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.2);
 }
 
 .home-right-column > div > a:hover {
@@ -611,6 +614,7 @@ a:visited {
     height: 75px;
     width: 75px;
     margin-right: 10px;
+    object-fit: cover;
 }
 
 .home-right-column > div > a > div > h4, .right-column > div > a > div > h5 {
@@ -671,7 +675,7 @@ a:visited {
     justify-content: center;
     text-decoration: none;
     color: white;
-    font-size: 15px;
+    font-size: 18px;
     border-radius: 25px;
     width: 100%;
     min-width: 200px;
@@ -763,7 +767,7 @@ a:visited {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .home-center-column > .trending-explore-container > .explore-locations > .new-itineraries > a > div > div {
@@ -778,15 +782,7 @@ a:visited {
 }
 
 
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card {
-    display: flex;
-    flex-direction: column;
-    border-radius: 30px;
-    background: rgba(51, 58, 95, 0.8);
-    padding: 30px 25px 25px 25px;
-    margin-left: 20px;
-    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.5);
-}
+
 
 .home-center-column > .trending-explore-container > .explore-locations > div > img {
     height: 200px;
@@ -800,48 +796,54 @@ a:visited {
     max-width: 300px;
     max-height: 450px;
 }
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search {
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search> button {
-    margin: 0.5em;
-    border-radius: 50%;
-    border: none;
-    height: 44px;
-    width: 44px;
-    outline: none;
-    background: #0000002b;
+    flex-direction: column;
+    border-radius: 25px;
+    background: rgba(10, 35, 66, 0.95);
+    margin-left: 20px;
+    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.5);
     color: white;
-}
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .search> .search-button:hover {
-    background: #7c7c7c6b;
-}
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .search> .search-bar {
-    border: none;
-    outline: none;
-    padding: 0.4em 1em;
-    border-radius: 24px;
-    background: #0000002b;
-    color: white;
-    font-family: inherit;
-    font-size: 105%;
-    width: calc(100% - 120px);
-}
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather {
-    margin: 0;
-    margin-bottom: 0.5em;
-}
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>img {
-    height: 100px;
-    display: block;
     text-align: center;
 }
-.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>.icon {
-    margin-bottom: -25px;
-    margin-top: -25px;
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
 }
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather > h2 {
+    font-size: 28px;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather > div {
+    margin-top: 3px;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather > .temp {
+    font-size: 20px;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather > .description,
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather > .humidity,
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather > .wind {
+    color: rgb(240, 240, 240);
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather> .duck {
+    width: 120px;
+    margin: 0 auto;
+    margin-top: -30px;
+    z-index: 5;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>.icon {
+    margin: -25px auto -25px auto;
+    width: 125px;
+}
+
 .home-center-column > .trending-explore-container > .explore-locations > .weather-card >.weather>.description {
     text-transform: Capitalize;
 }
@@ -851,6 +853,7 @@ a:visited {
     max-height: 20px;
     position: relative
 }
+
 .home-center-column > .trending-explore-container > .explore-locations > .weather-card > .weather.loading:after{
     visibility: visible;
     content: "Loading...";
@@ -860,6 +863,57 @@ a:visited {
     left: 20px;
 }
 
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5px;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search> button {
+    box-sizing: border-box;
+    height: 35px;
+    width: 35px;
+    border: none;    
+    outline: none;
+    background: #FFB039;
+    color: black;
+    margin: 10px 15px 10px 0;
+    border-radius: 0 8px 8px 0;
+    padding: 0;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .search> .search-button:hover {
+    background: #fab753;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card >.search> button > img {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+}
+
+.home-center-column > .trending-explore-container > .explore-locations > .weather-card > .search> .search-bar {
+    box-sizing: border-box;
+    height: 35px;
+    font-family: inherit;
+    border: none;
+    outline: none;  
+    background: white;
+    color: black;  
+    margin: 10px 0 10px 15px;
+    border-radius: 8px 0 0 8px;
+    padding: 5px 10px;
+    font-size: 20px;
+    width: 200px;
+}
+
+@media (max-width: 1200px) {
+    /* CSS that should be displayed if width is equal to or less than 800px goes here */
+    .home-center-column > .trending-explore-container > .explore-locations > .weather-card {
+        margin: 20px 0 0 0;
+    }
+}
 
 /* home scroll bar */
 .home-center-column::-webkit-scrollbar {
@@ -1094,7 +1148,7 @@ a:visited {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     background-color: #FFF8E0;
     border-radius: 35px;
     height: 97vh;
@@ -1102,6 +1156,11 @@ a:visited {
     /* limit width of center column to contain slick sliders - (100vw - (nav width + checklist width)) */
     max-width: calc(100vw - (200px + 350px)); 
     overflow-x: hidden;
+}
+
+.itineraries-center-column > .itineraries-container,
+.itineraries-center-column > .bookmarked-container {
+    height: 50%;
 }
 
 .itineraries-center-column > .itineraries-container > a > .add-button {
@@ -1201,7 +1260,7 @@ a:visited {
 /* CSS for sLick sliders */
 .itinerary-wrapper, .bookmarked-wrapper {
 	width: 98%;
-    margin: auto;
+    /* margin: auto; */
 	/* background-color: aqua; */
 }
 
@@ -1226,6 +1285,7 @@ a:visited {
     margin: 15px 0;
     transition: 0.15s;
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    font-size: 18px;
 }
 
 .itinerary-item:hover, .bookmarked-item:hover {
@@ -1491,31 +1551,48 @@ a:visited {
 }
 
 .itinerary-details-center-column > .itinerary-header {
-    background-color: lightgray; 
+    /* background-color: lightgray;  */
     width: 97%;
     height: 250px;
     border-radius: 20px;
-    padding: 10px;
     margin: auto;
     margin-bottom: 85px;
-    background-image: url("images/defaults/default-itineraries-background.jpg");
+    margin-top: 10px;
+    /* background-image: url("images/defaults/default-itineraries-background.jpg"); */
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark { 
+.itinerary-details-center-column >.itinerary-header >.bg-pic{
+    position: relative;
+    margin-top: -60px;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+}
+
+
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark { 
     display: flex;
     justify-content: space-between;
+    margin: 0px 15px;
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a {
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > a {
     display: block;
-    width: 50px;
+    width: 50px; 
+    z-index: 2;
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back {
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-back {
     display: block;
     background-color: #58A4B0;
     border-radius: 50px;
@@ -1529,18 +1606,13 @@ a:visited {
     box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25);
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark {
-    display: block;
-    height: 50px;
-    width: 40px;
-    background-image: url(images/bookmark-empty.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 35px;
-    transition: 0.3s;
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back:hover,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-back:hover {
+    background-color: #77b5be;
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark:hover {
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark {
     display: block;
     height: 50px;
     width: 40px;
@@ -1551,6 +1623,11 @@ a:visited {
     transition: 0.3s;
 }
 
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark:hover
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark:hover {
+    background-image: url(images/bookmark-filled.png);
+}
+
 .itinerary-details-center-column > .itinerary-header > .trip-title {
     box-sizing: border-box;
     position: relative;
@@ -1558,10 +1635,11 @@ a:visited {
     width: 80%;
     margin: auto;
     background-color: #FFFDF7;
-    top: 150px;
+    top: -80px;
     border-radius: 25px;
     padding: 15px 30px;
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
+    z-index: 2;
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title > h2 {
@@ -1598,6 +1676,42 @@ a:visited {
     box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25);
 }
 
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color:#58A4B0;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    margin-bottom: -10px;
+    position: absolute;
+    z-index: 3;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #58A4B0 transparent transparent transparent;
+  }
+
+.export-button:hover .tooltiptext {
+    visibility: visible;
+}
+
+.export-button{
+    position: relative;
+    display: inline-block;
+}
+
 .itinerary-details-center-column > div > a > .itin-button:hover, 
 .itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a > div:hover {
     background-color: #42939f;
@@ -1615,6 +1729,9 @@ a:visited {
 
 .itinerary-details-center-column > .location-container > .location-item {
     display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-sizing: border-box;
 }
 
 .itinerary-details-center-column > .location-container > .location-item > .decoration {
@@ -1839,6 +1956,7 @@ a:visited {
 .support-body {
     box-sizing: border-box;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
     background-color: #FFF8E0;
@@ -1952,6 +2070,13 @@ a:visited {
     font-size: 20px;
 }
 
+@media (max-width: 1440px) {
+    /* CSS that should be displayed if width is equal to or less than 800px goes here */
+    .support-body > .contact-form {
+        margin: 0 0 20px 0;
+    }
+}
+
 /* === Profile Info By Mariel Urbano=== */
 /* This is the styling for the Profile page*/
 .profile-edit-body{
@@ -2039,6 +2164,7 @@ a:visited {
     width: 130px;
     height: 130px;
     z-index: 0;
+    object-fit: cover;
 }
 
 .profile-pic > input{
@@ -2085,11 +2211,13 @@ a:visited {
 .profile-edit-body > div > .name-location > h5{
     font-size: 15px;
     margin-bottom: -10px;
-    
+    margin-top: 8px;
 }
-.profile-edit-body > div > .name-location > h5 > img{
-    padding: 1px;
+.profile-edit-body > div > .name-location > img{
+    margin-top: 10px;
     width: 15px;
+    float: left;
+    display: none;
 }
 
 .info-title{
@@ -2147,12 +2275,14 @@ a:visited {
 }
 
 .user-details > .form-names > div,
-.user-details > .form-username-pass > div{
+.user-details > .form-username-loc > div,
+.user-details > .form-passes > div {
     width: 100%;
 }
 
-.user-details > .form-names > div > input , 
-.user-details > .form-username-pass > div > input{
+.user-details > .form-names > div > input ,
+.user-details > .form-passes > div > input, 
+.user-details > .form-username-loc > div > input{
     height: 30px;
     border-radius: 10px;
     width: 100%;
@@ -2180,13 +2310,15 @@ a:visited {
 
 .form-email > input:focus , 
 .form-location > input:focus ,
-.user-details > .form-names > div > input:focus  , 
-.user-details > .form-username-pass > div > input:focus {
+.user-details > .form-names > div > input:focus  ,
+.user-details > .form-passes > div > input:focus, 
+.user-details > .form-username-loc > div > input:focus {
     border-color: #58A4B0;
     outline: none;
 } 
 
-.user-details > .form-username-pass{
+.user-details > .form-username-loc,
+.user-details > .form-passes{
     width: 100%;
     justify-content: center;
     display: flex;
@@ -2209,9 +2341,9 @@ a:visited {
 }
 
 .user-details > .form-names > div > h6 ,
-.user-details > .form-username-pass > div > h6,
+.user-details > .form-username-loc > div > h6,
 .user-details > .form-email > h6, 
-.user-details > .form-location > h6{
+.user-details > .form-passes > div > h6{
     font-size: 12px;
 }
 
@@ -2333,6 +2465,40 @@ a:visited {
     margin-right: auto;
 }
 
+.upcoming-trips{
+    overflow-x: hidden;
+}
+
+/* upcoming trips scroll bar */
+.upcoming-trips::-webkit-scrollbar {
+    width: 20px;
+    height: 15px;
+}
+
+.upcoming-trips::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.upcoming-trips::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 176, 57, 0.75);
+    border-radius: 10px;
+    border: 8px solid white;
+}
+
+.upcoming-trips::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 176, 57, 1);
+}
+
+.upcoming-trips::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: 22px; 
+}
+
+.profile-edit-body::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: 22px;
+}
+
 /* === Itineraries Edit View === */
 /* center column */
 .itinerary-edit-center-column {
@@ -2341,19 +2507,72 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 20px 20px;
-    overflow-y: scroll;
+    overflow-x: hidden;
     min-width: 520px;
 }
 
 .itinerary-edit-center-column > .itinerary-header {
-    background-color: lightgray;
+    /* background-color: lightgray;  */
     width: 97%;
     height: 250px;
     border-radius: 20px;
-    padding: 10px;
     margin: auto;
     margin-bottom: 85px;
+    margin-top: 10px;
+}
 
+.itinerary-header > .edit-bg > input{
+    display: none;
+}
+
+.itinerary-edit-center-column >.itinerary-header >.bg-pic{
+    position: relative;
+    margin-top: -40px;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+}
+
+.edit-bg{
+    position: relative;
+    top: -440px;
+    height: 185px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    border-radius: 30px;
+    color: transparent;
+    margin-bottom: 0;
+}
+
+.itinerary-header > .edit-bg > .change-bg{
+    position: inline;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    margin: auto;
+    display: inline-block;
+    border-radius: 20px;
+}
+
+.change-bg:hover{
+    background-color: #2b2b2b93;
+    box-shadow: 0 0 5px 5px #2b2b2b93;
+    color: rgb(255, 247, 232);
+    display: block;
+    text-align: center;
+    font-style: bold;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background-color .2s ease-in-out;
+    z-index: 1000;
+    padding-top: 60px;
+    visibility: visible;
 }
 
 .itinerary-edit-center-column > .itinerary-header > a {
@@ -2373,6 +2592,26 @@ a:visited {
     background-size: 30px;
 }
 
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 50px;
+    height: 30px;
+    border-radius: 50px;
+    background-color: #f44336;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    z-index: 2;
+    box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+}
+
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > button:hover {
+    background-color: #f5554a;
+}
+
 .itinerary-edit-center-column > .itinerary-header > .trip-title {
     box-sizing: border-box;
     position: relative;
@@ -2380,10 +2619,11 @@ a:visited {
     width: 80%;
     margin: auto;
     background-color: #FFFDF7;
-    top: 150px;
+    top: -60px;
     border-radius: 25px;
     padding: 15px 30px;
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
+    z-index: 2;
 }
 
 
@@ -2434,7 +2674,16 @@ a:visited {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    padding-top: 30px;
+    padding-top: 45px;
+    
+}
+
+.itinerary-edit-center-column > .submit-button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 40px;
+    
 }
 
 .itinerary-edit-center-column > div > a {
@@ -2483,7 +2732,7 @@ a:visited {
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.25);
 }
 
-.location-item {
+.itinerary-edit-location-item {
     display: flex;
     border: 3px solid #ffb34183;
     border-radius: 20px;
@@ -2492,11 +2741,11 @@ a:visited {
     /* background-color: lightblue; */
 }
 
-.location-item > .hamburger{
+.itinerary-edit-location-item > .hamburger{
     position: relative;
 }
 
-.location-item > .hamburger > button{
+.itinerary-edit-location-item > .hamburger > button{
     background-color: lightgrey;
     border-radius: 50%;
     border: none;
@@ -2508,16 +2757,16 @@ a:visited {
     cursor: pointer;
 }
 
-.location-item > .hamburger > button:hover{
+.itinerary-edit-location-item > .hamburger > button:hover{
     background-color: #f44336;
     color: white;
 }
 
-.location-item.drag-sort-active :where(.location-container, div){
+.itinerary-edit-location-item.drag-sort-active :where(.location-container, div){
     opacity: 0;
 }
 
-.location-item > .decoration {
+.itinerary-edit-location-item > .decoration {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2527,13 +2776,13 @@ a:visited {
     /* background-color: lightgoldenrodyellow; */
 }
 
-.location-item > .decoration > img {
+.itinerary-edit-location-item > .decoration > img {
     height: 35px;
     margin-top: 30px;
 }
 
 
-.location-item > .hamburger > img {
+.itinerary-edit-location-item > .hamburger > img {
     height: 30px;
     margin-top: 35px;
     margin-left: 35px;
@@ -2541,30 +2790,30 @@ a:visited {
 }
 
 
-.location-item > .details {
+.itinerary-edit-location-item > .details {
     margin-top: 15px;
     margin-bottom: 20px;
     margin-right: auto;
     /* background-color: lightcoral; */
 }
 
-.location-item > .details > h4 {
+.itinerary-edit-location-item > .details > h4 {
     font-size: 22px;
 }
 
-.location-item > .details > div {
+.itinerary-edit-location-item > .details > div {
     display: flex;
     align-items: center;
     margin-left: 5px;
 }
 
-.location-item > .details > div > h5 {
+.itinerary-edit-location-item > .details > div > h5 {
     word-wrap: normal;
     font-size: 16px;
     padding: 0 5px;
 }
 
-.location-item > .details > div > img {
+.itinerary-edit-location-item > .details > div > img {
     height: 18px;
     padding-right: 5px;
     opacity: 50%;
