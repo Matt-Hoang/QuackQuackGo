@@ -201,13 +201,18 @@ function displayTrips(accountTrips)
     
     // Format date
     const date = accountTrips[i][1].duration.start;
+
+    const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+    const startMonth = months[Number(date.substring(date.indexOf("-") + 1, date.lastIndexOf("-")))];
+    const startDay = Number(date.substring(date.lastIndexOf("-") + 1));
+    const startYear = Number(date.substring(0, date.indexOf("-")));
     
     // Set image
     image.src = accountTrips[i][1].image;
 
     // Set name of trip and duration
     document.getElementById(`trip-${i + 1}-title`).innerHTML = accountTrips[i][1].name;
-    document.getElementById(`duration-trip-${i + 1}`).innerHTML = date;
+    document.getElementById(`duration-trip-${i + 1}`).innerHTML = startMonth + " " + startDay + ", " +  startYear;
 
     document.getElementById(`trip-${i + 1}`).addEventListener("click", function(e) {
       e.preventDefault();
