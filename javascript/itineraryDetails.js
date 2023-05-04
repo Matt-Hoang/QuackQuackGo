@@ -5,6 +5,7 @@ const locationClass = document.getElementsByClassName("location-container")[0];
 const itineraryPath = localStorage.getItem("itineraryPath");
 const bookmark = document.getElementsByClassName("itin-bookmark")[0];
 
+console.log(itineraryPath)
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {

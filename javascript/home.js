@@ -110,15 +110,79 @@ function addClicks(itineraryID, htmlID, user)
   document.getElementById(htmlID).addEventListener("click", function(e) {
     e.preventDefault();
 
+    get(ref(db, `Users`)).then((snapshot) => {
+      // get all user IDs
+      var userIDs = Object.keys(snapshot.val());
+      
+      for(let i = 0; i < userIDs.length; i++)
+      {
+        // get itineraries of certain user
+        get(ref(db, `Users/${userIDs[i]}/Itineraries`)).then((snapshot2) => {
+          if (snapshot2.val() != null)
+          {
+            const userItineraries = Object.keys(snapshot2.val());
+            
+            // get all itinerary IDs of user
+            for(let j = 0; j < userItineraries.length; j++)
+            {
+              if (userItineraries[j] == itineraryID)
+              {
+                var userIDItinerary = userIDs[i];
+                var updates = {};
+
+                console.log(userIDItinerary)
+                updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
+
+                update(ref(db), updates);
+                
+                // Check if itinerary already exists in user's bookmarked or itinerary section for bookmarking
+                get(ref(db, `Users/${user}/Bookmarked`)).then((snapshot3) => {
+                  const bookmarks = snapshot3.val() == null ? {}: snapshot3.val();
+                  const bookmarkIDs = Object.keys(bookmarks);
+
+                  for(let k = 0; k < bookmarkIDs.length; k++)
+                  {
+                    // Compare IDs of both itineraries
+                    if (bookmarks[bookmarkIDs[k]].userID == userIDItinerary)
+                    {
+                      console.log(`${bookmarks[bookmarkIDs[k]].userID} and ${userIDItinerary} are equal!`)
+
+                      get(ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`)).then((snapshot4) => {
+                        const itinerary = snapshot4.val();
+                        
+                        // Compare the name of both itineraries
+                        if (itinerary["name"] == bookmarks[bookmarkIDs[k]].name)
+                        {
+                          localStorage.setItem("itineraryPath", `Users/${user}/Bookmarked/${bookmarkIDs[i]}`);
+                          window.location.href = "itineraryDetails.html";
+                        }
+                      })
+                    }
+                  }
+
+                  localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+                    console.log(localStorage.getItem("itineraryPath"));
+                    window.location.href = "itineraryDetails.html";
+                  })
+                }
+              }
+            }  
+        })
+      }
+    })
+
+    retrieveUserID(itineraryID)
+    /*
     retrieveUserID(itineraryID).then(
       function(value)
       {
         var userIDItinerary = value;
         var updates = {};
 
-        updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
+        console.log(userIDItinerary)
+        //updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
 
-        update(ref(db), updates);
+        //update(ref(db), updates);
         
         // Check if itinerary already exists in user's bookmarked or itinerary section for bookmarking
         get(ref(db, `Users/${user}/Bookmarked`)).then((snapshot) => {
@@ -139,14 +203,15 @@ function addClicks(itineraryID, htmlID, user)
                 if (itinerary["name"] == bookmarks[bookmarkIDs[i]].name)
                 {
                   localStorage.setItem("itineraryPath", `Users/${user}/Bookmarked/${bookmarkIDs[i]}`);
-                  window.location.href = "itineraryDetails.html";
+                  //window.location.href = "itineraryDetails.html";
                 }
               })
             }
           }
 
           localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
-          window.location.href = "itineraryDetails.html";
+          console.log(localStorage.getItem("itineraryPath"));
+          //window.location.href = "itineraryDetails.html";
         })
 
         
@@ -156,6 +221,7 @@ function addClicks(itineraryID, htmlID, user)
         console.error(error);
       }
     )
+    */
   });
 }
 
@@ -333,6 +399,7 @@ function increaseLocationClicks(elementList)
   }
 }
 
+/*
 function retrieveUserID(itineraryID)
 {
   let promise = new Promise(function(resolve, reject) {
@@ -367,4 +434,31 @@ function retrieveUserID(itineraryID)
   })
 
   return promise;
+}
+*/
+
+function retrieveUserID(itineraryID)
+{
+  
+  get(ref(db, `Users`)).then((snapshot) => {
+    // get all user IDs
+    var userIDs = Object.keys(snapshot.val());
+
+    for(let i = 0; i < userIDs.length; i++)
+    {
+      // get itineraries of certain user
+      get(ref(db, `Users/${userIDs[i]}/Itineraries`)).then((snapshot) => {
+        const userItineraries = Object.keys(snapshot.val());
+        
+        // get all itinerary IDs of user
+        for(let i = 0; i < userItineraries.length; i++)
+        {
+          if (userItineraries[i] == itineraryID)
+          {
+            
+          }
+        }
+      })
+    }
+  })
 }
