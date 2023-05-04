@@ -9,6 +9,7 @@
     <title>QQG - Itinerary Edit</title>
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
+    <script type="module" src="javascript/itineraries.js" defer></script>
     <script type="module" src="javascript/itineraryEdit.js" defer></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
@@ -27,9 +28,12 @@
     <!-- main itineraries column -->
     <div class="itinerary-edit-center-column">
         <div class="itinerary-header">
-            <!-- back button -->
-            <a href="itineraryDetails.html"><div></div></a>
-            <button id="delete"><div class="delete-itin">X</button>
+            <!-- back and delete button -->
+            <div class="itin-back-bookmark">
+                <a href="itineraries.html" class="itin-back"><div></div></a>
+                <button id="delete"><div class="delete-itin">X</button>
+            </div>
+
             <!-- itinerary header -->
             <div class="trip-title">
                 <form id="itineraryForm" action="">

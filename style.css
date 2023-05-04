@@ -600,7 +600,7 @@ a:visited {
     font-size: 22px;
     margin: 25px 0px;
     overflow: hidden;
-    box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.2);
 }
 
 .home-right-column > div > a:hover {
@@ -1617,19 +1617,22 @@ a:visited {
 }
 
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark { 
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark { 
     display: flex;
     justify-content: space-between;
     margin: 0px 15px;
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a {
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > a {
     display: block;
     width: 50px; 
     z-index: 2;
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back {
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-back {
     display: block;
     background-color: #58A4B0;
     border-radius: 50px;
@@ -1643,26 +1646,26 @@ a:visited {
     box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.25);
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark {
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-back:hover,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-back:hover {
+    background-color: #77b5be;
+}
+
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark,
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark {
     display: block;
     height: 50px;
     width: 40px;
-    background-image: url(images/bookmark-empty.png);
+    background-image: url(images/bookmark-fill.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: 35px;
     transition: 0.3s;
 }
 
-.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark:hover {
-    display: block;
-    height: 50px;
-    width: 40px;
+.itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark:hover
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > .itin-bookmark:hover {
     background-image: url(images/bookmark-filled.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 35px;
-    transition: 0.3s;
 }
 
 .itinerary-details-center-column > .itinerary-header > .trip-title {
@@ -2503,7 +2506,7 @@ a:visited {
 }
 
 .upcoming-trips{
-    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 /* upcoming trips scroll bar */
@@ -2544,7 +2547,7 @@ a:visited {
     border-radius: 35px;
     height: 97vh;
     padding: 20px 20px;
-    overflow-y: scroll;
+    overflow-x: hidden;
     min-width: 520px;
 }
 
@@ -2553,10 +2556,9 @@ a:visited {
     width: 97%;
     height: 250px;
     border-radius: 20px;
-    padding: 10px;
+    padding: 10px 0;
     margin: auto;
     margin-bottom: 85px;
-
 }
 
 .itinerary-edit-center-column > .itinerary-header > a {
@@ -2574,6 +2576,24 @@ a:visited {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 30px;
+}
+
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 50px;
+    height: 30px;
+    border-radius: 50px;
+    background-color: #f44336;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.itinerary-edit-center-column > .itinerary-header > .itin-back-bookmark > button:hover {
+    background-color: #f5554a;
 }
 
 .itinerary-edit-center-column > .itinerary-header > .trip-title {

@@ -255,9 +255,23 @@ function displayInfo(itineraryInfo)
   const date = document.getElementById("itinerary-date-interval");
   const bg = document.getElementById("bg-pic");
 
+  // reformat date (YYYY/MM/DD --> Month Day, Year)
+  const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  
+  const startDate = itineraryInfo.duration.start;
+  const endDate = itineraryInfo.duration.end;
+
+  const startMonth = months[Number(startDate.substring(startDate.indexOf("-") + 1, startDate.lastIndexOf("-")))];
+  const startDay = Number(startDate.substring(startDate.lastIndexOf("-") + 1));
+  const startYear = Number(startDate.substring(0, startDate.indexOf("-")));
+
+  const endMonth = months[Number(endDate.substring(endDate.indexOf("-") + 1, endDate.lastIndexOf("-")))];
+  const endDay = Number(endDate.substring(endDate.lastIndexOf("-") + 1));
+  const endYear = Number(endDate.substring(0, endDate.indexOf("-")));
+
   // Set date and name with information from ID in database
   title.innerText = itineraryInfo.name;
-  date.innerText = itineraryInfo.duration.start + " - " + itineraryInfo.duration.end;
+  date.innerText = startMonth + " " + startDay + ", " +  startYear + " - " + endMonth + " " + endDay + ", " + endYear;
   origin.innerText = itineraryInfo.origin;
   bg.src = itineraryInfo.image;
   
