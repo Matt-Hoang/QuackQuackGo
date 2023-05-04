@@ -235,6 +235,7 @@ function displayInfo(itineraryInfo)
   const origin = document.getElementById("origin-location-name");
   const date = document.getElementById("itinerary-date-interval");
   const bg = document.getElementById("bg-pic");
+  const cost = document.getElementById("itinerary-total-cost")
 
   // reformat date (YYYY/MM/DD --> Month Day, Year)
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
@@ -255,6 +256,7 @@ function displayInfo(itineraryInfo)
   date.innerText = startMonth + " " + startDay + ", " +  startYear + " - " + endMonth + " " + endDay + ", " + endYear;
   origin.innerText = itineraryInfo.origin;
   bg.src = itineraryInfo.image;
+  cost.innerHTML = itineraryInfo.totalCost;
   
   // set background image and delete css for it in css
 }
