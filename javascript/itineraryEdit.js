@@ -20,7 +20,7 @@ onAuthStateChanged(auth, (user) => {
   {
     // Adds in blank templates for locations
     add[0].onclick = function() {
-      window.location.href = "search.html";
+      window.location.href = "index.html";
     }
 
     // If user loads in pre-existing itinerary, we display it
