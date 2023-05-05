@@ -726,4 +726,3 @@ function newElementPost() {
     }
   });
 }
-
