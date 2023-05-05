@@ -115,66 +115,52 @@ function addClicks(itineraryID, htmlID, user)
   document.getElementById(htmlID).addEventListener("click", function(e) {
     e.preventDefault();
 
-    get(ref(db, `Users`)).then((snapshot) => {
-      // get all user IDs
-      var userIDs = Object.keys(snapshot.val());
-      
-      for(let i = 0; i < userIDs.length; i++)
+    retrieveUserID(itineraryID).then(
+      function(value)
       {
-        // get itineraries of certain user
-        get(ref(db, `Users/${userIDs[i]}/Itineraries`)).then((snapshot2) => {
-          if (snapshot2.val() != null)
+        var userIDItinerary = value;
+        var updates = {};
+
+        updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
+
+        update(ref(db), updates);
+        
+        // Check if itinerary already exists in user's bookmarked or itinerary section for bookmarking
+        get(ref(db, `Users/${user}/Bookmarked`)).then((snapshot) => {
+          const bookmarks = snapshot.val() == null ? {}: snapshot.val();
+          const bookmarkIDs = Object.keys(bookmarks);
+
+          for(let i = 0; i < bookmarkIDs.length; i++)
           {
-            const userItineraries = Object.keys(snapshot2.val());
-            
-            // get all itinerary IDs of user
-            for(let j = 0; j < userItineraries.length; j++)
+            // Compare IDs of both itineraries
+            if (bookmarks[bookmarkIDs[i]].userID == userIDItinerary)
             {
-              if (userItineraries[j] == itineraryID)
-              {
-                var userIDItinerary = userIDs[i];
-                var updates = {};
+              console.log(`${bookmarks[bookmarkIDs[i]].userID} and ${userIDItinerary} are equal!`)
 
-                console.log(userIDItinerary)
-                updates[`Users/${userIDItinerary}/Itineraries/${itineraryID}/stats/clicks`] = increment(1);
-
-                update(ref(db), updates);
+              get(ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`)).then((snapshot2) => {
+                const itinerary = snapshot2.val();
                 
-                // Check if itinerary already exists in user's bookmarked or itinerary section for bookmarking
-                get(ref(db, `Users/${user}/Bookmarked`)).then((snapshot3) => {
-                  const bookmarks = snapshot3.val() == null ? {}: snapshot3.val();
-                  const bookmarkIDs = Object.keys(bookmarks);
-
-                  for(let k = 0; k < bookmarkIDs.length; k++)
-                  {
-                    // Compare IDs of both itineraries
-                    if (bookmarks[bookmarkIDs[k]].userID == userIDItinerary)
-                    {
-                      console.log(`${bookmarks[bookmarkIDs[k]].userID} and ${userIDItinerary} are equal!`)
-
-                      get(ref(db, `Users/${userIDItinerary}/Itineraries/${itineraryID}`)).then((snapshot4) => {
-                        const itinerary = snapshot4.val();
-                        
-                        // Compare the name of both itineraries
-                        if (itinerary["name"] == bookmarks[bookmarkIDs[k]].name)
-                        {
-                          localStorage.setItem("itineraryPath", `Users/${user}/Bookmarked/${bookmarkIDs[i]}`);
-                          window.location.href = "itineraryDetails.html";
-                        }
-                      })
-                    }
-                  }
-
-                  localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
-                    console.log(localStorage.getItem("itineraryPath"));
-                    window.location.href = "itineraryDetails.html";
-                  })
+                // Compare the name of both itineraries
+                if (itinerary["name"] == bookmarks[bookmarkIDs[i]].name)
+                {
+                  localStorage.setItem("itineraryPath", `Users/${user}/Bookmarked/${bookmarkIDs[i]}`);
+                  window.location.href = "itineraryDetails.html";
                 }
-              }
-            }  
+              })
+            }
+          }
+
+          localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${itineraryID}`);
+          window.location.href = "itineraryDetails.html";
         })
+
+        
+      },
+      function(error)
+      {
+        console.error(error);
       }
-    })
+    )
   });
 }
 
@@ -320,68 +306,38 @@ function sortDates(tripList)
   }
 }
 
-/** When a user clicks on a location, this function's event listener is called that handles a click event. 
- *  It retrieves an object of multiple objects with the same name of that location and increases the click count 
- *  of the location with the highest click count.
- * 
- * @param {*} elementList - List of HTML elements 
- * @param {*} tableRef - Name of table in Firebase
- */
-function increaseLocationClicks(elementList)
-{
-  for (let i = 0; i < elementList.length; i++)
-  {
-    // EventListner for clicks based on element ID
-    document.getElementById(elementList[i].id).addEventListener("click", function(e) {
-      e.preventDefault();
-
-      // Get location name based on ID
-      var name = document.getElementById(elementList[i].id).innerHTML;
-      
-      // The "Consuming code" of a Promise
-      retrieveLocation(ref(db, tableRef), name).then(
-        function(value) 
-        {
-          // Get 0th element of object, which is the highest click count location
-          var location = Object.keys(value)[0];
-          
-          console.log(`Now adding click to ${name}!`);
-
-          // Update click in Firebase
-          updateClick(`${tableRef}/${location}/stats/clicks`);
-        },
-        function(error) 
-        {
-          // Function is only called if error is encounted in getting the object of same location name objects
-          console.error(error);
-        }
-      )
-    });
-  }
-}
-
 function retrieveUserID(itineraryID)
 {
-  
-  get(ref(db, `Users`)).then((snapshot) => {
-    // get all user IDs
-    var userIDs = Object.keys(snapshot.val());
+  let promise = new Promise(function(resolve, reject) {
+    onValue(ref(db, "Users"), (snapshot) => {
+      var users = Object.entries(snapshot.val());
+      var foundUserID = "";
 
-    for(let i = 0; i < userIDs.length; i++)
-    {
-      // get itineraries of certain user
-      get(ref(db, `Users/${userIDs[i]}/Itineraries`)).then((snapshot) => {
-        const userItineraries = Object.keys(snapshot.val());
+      for(let i = 0; i < users.length; i++)
+      {
+        var userItinerary;
+        if (users[i][1].Itineraries != undefined) {
+          userItinerary = Object.entries(users[i][1].Itineraries);
+        }
         
-        // get all itinerary IDs of user
-        for(let i = 0; i < userItineraries.length; i++)
+        for(let j = 0; j < userItinerary.length; j++)
         {
-          if (userItineraries[i] == itineraryID)
+          if (itineraryID == String(userItinerary[j][0]))
           {
-            
+            foundUserID = users[i][0];
           }
         }
-      })
-    }
+      }
+      try
+      {
+        resolve(foundUserID);
+      }
+      catch(error)
+      {
+        reject(error)
+      }
+    })
   })
+
+  return promise;
 }

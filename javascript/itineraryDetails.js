@@ -301,7 +301,7 @@ function displayLocations(itineraryInfo, userID)
 
     const cost = itineraryInfo.locationList[locationIDs[i]].locationCost == "" ? "$0" : `$${itineraryInfo.locationList[locationIDs[i]].locationCost}`
 
-    if (itineraryInfo.userID == undefined)
+    if ((itineraryInfo.userID == undefined || itineraryPath.split("/")[2] == "Bookmarked") && userID == itineraryPath.split("/")[1])
     {
       // Insert nested HTML into div element with corresponding name, address, and date
       element.innerHTML =`<div class="decoration">
