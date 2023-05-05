@@ -551,6 +551,10 @@ a:visited {
     box-shadow: -2px 2px 5px 0px rgba(0,0,0,0.3);
 }
 
+.home-right-column > a {
+    background-color: #FFB039;
+}
+
 .nav-column > .active, .nav-column > a:hover {
     background-color: #FFB039;
 }
