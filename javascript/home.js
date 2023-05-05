@@ -174,7 +174,7 @@ function displayTrips(accountTrips)
   var tripKeys;
   if (accountTrips == null) 
   {
-     var tripCount = 0;
+     tripCount = 0;
   } 
   else 
   {
@@ -227,8 +227,7 @@ function displayTrips(accountTrips)
         {
           var userIDItinerary = value;
     
-          localStorage.setItem("itineraryID", `Users/${userIDItinerary}/Itineraries/${accountTrips[i][0]}`);
-          localStorage.setItem("userID", String(userIDItinerary));
+          localStorage.setItem("itineraryPath", `Users/${userIDItinerary}/Itineraries/${accountTrips[i][0]}`);
 
           window.location.href = "itineraryDetails.html";
         },
