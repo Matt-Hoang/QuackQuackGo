@@ -123,16 +123,8 @@ function saveItinerary(userID)
       {
         const date1 = new Date(startDate);
         const date2 = new Date(endDate);
-
-        // Set time for both dates to be 12 midnight
-        date1.setHours(0);
-        date1.setMinutes(0);
-
-        date2.setHours(0);
-        date2.setMinutes(0);
-        
         // Test for date validation
-        if (date1 >= date2)
+        if (date1.getMonth() >= date2.getMonth && date1.getDay() >= date2.getDay() && date1.getFullYear() >= date2.getFullYear())
         {
           isValid = false;
           alert("Start date can't be later than or the same date as the end date!");
@@ -200,7 +192,7 @@ function saveItinerary(userID)
             for(let i = 0; i < locationDates.length; i++)
             {
               if (locationDates[i] < duration[0] || locationDates[i] > duration[1])
-              {
+              { 
                 isNotItineraryConflict = false;
                 alert(`Location dates is in conflict with start or end date of itinerary!`);
                 break;
