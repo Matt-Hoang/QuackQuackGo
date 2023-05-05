@@ -145,16 +145,15 @@ function totalCostCalc(userID)
     const locationCost = locations[i].getElementsByClassName("location-cost")[0].children[0];    
     
     var cost;
-    if (userID == itineraryPath.split("/")[1])
-    {
-      cost = locationCost.value;
-    }
-    else
+    if (locationCost.value == "")
     {
       cost = locationCost.placeholder;
     }
+    else
+    {
+      cost = locationCost.value;
+    }
 
-    console.log(cost)
     cost = cost.replace("$", "");
 
     totalCost += Number(cost);
