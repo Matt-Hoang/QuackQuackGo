@@ -18,7 +18,15 @@ onAuthStateChanged(auth, (user) => {
     // Reference of user's itineraries in Firebase
     const userItinerariesRef = ref(db, `Users/${user.uid}/Itineraries`);
     get(userItinerariesRef).then((snapshot) => {
-      const userItineraries = snapshot.val();
+      const userItineraries = snapshot.val() == null ? {} : snapshot.val();
+
+      if (userItineraries == null)
+        {
+          // Add back in column in DB
+          update(ref(db, `Users/${user.uid}`), {
+            "Itineraries": ""
+          })
+        }
 
       // Display user itineraries
       displayUserItineraries(userItineraries);
@@ -51,10 +59,18 @@ onAuthStateChanged(auth, (user) => {
           itinCount = itinerariesKeys.length;
         }
 
+        if (userBMItineraries == null)
+        {
+          // Add back in column in DB
+          update(ref(db, `Users/${user.uid}`), {
+            "Bookmarked": ""
+          })
+        }
+
         for (let i = 0; i < itinCount; i++) {
           // If key exists in DB and the bookmark attribute is true, we add it to object of bookmarked itineraries
           if (itineraries[itinerariesKeys[i]].bookmarked == "true") {
-            userBMItineraries[itinerariesKeys[i]] = itineraries[itinerariesKeys[i]];
+            userBMItineraries = {...userBMItineraries, ...itineraries}
           }
         }
 
@@ -710,4 +726,3 @@ function newElementPost() {
     }
   });
 }
-

@@ -5,6 +5,7 @@ const locationClass = document.getElementsByClassName("location-container")[0];
 const itineraryPath = localStorage.getItem("itineraryPath");
 const bookmark = document.getElementsByClassName("itin-bookmark")[0];
 
+console.log(itineraryPath)
 onAuthStateChanged(auth, (user) => {
   if (user) 
   {
@@ -14,6 +15,8 @@ onAuthStateChanged(auth, (user) => {
       - User accesses itinerary from itineraries page and those itineraries are the user's own itineraries bookmarked or not
       - User accesses itinerary from homepage that may or may not be their itinerary
     */
+    console.log(user.uid)
+    console.log(itineraryPath.split("/")[1])
     if (user.uid == itineraryPath.split("/")[1])
     {
       // If the DB path is from the bookmarked section, display it as bookmarked by default
@@ -31,6 +34,7 @@ onAuthStateChanged(auth, (user) => {
           bookmark.style.backgroundImage = itinerary["bookmarked"] == "true" ? `url("images/bookmark-filled.png")`: `url("images/bookmark-empty.png")`;
         })
       }
+
     }
     else{
       bookmark.style.backgroundImage = `url("images/bookmark-empty.png")`
@@ -44,19 +48,20 @@ onAuthStateChanged(auth, (user) => {
       if (itinerariesKeys.find(id => id == itineraryPath.split("/")[3]) != undefined)
       {
         displayEditButton();
+        editCostInput();
       }
     })
     
     // reference of itinerary that user clicked on in itineraries.js in Firebase
+    console.log(itineraryPath)
     const itineraryIDRef = ref(db, itineraryPath);
-    onValue(itineraryIDRef, (snapshot) => {
+    get(itineraryIDRef).then((snapshot) => {
       const itineraryInfo = snapshot.val();
 
       displayInfo(itineraryInfo);
-      displayLocations(itineraryInfo.locationList, user.uid);
-      editCostInput();
+      displayLocations(itineraryInfo, user.uid);
+      editCostInput(user.uid);
       exportLocations(itineraryInfo.locationList);
-      
     });
 
 
@@ -76,6 +81,7 @@ onAuthStateChanged(auth, (user) => {
 
           // Add itinerary to bookmarked column or itineraries column depending on if it's the user's own itineraries or not.
           addBookmarkedItinerary(user.uid, itineraryInfo, itineraryPath);
+          
 
           // If the ID of the user is not the same as the user ID in itineraryPath, we add in locations
           if (user.uid != itineraryPath.split("/")[1])
@@ -84,17 +90,24 @@ onAuthStateChanged(auth, (user) => {
 
             for(let i = 0; i < locationKeys.length; i++)
             {
-              addLocationBookmarked(user.uid, itineraryInfo["locationList"][locationKeys[i]]);
-            }
-            
-            window.location.href = "itineraries.html";
-          }
-          
-          // Direct back to itineraries page
-          window.location.href = "itineraries.html";
+              const locationInfo = itineraryInfo["locationList"][locationKeys[i]];
 
+              console.log(locationInfo)
+              get(query(ref(db, `Users/${user.uid}/Bookmarked`), limitToLast(1))).then((snapshot) => {
+                const itineraryID = Object.keys(snapshot.val())[0];
+              
+                push(ref(db, `Users/${user.uid}/Bookmarked/${itineraryID}/locationList`), {
+                    "address": locationInfo["address"],
+                    "date": locationInfo["date"],
+                    "locationCost": locationInfo["locationCost"],
+                    "locationName": locationInfo["locationName"],
+                    "time": locationInfo["time"]
+                });
+              });
+            }
+          }
           // Alert message to show task is successfully done
-          alert("Bookmarked Successfully!"); 
+          alert("Bookmarked Successfully! Check out your itineraries!"); 
         });
       }
       else
@@ -115,26 +128,33 @@ onAuthStateChanged(auth, (user) => {
 
         // Unfill bookmark button
         bookmark.style.backgroundImage = `url("images/bookmark-empty.png")`;
-
         window.location.href = "itineraries.html";
-
         alert("Bookmarked successfully removed!");
       }
     })
   }
 });
 
-function totalCostCalc()
+function totalCostCalc(userID)
 {
   const locations = locationClass.children;
   var totalCost = 0;
 
   for(let i = 0; i < locations.length; i++)
   {
-    const locationCost = locations[i].getElementsByClassName("location-cost")[0].children[0]
+    const locationCost = locations[i].getElementsByClassName("location-cost")[0].children[0];    
     
-    var cost = locationCost.placeholder == undefined ? locationCost.innerHTML : locationCost.placeholder;
-  
+    var cost;
+    if (userID == itineraryPath.split("/")[1])
+    {
+      cost = locationCost.value;
+    }
+    else
+    {
+      cost = locationCost.placeholder;
+    }
+
+    console.log(cost)
     cost = cost.replace("$", "");
 
     totalCost += Number(cost);
@@ -146,7 +166,7 @@ function totalCostCalc()
   });
 }
 
-function editCostInput()
+function editCostInput(userID)
 {
   const locations = locationClass.children;
 
@@ -161,7 +181,6 @@ function editCostInput()
           e.preventDefault();
 
           var cost = costElement.value;
-
           console.log(cost)
           get(ref(db, itineraryPath + "/locationList")).then((snapshot) => {
             const locations = snapshot.val();
@@ -171,7 +190,7 @@ function editCostInput()
               "locationCost": cost
             });
 
-            totalCostCalc();
+            totalCostCalc(userID);
           });
         }
       });
@@ -242,6 +261,7 @@ function displayInfo(itineraryInfo)
   
   const startDate = itineraryInfo.duration.start;
   const endDate = itineraryInfo.duration.end;
+  
 
   const startMonth = months[Number(startDate.substring(startDate.indexOf("-") + 1, startDate.lastIndexOf("-")))];
   const startDay = Number(startDate.substring(startDate.lastIndexOf("-") + 1));
@@ -256,7 +276,7 @@ function displayInfo(itineraryInfo)
   date.innerText = startMonth + " " + startDay + ", " +  startYear + " - " + endMonth + " " + endDay + ", " + endYear;
   origin.innerText = itineraryInfo.origin;
   bg.src = itineraryInfo.image;
-  cost.innerHTML = itineraryInfo.totalCost;
+  cost.innerText = "$" + itineraryInfo.stats.totalCost;
   
   // set background image and delete css for it in css
 }
@@ -265,10 +285,10 @@ function displayInfo(itineraryInfo)
  * 
  * @param {*} locationList - list of locations from itinerary
  */
-function displayLocations(locationList, userID)
+function displayLocations(itineraryInfo, userID)
 {
   // Array of all location IDs from itinerary
-  const locationIDs = Object.keys(locationList);
+  const locationIDs = Object.keys(itineraryInfo.locationList);
 
   // Get array of locations in itinerary  
   for (let i = 0; i < locationIDs.length; i++)
@@ -279,9 +299,9 @@ function displayLocations(locationList, userID)
     // Assign name of div element class
     element.className = "location-item";
 
-    const cost = locationList[locationIDs[i]].locationCost == "" ? "$0" : `$${locationList[locationIDs[i]].locationCost}`
+    const cost = itineraryInfo.locationList[locationIDs[i]].locationCost == "" ? "$0" : `$${itineraryInfo.locationList[locationIDs[i]].locationCost}`
 
-    if (userID == itineraryPath.split("/")[1])
+    if (itineraryInfo.userID == undefined)
     {
       // Insert nested HTML into div element with corresponding name, address, and date
       element.innerHTML =`<div class="decoration">
@@ -289,14 +309,14 @@ function displayLocations(locationList, userID)
                               <div></div>
                           </div>
                           <div class="details">
-                              <h4 id="location-name-${i + 1}">${locationList[locationIDs[i]].locationName}</h4>
+                              <h4 id="location-name-${i + 1}">${itineraryInfo.locationList[locationIDs[i]].locationName}</h4>
                               <div>
                                   <img src="images/pin-logo.png" alt="">
-                                  <h5 id="location-address-${i + 1}">${locationList[locationIDs[i]].address}</h5> 
+                                  <h5 id="location-address-${i + 1}">${itineraryInfo.locationList[locationIDs[i]].address}</h5> 
                               </div>
                               <div>
                                   <img src="images/calendar-logo.png" alt="">
-                                  <h5 id="location-date-${i + 1}">${locationList[locationIDs[i]].date}</h5>
+                                  <h5 id="location-date-${i + 1}">${itineraryInfo.locationList[locationIDs[i]].date}</h5>
                               </div>
                           </div>
                           <div class="location-cost">
@@ -309,18 +329,18 @@ function displayLocations(locationList, userID)
                               <div></div>
                           </div>
                           <div class="details">
-                              <h4 id="location-name-${i + 1}">${locationList[locationIDs[i]].locationName}</h4>
+                              <h4 id="location-name-${i + 1}">${itineraryInfo.locationList[locationIDs[i]].locationName}</h4>
                               <div>
                                   <img src="images/pin-logo.png" alt="">
-                                  <h5 id="location-address-${i + 1}">${locationList[locationIDs[i]].address}</h5> 
+                                  <h5 id="location-address-${i + 1}">${itineraryInfo.locationList[locationIDs[i]].address}</h5> 
                               </div>
                               <div>
                                   <img src="images/calendar-logo.png" alt="">
-                                  <h5 id="location-date-${i + 1}">${locationList[locationIDs[i]].date}</h5>
+                                  <h5 id="location-date-${i + 1}">${itineraryInfo.locationList[locationIDs[i]].date}</h5>
                               </div>
                           </div>
                           <div class="location-cost">
-                              <h5 id="location-cost-${i + 1}">$${locationList[locationIDs[i]].locationCost}</h5>`;    
+                              <h5 id="location-cost-${i + 1}">$${itineraryInfo.locationList[locationIDs[i]].locationCost}</h5>`;    
     }
     
     // Append div element class to container
@@ -357,6 +377,10 @@ function addBookmarkedItinerary(userID, itineraryInfo, itineraryPath)
       "image": itineraryInfo["image"],
       "name": itineraryInfo["name"],
       "origin": itineraryInfo["origin"],
+      "duration": {
+        "start": itineraryInfo["duration"]["start"],
+        "end": itineraryInfo["duration"]["end"]
+      },
       "locationList": "",
       "stats": {
         "clicks": itineraryInfo["stats"].clicks,
@@ -364,38 +388,7 @@ function addBookmarkedItinerary(userID, itineraryInfo, itineraryPath)
       },
       "userID": itineraryPath.split("/")[1]  
     });
-
-    get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
-      const itineraryID = Object.keys(snapshot.val())[0];
-      update(ref(db, `Users/${userID}/Bookmarked/${itineraryID}`), {
-        duration: {
-          "start": itineraryInfo["duration"]["start"],
-          "end": itineraryInfo["duration"]["end"]
-        }
-      });
-    })
   }
-}
-
-/** Function that adds in the locations of an itinerary that is going to be bookmarked
- * 
- * @param {*} userID - ID of user
- * @param {*} locationInfo - information of the location
- */
-function addLocationBookmarked(userID, locationInfo)
-{
-  get(query(ref(db, `Users/${userID}/Bookmarked`), limitToLast(1))).then((snapshot) => {
-    const itineraryID = Object.keys(snapshot.val())[0];
-    
-    console.log(itineraryID);
-    push(ref(db, `Users/${userID}/Bookmarked/${itineraryID}/locationList`), {
-      "address": locationInfo["address"],
-      "date": locationInfo["date"],
-      "locationCost": locationInfo["locationCost"],
-      "locationName": locationInfo["locationName"],
-      "time": locationInfo["time"]
-    });
-  });
 }
 
 var kmlData = '<?xml version="1.0" encoding="UTF-8"?>' +
