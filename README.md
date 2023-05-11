@@ -1,6 +1,6 @@
 # QuackQuackGo
 
-Our goal is to create a simple and informational tool for all travelers. To achieve this goal, QuackQuackGo was developed. QuackQuackGo (QQG) is a web application that allows users to create and manage itineraries to plan trips conveniently. By allowing users to create their own itinerary, they can seamlessly make plans to places they want to visit. 
+Our goal is to create a simple and informational tool for all travelers. To achieve this goal, QuackQuackGo (QQG) was developed. QQG is a web application that allows users to create and manage itineraries to plan trips conveniently. By allowing users to create their own itinerary, they can seamlessly make plans to places they want to visit. 
 
 ## Features
 
