@@ -565,6 +565,10 @@ a:visited {
 }
 
 /* right column */
+.home-right-column > .profile-active {
+    background-color: #FFB039;
+}
+
 .home-right-column {
     display: flex;
     flex-direction: column;
@@ -1668,6 +1672,8 @@ a:visited {
     text-align: center;
     background-color: #58A4B0;
     border-radius: 50px;
+    border: none;
+    color: white;
     height: 35px;
     width: 90px;
     padding-top: 5px;
@@ -1770,6 +1776,7 @@ a:visited {
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
+
 
 .itinerary-details-center-column > div > a > .itin-button:hover, 
 .itinerary-details-center-column > .itinerary-header > .itin-back-bookmark > a > div:hover {

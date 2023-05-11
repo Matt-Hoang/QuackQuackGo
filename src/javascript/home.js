@@ -11,6 +11,7 @@ onAuthStateChanged(auth, (user) => {
     const userRef = ref(db, "Users");
     get(userRef).then((snapshot) => {
       const users = snapshot.val();
+      
       var itinerariesList = getAllItineraries(users);
 
       displayTrendingLocations(itinerariesList, userID);
@@ -20,6 +21,7 @@ onAuthStateChanged(auth, (user) => {
     const tripDisplayRef = ref(db, "Users/" + userID + "/Itineraries");
     get(tripDisplayRef).then((snapshot) => {
       const userTrips = snapshot.val(); 
+    
       displayTrips(userTrips);
     });
   }
@@ -83,10 +85,11 @@ function displayExploreLocations(itineraries, userID)
   // List of all elements inside the new-itineraries class div
   const newItineraryList = document.getElementsByClassName("new-itineraries")[0].children;
   
-  for (let i = 0; i < newItineraryList.length; i++)
+  for (let i = 0; i < 4; i++)
   {
     const randomItinerary = Math.floor(Math.random() * itineraries.length);
 
+    console.log(itineraries.length)
     newItineraryList[i].id = itineraries[randomItinerary][0];
 
     var itinerary = document.getElementById(newItineraryList[i].id);
@@ -100,6 +103,8 @@ function displayExploreLocations(itineraries, userID)
     url('${itineraries[randomItinerary][1].image}')`;
     
     itineraries.splice(randomItinerary, 1);
+
+    console.log(itineraries)
 
     addClicks(newItineraryList[i].id, newItineraryList[i].id, userID)
   }
@@ -165,19 +170,18 @@ function addClicks(itineraryID, htmlID, user)
  */
 function displayTrips(accountTrips)
 { 
-  // var tripCount = 0;
-  // if (accountTrips == null) {
-  //   var tripCount = 0;
-  // } 
-  // else {
-  //   var tripCount = accountTrips.length;
-  // }
-  var tripKeys = Object.keys(accountTrips);
   var tripCount = 0;
-  if (accountTrips != null){
+  var tripKeys;
+  if (accountTrips == null) 
+  {
+     var tripCount = 0;
+  } 
+  else 
+  {
+    tripKeys = Object.keys(accountTrips)
     tripCount = tripKeys.length;
   }
-  console.log(tripCount);
+  
   accountTrips = sortDates(accountTrips);
 
   var rightColumnHome = document.getElementsByClassName("home-right-column")[0].children;
@@ -239,20 +243,29 @@ function displayTrips(accountTrips)
 
 function getAllItineraries(users)
 {
-  const userIDs = Object.keys(users);
+  var userCount;
+  var userIDs;
+
+  if (users == null)
+  {
+    userCount = 0;
+  }
+  else
+  {
+    userIDs = Object.keys(users);
+    userCount = userIDs.length;
+
+  }
+
   var itinerariesList = [];
 
-  for(let i = 0; i < userIDs.length; i++)
+  for(let i = 0; i < userCount; i++)
   {
-    var itineraries;
-    // make sure user itin is not undefined (user has no itins)
-    if (users[userIDs[i]].Itineraries != undefined) {
-      itineraries = Object.entries(users[userIDs[i]].Itineraries);
-    }   
-
-    for(let i = 0; i < itineraries.length; i++)
+    var itineraries = users[userIDs[i]].Itineraries != undefined ? Object.entries(users[userIDs[i]].Itineraries) : [];
+    
+    for(let j = 0; j < itineraries.length; j++)
     {
-      itinerariesList.push(itineraries[i]);
+      itinerariesList.push(itineraries[j]);
     }
   }
 
@@ -290,46 +303,6 @@ function sortDates(tripList)
     }
 
     return tripList.sort(sortedDates);
-  }
-}
-
-/** When a user clicks on a location, this function's event listener is called that handles a click event. 
- *  It retrieves an object of multiple objects with the same name of that location and increases the click count 
- *  of the location with the highest click count.
- * 
- * @param {*} elementList - List of HTML elements 
- * @param {*} tableRef - Name of table in Firebase
- */
-function increaseLocationClicks(elementList)
-{
-  for (let i = 0; i < elementList.length; i++)
-  {
-    // EventListner for clicks based on element ID
-    document.getElementById(elementList[i].id).addEventListener("click", function(e) {
-      e.preventDefault();
-
-      // Get location name based on ID
-      var name = document.getElementById(elementList[i].id).innerHTML;
-      
-      // The "Consuming code" of a Promise
-      retrieveLocation(ref(db, tableRef), name).then(
-        function(value) 
-        {
-          // Get 0th element of object, which is the highest click count location
-          var location = Object.keys(value)[0];
-          
-          console.log(`Now adding click to ${name}!`);
-
-          // Update click in Firebase
-          updateClick(`${tableRef}/${location}/stats/clicks`);
-        },
-        function(error) 
-        {
-          // Function is only called if error is encounted in getting the object of same location name objects
-          console.error(error);
-        }
-      )
-    });
   }
 }
 

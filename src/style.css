@@ -565,6 +565,10 @@ a:visited {
 }
 
 /* right column */
+.home-right-column > .profile-active {
+    background-color: #FFB039;
+}
+
 .home-right-column {
     display: flex;
     flex-direction: column;
@@ -1668,6 +1672,8 @@ a:visited {
     text-align: center;
     background-color: #58A4B0;
     border-radius: 50px;
+    border: none;
+    color: white;
     height: 35px;
     width: 90px;
     padding-top: 5px;

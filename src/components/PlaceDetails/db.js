@@ -4,15 +4,15 @@ import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateP
 export { push, ref, remove, update, orderByChild, orderByKey, orderByValue, increment, onValue, limitToLast, limitToFirst, query, set, get, createUserWithEmailAndPassword, sendEmailVerification, 
   updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithPopup, GoogleAuthProvider, GithubAuthProvider };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCzpEwrHIAT1MfPfW9RXMxR0wNOFpcnS-Y",
-    authDomain: "qqg-491b.firebaseapp.com",
-    databaseURL: "https://qqg-491b-default-rtdb.firebaseio.com",
-    projectId: "qqg-491b",
-    storageBucket: "qqg-491b.appspot.com",
-    messagingSenderId: "891674221190",
-    appId: "1:891674221190:web:a4bcf43906da1a6dd3cf07"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJ6Y9GaNqv4VA5hzydaGHkUMQPE0Q9TpM",
+    authDomain: "quackquackgo-3545c.firebaseapp.com",
+    databaseURL: "https://quackquackgo-3545c-default-rtdb.firebaseio.com/",
+    projectId: "quackquackgo-3545c",
+    storageBucket: "quackquackgo-3545c.appspot.com",
+    messagingSenderId: "728670417360",
+    appId: "1:728670417360:web:a17cae9a7658dee7b349d5"
+  };
 
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);

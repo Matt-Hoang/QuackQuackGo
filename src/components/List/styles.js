@@ -10,15 +10,19 @@ export default makeStyles((theme) => ({
     borderWidth: '0px',
     padding: '5px',
   },
+
   formControl2: {
     margin: theme.spacing(0), 
     width: '50%',
     marginBottom: '30px', 
-    border: 'solid',
+    borderBottom: '1px solid',
     backgroundColor: '#FFF8E0',
     borderWidth: '1px',
     padding: '5px',
+    height: '53px',
   },
+
+
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
@@ -35,6 +39,7 @@ export default makeStyles((theme) => ({
     borderRadius: '35px 0px 0px 35px',
     width: 'none'
   },
+  
   marginBottom: {
     marginBottom: '30px',
   },

@@ -82,7 +82,7 @@ const App = () => {
                 <div class="nav-column">
                     <img src="./images/nav/quack-quack-go-logo.png" alt=""/>
                     <a href="home.html"><img src="./images/nav/home-icon.png" alt=""/>Home</a>
-                    <a href="search.html" class="active"><img src="./images/nav/search-icon.png" alt=""/>Search</a>
+                    <a href="index.html" class="active"><img src="./images/nav/search-icon.png" alt=""/>Search</a>
                     <a href="itineraries.html"><img src="./images/nav/itineraries-icon.png" alt=""/>itineraries</a>
                     <a href="about.html"><img src="./images/nav/about-icon.png" alt=""/>About</a>
                     <a href="support.html"><img src="./images/nav/support-icon.png" alt=""/>Support</a>

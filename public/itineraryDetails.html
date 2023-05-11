@@ -9,8 +9,8 @@
     <title>QQG - Itinerary Details</title>
     <script type="text/javascript" src="javascript/jquery-3.6.3.js" defer></script>
     <script type="text/javascript" src="slick/slick.min.js" defer></script>
-    <script type="module" src="javascript/itineraries.js" defer></script>
     <script type="module" src="javascript/itineraryDetails.js" defer></script>
+    <script type="module" src="javascript/itineraries.js" defer></script>
     <!-- TODO: UPDATE API KEY -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkmNHJOVlb2iYQUtAVpBWsnzRSLrIT_os&callback=myMap"></script>
     <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
@@ -47,7 +47,7 @@
                 <br>
                 <h3>Dates: </h3><h3 id="itinerary-date-interval">Insert Date</h3>
                 <br>
-                <h3>Total Cost: </h3><h3 id="itinerary-total-cost">$0</h3>
+                <h3>Total Cost: </h3><h3 id="itinerary-total-cost"></h3>
             </div>
         </div>
         <!-- view map button -->
@@ -61,10 +61,15 @@
             <div class="pop-up" id="pop-up">
                 <img src="images/checklist-duck.png">
                 <h2>Downloaded Successfully!</h2>
-                <p>1. Go to https://www.google.com/maps/about/mymaps/ <br>
-                2. Click on the "Get Started" button <br>
-                3. Click on "Create New Map" or "+" to create new map <br>
-                4. Import KML layer by clicking on "Import" under the Untitled layer</p>
+                <p>
+                    Here's how to load your itinerary into Google Maps: <br>
+                    1. Go to <a href="https://www.google.com/maps/about/mymaps/" target="_blank" rel="noopener noreferrer">
+                                https://www.google.com/maps/about/mymaps/
+                                </a> <br>
+                    2. Click on the "Get Started" button <br>
+                    3. Click on "Create New Map" or "+" to create new map <br>
+                    4. Import KML layer by clicking on "Import" under the Untitled layer
+                </p>
                 <button type="button" onclick="closePopup()">Got it!</button>
             </div>
         </div>

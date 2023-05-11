@@ -121,11 +121,13 @@ function saveItinerary(userID)
 
       if (isUnique)
       {
+        const date1 = new Date(startDate);
+        const date2 = new Date(endDate);
         // Test for date validation
-        if (new Date(startDate) > new Date(endDate))
+        if (date1.getMonth() >= date2.getMonth && date1.getDay() >= date2.getDay() && date1.getFullYear() >= date2.getFullYear())
         {
           isValid = false;
-          alert("Start date can't be later than end date!");
+          alert("Start date can't be later than or the same date as the end date!");
         }
         
         if (isValid)

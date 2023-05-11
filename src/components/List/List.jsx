@@ -79,6 +79,7 @@ const List = ({ places, childClicked, isLoading, type, setType, rating, setRatin
                 </div>
             </Autocomplete>
             </FormControl>
+
             {/* should take in locations as a reference get auto click working. */}
             <Grid container spacing= {3} className = {classes.list}>
                 {/* places?. means that if that place exists, then map over them */}
