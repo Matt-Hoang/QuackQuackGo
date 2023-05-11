@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="images/ducky.png">
+    <title>QQG - Registration</title>
+    <script type="module" src="javascript/registration.js"></script>
+</head>
+<body>
+    <!-- registration page -->
+    <div class="login-signup-container">
+        <div class="login-signup-info">
+            <img class="ducky" src="images/ducky.png" alt="">
+            <div class="bubble-container" id="bubble-container">
+                <!-- Display error message in text bubble -->
+            </div>
+            <!-- registration form -->
+            <form class="login-signup-form pw-meter" id="registrationForm"> 
+                <h1><u>QuackQuackGo</u></h1>
+                <h3>Sign Up</h3>
+                <input type="text" id="fullName" name="fullName" placeholder="Full Name" required><br>
+                <input type="text" id="userName" name="userName" placeholder="User Name" required><br>
+                <input type="email" id="email" name="email" placeholder="Email Address" required><br>
+                <input class="password" type="password" id="password1" name="password1" placeholder="Password" required><br>
+                <div class="pw-strength">
+                    <span>Password Strength</span>
+                    <span></span>
+                </div>
+                <input type="password" id="password2" name="password2" placeholder="Retype Password" required><br>
+                <h5><input type="checkbox" required> I accept the <a href="terms-conditions.html" target="_blank">Terms and Conditions</a><br></h5>
+                <button type="submit">Register</button>
+                <h5>Already have an account? <a href="login.html">Login</a></h5>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

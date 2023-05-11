@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="images/ducky.png">
+    <title>QQG - Profile</title>
+</head>
+<body class="flex-container">
+    <!--Navigation bar on the left side-->
+    <script type="module" src="javascript/changePFP.js"></script>
+    <div class="nav-column">
+        <img src="images/nav/quack-quack-go-logo.png" alt="">
+        <a href="home.html" ><img src="images/nav/home-icon.png" alt="">Home</a>
+        <a href="index.html"><img src="images/nav/search-icon.png" alt="">Search</a>
+        <a href="itineraries.html"><img src="images/nav/itineraries-icon.png" alt="">Itineraries</a>
+        <a href="about.html"><img src="images/nav/about-icon.png" alt="">About</a>
+        <a href="support.html"><img src="images/nav/support-icon.png" alt="">Support</a>
+        <a href="login.html" class="logout-button"><img src="images/nav/log-out-icon.png" alt="">Log Out</a>
+    </div>
+
+    <!--Personal information should change based on user-->
+    <div class="profile-edit-body">
+        <!--Box that has the user's profile picture, background, and name-->
+        <div class="user-tile"> 
+            <div class="profile-background">
+                <img src="images/defaults/default-profile-background.png" alt="">
+            </div>
+            <div class="profile-pic">
+                <img src="images/profile-picture.jpeg" id="pfp" />
+                <input id="file" type="file" />
+                <label class="change-pfp" for="file">
+                    Change Photo
+                </label>
+            </div>
+            <div class="name-location">
+                <h3 id="fullname">John Doe</h3>
+                <img id="location-icon" src="images/pin-logo.png" alt="">
+                <h5 id="user-location"></h5>
+            </div>
+        </div>
+        <!--Profile Information Title/Lable-->
+        <div class="info-title">
+            <h4>Personal Info <img src="images/titles/info-icon.png" alt=""></h4>
+            <h5>Edit and update your information!</h5>
+        </div>
+        <!--the body of the profile edit page (the bottom half of the page)-->
+        <div class="profile-edit-boxes">
+            <!--This is the form to update user information-->
+            <div class="info-form">
+                <form class="user-details" id="userProfileDetails" action="">
+                    <div class="form-names">
+                        <div class="form-first-name">
+                            <h6>First Name</h6>
+                            <input type="text" id="firstName" >
+                        </div>
+                        <div class="form-last-name">
+                            <h6>Last Name</h6>
+                            <input type="text" id="lastName" >
+                        </div>
+                    </div>
+                    <div class="form-email">
+                        <h6>Email</h6>
+                        <input type="email" id="email">
+                    </div>
+                    <div class="form-username-loc">
+                        <div class="form-username">
+                            <h6>Username</h6>
+                            <input type="text" id="username">
+                        </div>    
+                            <div class="form-location">
+                            <h6>Location</h6>
+                            <input type="text" id="location">
+                        </div> 
+                    </div>
+                    <div class="form-passes">
+                        <div class="form-password">
+                            <h6>Current Password</h6>
+                            <input type="password" id="password">
+                        </div>
+                        <div class="form-password">
+                            <h6>New Password</h6>
+                            <input type="password" id="new-password">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="edit-save">Save</button>
+                </form>
+            </div>
+            <!--These are the trackers/counters-->
+            <div class="counters-create-itinerary">
+                <div class="itinerary-counter">
+                    <div class="itinerary-counter-icon">
+                        <img src="images/waypoint-map.png" alt="">
+                    </div>
+                    <div class="counter-text">
+                        <h4 id = "itinerary-tracker">6</h4>
+                        <p>Total Itineraries</p>
+                    </div>
+                </div>
+                <div class="location-counter">
+                    <div class="location-counter-icon">
+                        <img src="images/location-outline-icon.png" alt="">
+                    </div>
+                    <div class="counter-text">
+                        <h4 id = "bookmark-tracker">28</h4>
+                        <p>Total Bookmarks</p>
+                    </div>
+                </div>
+                <!--Create Itinerary widget-->
+                <div class="profile-create-itinerary">
+                    <img src="images/ducky.png" alt="">
+                    <br>
+                    <a href="itineraries.html">Create Itinerary</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+     <!-- profile and upcoming trips column -->
+     <div class="home-right-column">
+        <a href="profile-edit.html" class="profile-active" id="profile-info">
+            <img src="" id="profile-info-picture" alt="">
+            <span id="full-name"></span>
+        </a>
+        <h3>Upcoming Trips</h3>
+        <div class="upcoming-trips"></div>
+    </div>
+</body>
+</html>
