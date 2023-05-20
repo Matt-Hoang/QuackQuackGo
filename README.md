@@ -13,10 +13,6 @@ Core features of this web application includes:
 
 ## Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Setup 
-
 1.  Download the appropriate node for your device
     -  [Download Node here](https://nodejs.org/en/)
 2. Open Terminal and type:
@@ -54,6 +50,25 @@ REACT_APP_GOOGLE_MAPS_API_KEY=
 REACT_APP_RAPIDAPI_TRAVEL_API_KEY=
 ```
 - Inserting your keys after the “=”
+
+## Database Setup
+Insert db setup instructions here (@MAT)
+
+
+Copy paste the following chunk over the existing one within the app. 
+- This should be located in the db.js files in both src and public folders. There is also another instance within /components/placedetails folder.
+# Example
+```
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBByrTU8VstkLf9CEambHHGUpHJJWro6nk",
+  authDomain: "qqg2023.firebaseapp.com",
+  projectId: "qqg2023",
+  storageBucket: "qqg2023.appspot.com",
+  messagingSenderId: "972979169781",
+  appId: "1:972979169781:web:6e1717923e404a2467d8bc"
+};
+```
 
 ## Available Scripts
 
