@@ -57,11 +57,11 @@ Insert db setup instructions here (@MAT)
 
 Copy paste the following chunk over the existing one within the app. 
 - This should be located in the db.js files in both src and public folders. There is also another instance within /components/placedetails folder.
-# Example
+# Example (Firebase should generate this for you)
 ```
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBByrTU8VstkLf9CEambHHGUpHJJWro6nk",
+  apiKey: "YOURAPIKEY",
   authDomain: "qqg2023.firebaseapp.com",
   projectId: "qqg2023",
   storageBucket: "qqg2023.appspot.com",
