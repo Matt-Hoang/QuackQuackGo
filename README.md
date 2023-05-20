@@ -57,7 +57,7 @@ Insert db setup instructions here (@MAT)
 
 Copy paste the following chunk over the existing one within the app. 
 - This should be located in the db.js files in both src and public folders. There is also another instance within /components/placedetails folder.
-# Example (Firebase should generate this for you)
+## Example (Firebase should generate this for you)
 ```
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -89,4 +89,8 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 - The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
+
+## Setting up the host
+- Within the project directory, the build folder can be dragged and dropped into [https://app.netlify.com/](https://app.netlify.com/)
+- Must have a project created and further changes can be made by following the settings on the site.
 
