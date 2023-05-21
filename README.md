@@ -35,7 +35,7 @@ npm install @material-ui/core @material-ui/core @material-ui/icons @material-ui/
 ## API Keys
 All keys are accessed through a .env file which isn’t uploaded to the Github for security reasons.
 - Trip Adviser Key
-  1. Visit https:[//rapidapi.com/apidojo/api/travel-advisor ](//rapidapi.com/apidojo/api/travel-advisor) 
+  1. Visit [https://rapidapi.com/apidojo/api/travel-advisor ](//rapidapi.com/apidojo/api/travel-advisor) 
   2. Sign in with Google and click subscribe to test 
   3. Visit Endpoints tab to obtain key
 - Google Maps API Key
@@ -52,8 +52,7 @@ REACT_APP_RAPIDAPI_TRAVEL_API_KEY=
 - Inserting your keys after the “=”
 
 ## Database Setup
-Insert db setup instructions here (@MAT)
-
+Insert db setup instructions here TBA
 
 Copy paste the following chunk over the existing one within the app. 
 - This should be located in the db.js files in both src and public folders. There is also another instance within /components/placedetails folder.
