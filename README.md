@@ -55,7 +55,6 @@ REACT_APP_RAPIDAPI_TRAVEL_API_KEY=
 - Inserting your keys after the “=”
 
 ## Database Setup
-Insert db setup instructions here TBA
 
 Copy paste the following chunk over the existing one within the app. 
 - This should be located in the db.js files in both src and public folders. There is also another instance within /components/placedetails folder.
